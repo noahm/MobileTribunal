@@ -1,4 +1,4 @@
-<?php phpinfo();
+<?php
 
 function getNumberOfGames($tribunalHTML) {
   $doc = new DOMDocument();
