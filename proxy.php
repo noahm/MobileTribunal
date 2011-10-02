@@ -108,5 +108,3 @@ function getHtmlHeaderAndCookies($ch, $url, $cookies)
 	return array("html" => $html, "header" => $header, "cookies" => $cookies);
 
 }
-
-?>

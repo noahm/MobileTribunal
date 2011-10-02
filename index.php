@@ -30,4 +30,3 @@ $result = tribGetGame($caseno, 1, $realm, $ch, $result["cookies"]);
 
 echo nl2br(htmlspecialchars($result["JSON"]));
 
-?>

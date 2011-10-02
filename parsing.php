@@ -9,5 +9,3 @@ function getNumberOfGames($tribunalHTML) {
   $tag = $gamecount->nodeName;
   return (int) preg_replace('@^<' . $tag . '[^>]*>|</' . $tag . '>$@', '', $html);
 }
-
-?>
