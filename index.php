@@ -16,8 +16,8 @@ if ( $result === false )
 	echo "Init failed: " . curl_error($ch);
 else
 	echo "Init Cookies: {$result["cookies"]}<br /><br />Case number: {$result["caseno"]}<br /><br />";
-
-$result = tribGetCase($result["caseno"], $realm, $ch, $result["cookies"]);
+$caseno = $result["caseno"];
+$result = tribGetCase($caseno, $realm, $ch, $result["cookies"]);
 
 if ( $result === false )
 	echo "Case-get failed: " . curl_error($ch);
