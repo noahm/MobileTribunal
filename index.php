@@ -15,13 +15,19 @@ $result = tribInit($name, $pw, $realm, $ch);
 if ( $result === false )
 	echo "Init failed: " . curl_error($ch);
 else
-	echo "Cookies: {$result["cookies"]}<br /><br />Case number: {$result["caseno"]}<br />";
+	echo "Init Cookies: {$result["cookies"]}<br /><br />Case number: {$result["caseno"]}<br /><br />";
 
 $result = tribGetCase($result["caseno"], $realm, $ch, $result["cookies"]);
 
 if ( $result === false )
 	echo "Case-get failed: " . curl_error($ch);
 else
-	echo "Cookies: {$result["cookies"]}<br /><br />Number of games: " . getNumberOfGames($result["html"]) . "<br />Case html: <br />" . nl2br(htmlspecialchars($result["html"]));
+	echo "Get Case Cookies: {$result["cookies"]}<br /><br />Number of games: " . getNumberOfGames($result["html"]) . "<br /> <br />Case html: <br />" . nl2br(htmlspecialchars($result["html"]));
+
+echo "<br />GET GAME 1 <br />";
+
+$result = tribGetGame($caseno, 1, $realm, $ch, $result["cookies"]);
+
+echo nl2br(htmlspecialchars($result["JSON"]));
 
 ?>

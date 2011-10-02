@@ -67,6 +67,18 @@ function tribGetCase($caseno, $realm, $ch, $cookies)
 
 }
 
+function tribGetGame($caseno, $gameno, $realm, $ch, $cookies)
+{
+
+	$url = "http://$realm.leagueoflegends.com/case/$caseno/get-game/$gameno";
+	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+	if ( $result === false )
+		return false;
+	else
+		return array("JSON" => $result["html"], "cookies" => $result["cookies"]);
+
+}
+
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
 
