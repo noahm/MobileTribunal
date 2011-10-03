@@ -1,24 +1,29 @@
 <?php
-function getNumberOfGames($tribunalHTML) {
-
+function tribParseHTML($html)
+{
 	// grab the element from the html
 	$doc = new DOMDocument();
-	$doc->loadHTML($tribunalHTML);
+
+	// gag error reporting for all the nonsense that bad html pages generate during parsing
+	$orig = error_reporting(0);
+	$doc->loadHTML($html);
+	error_reporting($orig);
+
+	return array( 'numGames' => getNumGames($doc), 'formTokens' => getFormTokens($doc) );
+}
+
+function getNumGames($doc)
+{
 	$gamecount = $doc->getElementById('h_gamecount');
+	return (int) $gamecount->firstChild->data;
+}
 
-	// now, grab the contents of that element
-	// (this seems like a stupid limitation of PHP's DOM parsing library)
-
-	// create a document becase the element itself can't saveHTML
-	$newdoc = new DomDocument();
-	$newdoc->appendChild($newdoc->importNode($gamecount, TRUE));
-	$html = trim($newdoc->saveHTML());
-
-	// get the name of whatever tag happened to have the id "h_gamecount" (I expect it's a DIV)
-	$tag = $gamecount->nodeName;
-
-	// strip out the surrounding html
-	$pattern = '@^<' . $tag . '[^>]*>|</' . $tag . '>$@';
-	return (int) preg_replace($pattern, '', $html);
-
+function getFormTokens($doc)
+{
+	$xpath = new DOMXpath($doc);
+	return array(
+		'form_build_id' => $xpath->query("//input[@name='form_build_id']/@value")->item(0)->value,
+		'form_token' => $xpath->query("//input[@name='form_token']/@value")->item(0)->value,
+		'form_id' => $xpath->query("//input[@name='form_id']/@value")->item(0)->value,
+	);
 }
