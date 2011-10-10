@@ -82,6 +82,7 @@ function tribGetGame($caseno, $gameno, $realm, $ch, $cookies)
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
 
+	curl_setopt($ch, CURLOPT_USERAGENT, 'TribunalMobile/0.1 (https://tribunal.phpfogapp.com/)');
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
