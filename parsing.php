@@ -15,7 +15,7 @@ function tribParseHTML($html)
 function getNumGames($doc)
 {
 	$gamecount = $doc->getElementById('h_gamecount');
-	return (int) $gamecount->firstChild->data;
+	return (int) $gamecount->textContent;
 }
 
 function getFormTokens($doc)
