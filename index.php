@@ -1,4 +1,11 @@
 <?php
+// We always use SSL
+if ($_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
+{
+	header('Location: https://tribunal.phpfogapp.com/');
+	die;
+}
+
 require 'partials.php';
 
 // session expires in 30 minutes, only on our domain, only send session cookie over SSL
