@@ -2,7 +2,7 @@
 // We always use SSL
 if ($_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
 {
-	header('Location: https://tribunal.phpfogapp.com/');
+	header('Location: https://tribunal.phpfogapp.com/?secure');
 	die;
 }
 
