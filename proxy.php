@@ -79,6 +79,19 @@ function tribGetGame($caseno, $gameno, $realm, $ch, $cookies)
 
 }
 
+function tribGetCaptcha($realm, $ch, $cookies)
+{
+
+	$url = "http://$realm.leagueoflegends.com/cases/captcha";
+	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+	if ( $result === false )
+		return false;
+	else
+		return array("captcha" => $result["html"], "cookies" => $result["cookies"]);
+
+}
+
+
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
 

@@ -31,3 +31,8 @@ echo "<br />GET GAME 1 <br />";
 $gameData = tribGetGame($caseno, 1, $realm, $ch, $result["cookies"]);
 
 echo nl2br(htmlspecialchars($gameData["JSON"]));
+
+echo "<br />Captcha data: <br />";
+$result = tribGetCaptcha($realm, $ch, $cookies);
+
+echo htmlspecialchars($result["captcha"]);
