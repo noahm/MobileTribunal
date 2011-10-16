@@ -35,4 +35,23 @@ echo nl2br(htmlspecialchars($gameData["JSON"]));
 echo "<br />Captcha data: <br />";
 $result = tribGetCaptcha($realm, $ch, $cookies);
 
-echo htmlspecialchars($result["captcha"]);
+if ( $result === false )
+	echo "Captcha get failed: " . curl_error($ch);
+else {
+
+	$cookies = $result["cookies"];
+	echo "<img src=\"{$result["captcha"]}\"><br />";
+}
+
+//Skip the case, get the next one
+echo "<br />SKIPPING CASE<br />";
+
+$result = tribSkipCase($caseno, $realm, $ch, $cookies);
+
+if ( $result === false )
+	echo "Case skip failed: " . curl_error($ch);
+else {
+
+	$cookies = $result["cookies"];
+	echo "<br />New Case no: {$result["caseno"]} <br />";
+}

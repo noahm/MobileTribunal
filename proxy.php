@@ -91,6 +91,23 @@ function tribGetCaptcha($realm, $ch, $cookies)
 
 }
 
+function tribSkipCase($caseno, $realm, $ch, $cookies)
+{
+
+	$url = http://$realm.leagueoflegends.com/cases/skip/$caseno";
+	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
+	if ( $result == false )
+		return false;
+	elseif ( preg_match($pattern, $result["header"], $matches) != 0 )
+		$caseno = $matches[1];
+	else
+		return false;
+
+	return array("caseno" => $caseno, "cookies" => $result["cookies"]);
+
+}
+
 
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
