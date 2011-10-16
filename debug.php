@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors', 1);
 include("parsing.php");
 include("proxy.php");
 
