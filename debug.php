@@ -33,7 +33,7 @@ $gameData = tribGetGame($caseno, 1, $realm, $ch, $result["cookies"]);
 echo nl2br(htmlspecialchars($gameData["JSON"]));
 
 echo "<br />Captcha data: <br />";
-$result = tribGetCaptcha($realm, $ch, $result["cookies"]);
+$result = tribGetCaptcha($realm, $ch, $gameData["cookies"]);
 
 if ( $result === false )
 	echo "Captcha get failed: " . curl_error($ch);
