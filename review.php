@@ -4,7 +4,6 @@ $caseInfo = array();
 require 'proxy.php';
 $ch = curl_init();
 $result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
-curl_close($ch);
 if ($result)
 {
 	$_SESSION['cookies'] = $result['cookies'];
@@ -13,6 +12,7 @@ if ($result)
 
 	$message = 'You have ' . $caseInfo['numGames'] . ' games to review and your form tokens are ';
 	$message .= htmlspecialchars(json_encode($caseInfo['formTokens']));
+	$message .= '<br />';
 
 	$game = tribGetGame($_SESSION['case'], 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
 	if ($game)
@@ -28,6 +28,7 @@ else
 {
 	$message = 'Failed to get case info';
 }
+curl_close($ch);
 ?>
 <!DOCTYPE html>
 <html>

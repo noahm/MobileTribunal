@@ -108,34 +108,11 @@ function tribSkipCase($caseno, $realm, $ch, $cookies)
 
 }
 
-function tribPunishCase($caseno, $formTokens, $realm, $ch, $cookies)
+function tribReviewCase($caseno, $formTokens, $punish, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/"; //Fix this
-	$data = $formTokens;
-	$data = http_build_query($data);
-
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	curl_setopt($ch, CURLOPT_POST, false);
-	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
-	if ( $result === false )
-		return false;
-	elseif ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$caseno = $matches[1];
-	else
-		return false;
-
-	return array("caseno" => $caseno, "cookies" => $result["cookies"]);
-
-}
-
-function tribPardonCase($caseno, $formTokens, $realm, $ch, $cookies)
-{
-
-	$url = "http://$realm.leagueoflegends.com/tribunal/"; //Fix this
-	$data = $formTokens;
+	$url = "http://$realm.leagueoflegends.com/tribunal/case/$caseno/review";
+	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon"));
 	$data = http_build_query($data);
 
 	curl_setopt($ch, CURLOPT_POST, true);
