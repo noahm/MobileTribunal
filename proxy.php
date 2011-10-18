@@ -108,11 +108,11 @@ function tribSkipCase($caseno, $realm, $ch, $cookies)
 
 }
 
-function tribReviewCase($caseno, $formTokens, $punish, $realm, $ch, $cookies)
+function tribReviewCase($caseno, $formTokens, $punish, $captcha, $realm, $ch, $cookies)
 {
 
 	$url = "http://$realm.leagueoflegends.com/tribunal/case/$caseno/review";
-	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon"));
+	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon", "csb_captcha_text"=>$captcha));
 	$data = http_build_query($data);
 
 	curl_setopt($ch, CURLOPT_POST, true);

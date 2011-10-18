@@ -14,15 +14,25 @@ if ($result)
 	$message .= htmlspecialchars(json_encode($caseInfo['formTokens']));
 	$message .= '<br />';
 
-	$game = tribGetGame($_SESSION['case'], 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
-	if ($game)
+	$result = tribGetGame($_SESSION['case'], 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
+	if ($result)
 	{
 		$_SESSION['cookies'] = $result['cookies'];
 		//Parse game info here.
-		$message .= "<br />Game JSON is: " . $game["JSON"] . "<br />";
+		$message .= "<br />Game JSON is: " . $result["JSON"] . "<br />";
 	}
 	else
-		$message .= 'Failed to get Game 1';
+		$message .= 'Failed to get Game 1<br />';
+
+	$result = tribGetCaptcha($_SESSION['realm'], $ch, $_SESSION['cookies']);
+	if ($result)
+	{
+		$_SESSION['cookies'] = $result['cookies'];
+		$message .= 'Captcha: <img src="{$result["captcha"]}">';
+		$message .= "<br />";
+	}
+	else
+		$message .= 'Failed to get captcha<br />';
 }
 else
 {
