@@ -28,7 +28,7 @@ if ($result)
 	if ($result)
 	{
 		$_SESSION['cookies'] = $result['cookies'];
-		$message .= 'Captcha: <img src="{$result["captcha"]}">';
+		$message .= "Captcha: <img src=\"{$result["captcha"]}\">";
 		$message .= "<br />";
 	}
 	else
