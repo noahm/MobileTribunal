@@ -8,14 +8,13 @@ curl_close($ch);
 if ($result)
 {
 	$_SESSION['cookies'] = $result['cookies'];
-	$caseno = $result['caseno'];
 	require 'parsing.php';
 	$caseInfo = tribParseHTML($result['html']);
 
 	$message = 'You have ' . $caseInfo['numGames'] . ' games to review and your form tokens are ';
 	$message .= htmlspecialchars(json_encode($caseInfo['formTokens']));
 
-	$game = tribGetGame($caseno, 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
+	$game = tribGetGame($_SESSION['case'], 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
 	if ($game)
 	{
 		$_SESSION['cookies'] = $result['cookies'];
@@ -23,7 +22,7 @@ if ($result)
 		$message .= "<br />Game JSON is: " . $game["JSON"] . "<br />";
 	}
 	else
-		$message = 'Failed to get Game 1';
+		$message .= 'Failed to get Game 1';
 }
 else
 {
