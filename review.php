@@ -16,11 +16,11 @@ if ($result)
 	$message .= htmlspecialchars(json_encode($caseInfo['formTokens']));
 
 	$game = tribGetGame($caseno, 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
-	if ($result)
+	if ($game)
 	{
 		$_SESSION['cookies'] = $result['cookies'];
 		//Parse game info here.
-		$message .= "<br />Game JSON is: " . $result["JSON"] . "<br />";
+		$message .= "<br />Game JSON is: " . $game["JSON"] . "<br />";
 	}
 	else
 		$message = 'Failed to get Game 1';
