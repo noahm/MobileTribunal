@@ -112,7 +112,7 @@ function tribReviewCase($caseno, $formTokens, $punish, $captcha, $realm, $ch, $c
 {
 
 	$url = "http://$realm.leagueoflegends.com/tribunal/case/$caseno/review";
-	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon", "csb_captcha_text"=>$captcha));
+	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon", "captcha_result"=>$captcha));
 	$data = http_build_query($data);
 
 	curl_setopt($ch, CURLOPT_POST, true);
