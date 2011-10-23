@@ -1,5 +1,9 @@
 <?php // the index will include this file if $_SESSION['case'] is not set
 $feedback = array();
+
+define("BETA", false);
+$betaUsers = array( '425c051fd12adb6e5a7b12292d013dfa61515cb5' );
+
 if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['realm']))
 {
 	// validate submission
@@ -8,6 +12,12 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 	{
 		$validated = false;
 		$feedback[] = 'Region was invalid.';
+	}
+
+	if ( BETA && !in_array(sha1($_POST['username']), $betaUsers) )
+	{
+		$validated = false;
+		$feedback[] = 'You do not have access to this beta test.';
 	}
 
 	if ($validated)

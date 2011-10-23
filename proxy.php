@@ -1,4 +1,5 @@
 <?php
+require 'parsing.php';
 function tribInit($name, $pass, $realm, $ch)
 {
 
@@ -63,7 +64,12 @@ function tribGetCase($caseno, $realm, $ch, $cookies)
 	if ( $result === false )
 		return false;
 	else
-		return array("html" => $result["html"], "cookies" => $result["cookies"]);
+	{
+
+		$caseInfo = tribParseHTML($result['html']);
+		return array("numGames" => $caseInfo["numGames"], "formTokens" => json_encode($caseInfo["formTokens"]), "cookies" => $result["cookies"]);
+
+	}
 
 }
 
@@ -72,10 +78,11 @@ function tribGetGame($caseno, $gameno, $realm, $ch, $cookies)
 
 	$url = "http://$realm.leagueoflegends.com/case/$caseno/get-game/$gameno";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	if ( $result === false )
-		return false;
-	else
+ 	if ( $result === false )
+ 		return false;
+ 	else
 		return array("JSON" => $result["html"], "cookies" => $result["cookies"]);
+	}
 
 }
 

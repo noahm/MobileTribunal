@@ -14,7 +14,7 @@ if ( $verdict != "" )
 	{
 		case "Punish":
 		case "Pardon":
-			$result = tribReviewCase($_SESSION["case"], json_decode($formTokens, true), $verdict=="Punish", $captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
+			$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION['formTokens'], true), $verdict=="Punish", $captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 			break;
 		case "Skip":
 			$result = tribSkipCase($_SESSION["case"], $_SESSION["realm"], $ch, $_SESSION["cookies"]);
@@ -32,17 +32,19 @@ if ( $verdict != "" )
 	}
 	elseif ( $result === false ) //Submitted verdict but failed; differentiates from no verdict
 		$message .= 'Failed to submit case verdict <br />';
+	elseif ( $result == 0 )
+		$message .= 'Invalid verdict <br />';
+
 }
 
 $result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
 if ($result)
 {
 	$_SESSION['cookies'] = $result['cookies'];
-	require 'parsing.php';
-	$caseInfo = tribParseHTML($result['html']);
+	$_SESSION['formTokens'] = $result['formTokens'];
 
-	$message = 'You have ' . $caseInfo['numGames'] . ' games to review and your form tokens are ';
-	$message .= htmlspecialchars(json_encode($caseInfo['formTokens']));
+	$message = 'You have ' . $result['numGames'] . ' games to review and your form tokens are ';
+	$message .= htmlspecialchars($_SESSION['formTokens']));
 	$message .= '<br />';
 
 	$result = tribGetGame($_SESSION['case'], 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
@@ -86,7 +88,7 @@ curl_close($ch);
 		<p>Captcha:</p>
 		<input type="text" name="captcha-result">
 		<br />
-		<input type="hidden" name="formTokens" value='<?= json_encode($caseInfo['formTokens']) ?>' /><input type="submit" name="verdict" value="Punish" /><input type="submit" name="verdict" value="Pardon" /><input type="submit" name="verdict" value="Skip" />
+		<input type="submit" name="verdict" value="Punish" /><input type="submit" name="verdict" value="Pardon" /><input type="submit" name="verdict" value="Skip" />
 	</form>
 </body>
 </html>
