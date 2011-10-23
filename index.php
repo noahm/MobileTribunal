@@ -1,4 +1,7 @@
 <?php
+
+ini_set('display_errors', 1); //For testing only. Disable on release
+
 // We always use SSL
 if ($_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
 {
