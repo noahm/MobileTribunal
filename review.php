@@ -44,7 +44,7 @@ if ($result)
 	$_SESSION['formTokens'] = $result['formTokens'];
 
 	$message = 'You have ' . $result['numGames'] . ' games to review and your form tokens are ';
-	$message .= htmlspecialchars($_SESSION['formTokens']));
+	$message .= htmlspecialchars($_SESSION['formTokens']);
 	$message .= '<br />';
 
 	$result = tribGetGame($_SESSION['case'], 1, $_SESSION['realm'], $ch, $_SESSION['cookies']);
