@@ -82,7 +82,6 @@ function tribGetGame($caseno, $gameno, $realm, $ch, $cookies)
  		return false;
  	else
 		return array("JSON" => $result["html"], "cookies" => $result["cookies"]);
-	}
 
 }
 
