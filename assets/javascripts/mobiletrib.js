@@ -1,5 +1,4 @@
 $(function() {
-	var gists = { "1": "1307687", "2": "1307691", "3": "1307692" };
 	// handle opening and closing the menu
 	$('#game-selected').click(function() {
 		$('#games').toggle();
@@ -10,14 +9,7 @@ $(function() {
 		$('#verdict').html('Submit Verdict');
 		$('#games').hide();
 		
-		$('#game,#submit').hide();
-		$('#loading').show();
-		
-		// ajax load the game number specified by this.value
-		$.getJSON(
-			'/gh/gist/response.json/'+gists[this.value]+'/',
-			applyData
-		);
+		loadGame(this.value);
 	});
 	// handle showing the verdict options
 	$('#verdict').click(function() {
@@ -33,8 +25,8 @@ $(function() {
 	
 	// handle showing inventory details
 	$('#inventory img').live('click', function() {
-		// look up item info from the attached data (this.dataSet)
 		var data = $(this).data('info');
+		// TODO replace this alert with a popover div that looks nice
 		alert(data.name + "\n" + data.description);
 	});
 	// handle chat log filters
@@ -71,19 +63,69 @@ $(function() {
 		// (nope, because we should validate the response from riot and report errors without leaving the page)
 	});
 	
-	// load the total number of games and populate our game list, summoner name, form tokens
-	// AJAX blah blah
-	
-	// force initial game load
-	$('#games li:first-child').click();
+	// load the total number of games and populate our game list
+	loadCase();
+	window.captchaLoaded = false;
+	window.captchaIsLoading = false;
 });
 
-function applyData(gameData) {
-	$('#submit,#game').hide();
+function reloadCaptcha() {
+	if (!window.captchaIsLoading) {
+		window.captchaIsLoading = true;
+		$.ajax({
+			type: 'POST',
+			dataType: 'text',
+			url: '/ajax.php',
+			data: { cmd: 'getCaptcha' },
+			success: function(data) {
+				$('#captcha').attr('src',data);
+				window.captchaIsLoading = false;
+			}
+		});
+	}
+}
+
+function loadCase() {
+	$('#game,#submit').hide();
 	$('#loading').show();
+	
+	$.ajax({
+		type: 'POST',
+		dataType: 'text',
+		url: '/ajax.php',
+		data: { cmd: 'getCase' },
+		success: function (data) {
+			var num = (int)data;
+			if (num < 1) return alert('Could not get case data from Riot');
+			for (var i=1; i<=num; i++) {
+				$('<li></li>').attr('value',i).html('Case '+i).appendTo('#games');
+			}
+			loadGame('1');
+		}
+	});
+}
+
+function loadGame(gameNumber) {
+	$('#game,#submit').hide();
+	$('#loading').show();
+	
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: '/ajax.php',
+		data: { cmd: 'getGame', game: gameNumber },
+		success: applyData
+	});
+}
+
+function applyData(gameData) {
+	// if we are loading for the first time, grab a new captcha in the background
+	if (!window.captchaLoaded) reloadCaptcha();
+	
 	// expand the data into the #game div
 	$('#summoner-name').html('"' + gameData.summoner + '"');
 	$('#portrait img').attr('src', gameData.champion);
+	
 	var stats = gameData.stats[0];
 	$('#level').html(stats.LEVEL);
 	$('#time').html(stats.TIME_PLAYED + ':00'); //fudge the time because riot only gives minutes
@@ -94,6 +136,7 @@ function applyData(gameData) {
 	$('#creep-score').html(stats.MINIONS_KILLED);
 	$('#dps-out').html(stats.TOTAL_DAMAGE_DEALT);
 	$('#dps-in').html(stats.TOTAL_DAMAGE_RECEIVED);
+	
 	// setup inventory-container
 	$('#inventory-container').empty();
 	for (var i=0; i<gameData.items.length; i++) {
@@ -105,6 +148,7 @@ function applyData(gameData) {
 			.data('info', item)
 			.appendTo('#inventory-container');
 	}
+	
 	// add reports
 	$('#reports').empty();
 	$('#allied-report-count').html(gameData.allied_report_count);
@@ -119,6 +163,7 @@ function applyData(gameData) {
 		var reason = gameData.enemyreportreasons[i];
 		$('<li class="enemy"></li>').html(report).append($('<h2></h2>').html(reason)).appendTo('#reports');
 	}
+	
 	// build chat log
 	var $chat = $('#chat').removeClass().empty();
 	var chatLength = gameData.chatlogtext.length;
@@ -130,7 +175,6 @@ function applyData(gameData) {
 		var classes = gameData.chatlogteams[i];
 		if (classes === 'reported') classes += ' allied';
 		if (gameData.chatlogsentto[i] === 'All') classes += ' all';
-
 		$('<li></li>').addClass(classes)
 			.append(
 				$('<span class="author"></span>')
@@ -141,9 +185,11 @@ function applyData(gameData) {
 			.append(': '+message)
 			.appendTo($chat);
 	}
+	
 	// reset chat filter controls
 	$('#chat-filter')[0].selectedIndex = 0;
 	$('#champ-only')[0].checked = false;
+	
 	// show our handywork
 	$('#loading').hide();
 	$('#game').show();

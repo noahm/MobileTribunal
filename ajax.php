@@ -1,14 +1,16 @@
 <?php
 require 'proxy.php';
 
-$cmd = isset($_REQUEST["cmd"])?$_REQUEST["cmd"]:"";
-$game = isset($_REQUEST["game"])?$_REQUEST["game"]:"";
-$captchaResult = isset($_REQUEST["captcha-result"])?$_REQUEST["captcha-result"]:"";
+$cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
+$game = isset($_POST["game"]) ? $_POST["game"] : "";
+$captchaResult = isset($_POST["captcha-result"]) ? $_POST["captcha-result"] : "";
 
 //Some verification so we don't send bogus requests
 if ( $cmd == "getGame" && $game == "" )
 	die("0");
-if ( ( $cmd == "sendPunish" || $cmd == "sendPardon" ) && $captchaResult == "" )		//This will be replaced by proper captcha verification
+
+//This will be replaced by proper captcha verification
+if ( ( $cmd == "sendPunish" || $cmd == "sendPardon" ) && $captchaResult == "" )
 	die("0");
 
 $ch = curl_init();
@@ -17,6 +19,7 @@ switch ( $cmd )
 {
 
 	case "getCase":
+		header('Content-Type: text/plain');
 		$result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
 			echo "0";
@@ -29,6 +32,7 @@ switch ( $cmd )
 		break;
 
 	case "getGame":
+		header('Content-Type: application/json');
 		$result = tribGetGame($_SESSION['case'], $game, $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
 			echo "0";
@@ -40,6 +44,7 @@ switch ( $cmd )
 		break;
 
 	case "getCaptcha":
+		header('Content-Type: text/plain');
 		$result = tribGetCaptcha($_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
 			echo "0";
@@ -80,5 +85,3 @@ switch ( $cmd )
 }
 
 curl_close($ch);
-
-?>
