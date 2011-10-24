@@ -1,5 +1,5 @@
 <?php
-require 'parsing.php';
+require_once 'parsing.php';
 function tribInit($name, $pass, $realm, $ch)
 {
 

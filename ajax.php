@@ -1,5 +1,5 @@
 <?php
-require 'proxy.php';
+require_once 'proxy.php';
 
 $cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
 $game = isset($_POST["game"]) ? $_POST["game"] : "";

@@ -1,8 +1,8 @@
 <?php // the index will include this file if $_SESSION['case'] is not set
 $feedback = array();
 
-define("BETA", false);
-$betaUsers = array( '425c051fd12adb6e5a7b12292d013dfa61515cb5' );
+define("BETA", true);
+$betaUsers = array( '425c051fd12adb6e5a7b12292d013dfa61515cb5', '8e1a05c861a453ab06f3fd47b322ddee68feac0a' );
 
 if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['realm']))
 {
@@ -27,7 +27,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 
 		// perform login
 		$ch = curl_init();
-		require 'proxy.php';
+		require_once 'proxy.php';
 		if ($result = tribInit($_POST['username'], $_POST['password'], $_SESSION['realm'], $ch))
 		{
 			// save important info

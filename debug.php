@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
-include("parsing.php");
-include("proxy.php");
+require_once 'parsing.php';
+require_once 'proxy.php';
 
 $ch = curl_init();
 

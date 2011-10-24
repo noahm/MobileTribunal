@@ -1,7 +1,7 @@
 <?php //we only get here by having $_SESSION['case'] set
 $message = '';
 $caseInfo = array();
-require 'proxy.php';
+require_once 'proxy.php';
 $ch = curl_init();
 
 $captchaResult = isset($_REQUEST["captcha-result"])?$_REQUEST["captcha-result"]:"";
