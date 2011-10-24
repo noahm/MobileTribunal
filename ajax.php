@@ -5,14 +5,14 @@ require_once 'proxy.php';
 
 $cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";
 $game = isset($_REQUEST["game"]) ? $_REQUEST["game"] : "";
+$verdict = isset($_REQUEST["verdict"]) ? $_REQUEST["verdict"] : "";
 $captchaResult = isset($_REQUEST["captcha-result"]) ? $_REQUEST["captcha-result"] : "";
 
 //Some verification so we don't send bogus requests
 if ( $cmd == "getGame" && $game == "" )
 	die("0");
 
-//This will be replaced by proper captcha verification
-if ( ( $cmd == "sendPunish" || $cmd == "sendPardon" ) && $captchaResult == "" )
+if ( $cmd == "sendVerdict" && (!preg_match('/^\w{4}$/',$captchaResult) || !preg_match('/^(punish|pardon)$/', $verdict)) )
 	die("0");
 
 $ch = curl_init();
@@ -57,9 +57,8 @@ switch ( $cmd )
 		}
 		break;
 
-	case "sendPunish":
-	case "sendPardon":
-		$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $cmd=="sendPunish", $captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
+	case "sendVerdict":
+		$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 		if ( $result === false )
 			echo "0";
 		else
