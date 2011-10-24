@@ -12,7 +12,7 @@ $(function() {
 		loadGame(this.value);
 	});
 	// handle showing the verdict options
-	$('#verdict,return').click(function() {
+	$('#verdict,#return').click(function() {
 		$('#game,#submit,#verdict,#return').toggle();
 		$('#loading').hide();
 		window.scroll(0,0);
