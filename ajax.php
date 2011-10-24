@@ -1,9 +1,9 @@
 <?php
 require_once 'proxy.php';
 
-$cmd = isset($_POST["cmd"]) ? $_POST["cmd"] : "";
-$game = isset($_POST["game"]) ? $_POST["game"] : "";
-$captchaResult = isset($_POST["captcha-result"]) ? $_POST["captcha-result"] : "";
+$cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";
+$game = isset($_REQUEST["game"]) ? $_REQUEST["game"] : "";
+$captchaResult = isset($_REQUEST["captcha-result"]) ? $_REQUEST["captcha-result"] : "";
 
 //Some verification so we don't send bogus requests
 if ( $cmd == "getGame" && $game == "" )
