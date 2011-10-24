@@ -95,7 +95,7 @@ function loadCase() {
 		url: '/ajax.php',
 		data: { cmd: 'getCase' },
 		success: function (data) {
-			var num = (int)data;
+			var num = Number(data);
 			if (num < 1) return alert('Could not get case data from Riot');
 			for (var i=1; i<=num; i++) {
 				$('<li></li>').attr('value',i).html('Case '+i).appendTo('#games');
