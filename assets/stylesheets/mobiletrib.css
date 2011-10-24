@@ -4,6 +4,11 @@ body {
 	padding: .5em;
 }
 
+#title {
+	position: relative;
+	margin-top: .5em;
+}
+
 #loading {
 	position: absolute;
 	width: 100%;
@@ -40,17 +45,12 @@ h1 {
 #game-selector {
 	position: absolute;
 	text-align: center;
-	top: .5em;
-	right: .5em;
+	top: 0;
+	right: 0;
 }
 
-#downarrow {
-	border: 15px solid transparent;
-	border-top-color: black;
-	position: absolute;
-	top: 1.4em;
-	right: 35%;
-	z-index: -1;
+#game-selected:after {
+    content: " ▼";
 }
 
 #game-selected, #games li, #verdict {
