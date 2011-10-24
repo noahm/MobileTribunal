@@ -4,7 +4,7 @@ $(function() {
 		$('#games').toggle();
 	});
 	// handle switching games
-	$('#games li').click(function() {
+	$('#games li').live('click', function() {
 		$('#game-selected').html(this.innerHTML);
 		$('#verdict').html('Submit Verdict');
 		$('#games').hide();
