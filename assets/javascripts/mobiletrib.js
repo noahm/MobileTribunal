@@ -98,7 +98,7 @@ function loadCase() {
 			var num = Number(data);
 			if (num < 1) return alert('Could not get case data from Riot');
 			for (var i=1; i<=num; i++) {
-				$('<li></li>').attr('value',i).html('Case '+i).appendTo('#games');
+				$('<li onclick="void(0)"></li>').attr('value',i).html('Case '+i).appendTo('#games');
 			}
 			loadGame('1');
 		}
