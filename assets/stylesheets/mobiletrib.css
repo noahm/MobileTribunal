@@ -11,6 +11,7 @@ body {
 	left: 0;
 	text-align: center;
 	padding-top: 6em;
+	background-color: rgba(25,25,25,0.6);
 }
 
 #submit, #game {
@@ -39,6 +40,26 @@ h1 {
 	float: right;
 }
 
+#game-selected, #games li, #verdict {
+	color: white;
+	border: 1px solid black;
+	background: blue;
+	padding: .4em;
+	border-radius: 5px;
+}
+
+#games {
+	display: none;
+	position: absolute;
+	margin-top: 0.5em;
+}
+
+#games li {
+	color: black;
+	background-color: white;
+	border-radius: 0;
+}
+
 section {
 	display: inline-block;
 	vertical-align: top;
@@ -63,9 +84,6 @@ section {
 	border: 1px solid gold;
 	padding: .2em;
 	border-top-left-radius: 4px;
-}
-
-#inventory {
 }
 
 #inventory-container {

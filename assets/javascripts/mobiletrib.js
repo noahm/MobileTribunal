@@ -1,20 +1,36 @@
 $(function() {
 	var gists = { "1": "1307687", "2": "1307691", "3": "1307692" };
+	// handle opening and closing the menu
+	$('#game-selected').click(function() {
+		$('#games').toggle();
+	});
 	// handle switching games
-	$('#game-selector').change(function() {
-		if (this.value === "submit") {
-			$('#game,#loading').hide();
-			$('#submit').show();
+	$('#games li').click(function() {
+		$('#game-selected').html(this.innerHTML);
+		$('#verdict').html('Submit Verdict');
+		$('#games').hide();
+		
+		$('#game,#submit').hide();
+		$('#loading').show();
+		
+		// ajax load the game number specified by this.value
+		$.getJSON(
+			'/gh/gist/response.json/'+gists[this.value]+'/',
+			applyData
+		);
+	});
+	// handle showing the verdict options
+	$('#verdict').click(function() {
+		$('#game,#submit').toggle();
+		$('#loading').hide();
+		
+		if ($('#game').is(':visible')) {
+			$('#verdict').html('Submit Verdict');
 		} else {
-			$('#game,#submit').hide();
-			$('#loading').show();
-			// ajax load the game number specified by this.value
-			$.getJSON(
-				'/gh/gist/response.json/'+gists[this.value]+'/',
-				applyData
-			);
+			$('#verdict').html('Show Game');
 		}
 	});
+	
 	// handle showing inventory details
 	$('#inventory img').live('click', function() {
 		// look up item info from the attached data (this.dataSet)
@@ -54,8 +70,12 @@ $(function() {
 		// maybe this should just do a regular form submission?
 		// (nope, because we should validate the response from riot and report errors without leaving the page)
 	});
+	
+	// load the total number of games and populate our game list, summoner name, form tokens
+	// AJAX blah blah
+	
 	// force initial game load
-	$('#game-selector').change();
+	$('#games li:first-child').click();
 });
 
 function applyData(gameData) {
