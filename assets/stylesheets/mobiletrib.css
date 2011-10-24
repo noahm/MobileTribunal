@@ -1,0 +1,163 @@
+body {
+	font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode",
+		"Luxi Sans", Tahoma, sans-serif;
+}
+
+#loading {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	text-align: center;
+	padding-top: 6em;
+}
+
+#submit, #game {
+	display: none;
+}
+
+:not(#chat) > .enemy, .enemy .author {
+	color: #BC0000;
+}
+
+:not(#chat) > .allied, .allied .author {
+	color: #008B00;
+}
+
+:not(#chat) > .reported, .reported .author {
+	color: #9B00FE;
+}
+
+h1 {
+	text-align: center;
+	clear: both;
+	margin: .6em;
+}
+
+#game-selector {
+	float: right;
+}
+
+section {
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: .6em;
+	margin-right: .5em;
+}
+
+#portrait {
+	position: relative;
+	float: left;
+	height: 80px;
+	width: 80px;
+}
+
+#level {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	color: white;
+	background-color: black;
+	font-size: 70%;
+	border: 1px solid gold;
+	padding: .2em;
+	border-top-left-radius: 4px;
+}
+
+#inventory {
+}
+
+#inventory-container {
+	background-color: gray;
+	width: 198px;
+	height: 132px;
+}
+
+#inventory-container img {
+	height: 64px;
+	width: 64px;
+	margin: 1px;
+	float: left;
+}
+
+#stats {
+	width: 300px;
+}
+
+#stats #time-score {
+	text-align: center;
+}
+
+#stats #time-score img {
+	vertical-align: middle;
+}
+
+#stats ul {
+	-webkit-columns: 2;
+	-moz-columns: 2;
+	columns: 2;
+}
+
+#stats ul li {
+	display: inline-block;
+	width: 100%;
+}
+
+#stats ul label {
+	display: inline-block;
+	width: 105px;
+}
+
+#stats ul span {
+	float: right;
+}
+
+#reports li:not(:last-child) {
+	margin-bottom: .6em;
+}
+
+#reports h2 {
+	font-weight: bold;
+	font-size: 110%;
+}
+
+/* the idea was that the enemy reports and allied reports
+would be in separate columns on an ipad or other wide device
+but it still needs some attention to actually get working */
+@media width > 600px {
+#reports {
+	-webkit-columns: 2;
+	-moz-columns: 2;
+	columns: 2;
+}
+}
+
+#chat input#champ-only {
+	height: 1em;
+	width: 1em;
+}
+
+#chat .all .author:after {
+	content: " [All]";
+}
+
+#chat time {
+	color: gray;
+	font-size: 90%;
+}
+#chat time:before { content: " ["; }
+#chat time:after  { content: "]"; }
+
+#chat:not(.champ-only) .character:before { content: " ("; }
+#chat:not(.champ-only) .character:after  { content: ")"; }
+
+#chat.hide-enemy  li.enemy,
+#chat.hide-allied li.allied,
+#chat.only-all    li:not(.all),
+#chat.only-reported li:not(.reported)
+{ display: none; }
+
+#chat.champ-only .summoner,
+#chat.champ-only time
+{ display: none; }
