@@ -21,7 +21,7 @@ switch ( $cmd )
 {
 
 	case "getCase":
-		header('Content-Type: text/plain');
+		header('Content-Type: application/json');
 		$result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
 			echo "0";
@@ -29,7 +29,7 @@ switch ( $cmd )
 		{
 			$_SESSION['cookies'] = $result['cookies'];
 			$_SESSION['formTokens'] = $result['formTokens'];
-			echo $result["numGames"];
+			echo json_encode(array('numGames'=>$result["numGames"], 'caseId'=>$_SESSION['case']));
 		}
 		break;
 

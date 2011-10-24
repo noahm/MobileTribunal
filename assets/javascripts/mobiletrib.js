@@ -6,21 +6,15 @@ $(function() {
 	// handle switching games
 	$('#games li').live('click', function() {
 		$('#game-selected').html(this.innerHTML);
-		$('#verdict').html('Submit Verdict');
-		$('#games').hide();
+		$('#verdict').show();
+		$('#games,#return').hide();
 		
 		loadGame(this.value);
 	});
 	// handle showing the verdict options
-	$('#verdict').click(function() {
-		$('#game,#submit').toggle();
+	$('#verdict,return').click(function() {
+		$('#game,#submit,#verdict,#return').toggle();
 		$('#loading').hide();
-		
-		if ($('#game').is(':visible')) {
-			$('#verdict').html('Submit Verdict');
-		} else {
-			$('#verdict').html('Show Game');
-		}
 		window.scroll(0,0);
 	});
 	
@@ -39,10 +33,7 @@ $(function() {
 		$('#chat').toggleClass('champ-only');
 	});
 	// handle refreshing captcha
-	$('#refresh-captcha').click(function() {
-		// ajax load captcha, then in the callback:
-		$('#captcha').attr('src', base64string);
-	});
+	$('#refresh-captcha').click(reloadCaptcha);
 	// handle verdict timer
 	var interval, timeLeft = 60;
 	interval = window.setInterval(function() {
@@ -51,24 +42,50 @@ $(function() {
 		if (timeLeft < 1) {
 			window.clearInterval(interval);
 			$('#timer-message').detach();
+			$('#pardon,#punish').enable();
 		}
 	}, 1000);
 	// handle submitting a verdict
-	$('#pardon,#punish,#skip').click(function(event) {
+	$('#pardon,#punish').click(function(event) {
 		event.preventDefault();
-		if (timeLeft > 0) {
-			alert('Please spend more time reviewing the case');
-			return;
-		}
-		// maybe this should just do a regular form submission?
-		// (nope, because we should validate the response from riot and report errors without leaving the page)
+		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
+		$.ajax({
+			type: 'POST',
+			dataType: 'text',
+			url: '/ajax.php',
+			data: { cmd: 'sendVerdict', verdict: this.value, "captcha-result": $('#captcha-result').attr('value') },
+			success: offerQuit
+		});
+	});
+	$('#skip').click(function(event) {
+		event.preventDefault();
+		$.ajax({
+			type: 'POST',
+			dataType: 'text',
+			url: '/ajax.php',
+			data: { cmd: 'sendSkip' },
+			success: resetPage
+		});
 	});
 	
-	// load the total number of games and populate our game list
+	resetPage();
+});
+
+function offerQuit(data) {
+	if (data === '0') return alert('Your submission was not valid');
+	
+	if (window.confirm('Your verdict has been recorded. Do you wish to continue reviewing cases?')) {
+		resetPage();
+	} else {
+		window.close();
+	}
+}
+
+function resetPage() {
 	loadCase();
 	window.captchaLoaded = false;
 	window.captchaIsLoading = false;
-});
+}
 
 function reloadCaptcha() {
 	if (!window.captchaIsLoading) {
@@ -88,19 +105,23 @@ function reloadCaptcha() {
 
 function loadCase() {
 	$('#game,#submit').hide();
+	$('#pardon,#punish').disable();
 	$('#loading').show();
+	$('#game-selected').html('Game 1');
+	$('#games').empty();
 	
 	$.ajax({
 		type: 'POST',
-		dataType: 'text',
+		dataType: 'json',
 		url: '/ajax.php',
 		data: { cmd: 'getCase' },
 		success: function (data) {
-			var num = Number(data);
+			var num = Number(data.numGames);
 			if (num < 1) return alert('Could not get case data from Riot');
 			for (var i=1; i<=num; i++) {
-				$('<li onclick="void(0)"></li>').attr('value',i).html('Case '+i).appendTo('#games');
+				$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
 			}
+			$('#caseid').html(data.caseId);
 			loadGame('1');
 		}
 	});

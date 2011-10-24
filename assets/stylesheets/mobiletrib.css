@@ -22,7 +22,7 @@ body {
 	background-color: rgba(25,25,25,0.6);
 }
 
-#submit, #game {
+#submit, #game, #return {
 	display: none;
 }
 
@@ -52,10 +52,10 @@ h1 {
 }
 
 #game-selected:after {
-    content: " ▼";
+	content: " ▼";
 }
 
-#game-selected, #games li, #verdict {
+#game-selected, #games li, #verdict, #return {
 	color: white;
 	border: 1px solid black;
 	background: blue;
