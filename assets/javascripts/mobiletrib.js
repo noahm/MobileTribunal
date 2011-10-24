@@ -21,6 +21,7 @@ $(function() {
 		} else {
 			$('#verdict').html('Show Game');
 		}
+		window.scroll(0,0);
 	});
 	
 	// handle showing inventory details
