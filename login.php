@@ -51,7 +51,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 <head>
 	<?= htmlHead(); ?>
 </head>
-<body>
+<body onload="document.getElementById('username').focus()">
 	<form method="post" action"/" autocapitalize="off" autocorrect="off"><fieldset>
 		<legend>Login to access Tribunal Mobile</legend>
 		<div><?= implode('<br>', $feedback) ?></div>
