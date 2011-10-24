@@ -1,4 +1,6 @@
 <?php
+require_once 'partials.php';
+startSession();
 require_once 'proxy.php';
 
 $cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";
