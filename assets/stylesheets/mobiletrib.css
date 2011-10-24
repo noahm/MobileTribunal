@@ -1,6 +1,7 @@
 body {
 	font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode",
 		"Luxi Sans", Tahoma, sans-serif;
+	padding: .5em;
 }
 
 #loading {
@@ -37,7 +38,19 @@ h1 {
 }
 
 #game-selector {
-	float: right;
+	position: absolute;
+	text-align: center;
+	top: .5em;
+	right: .5em;
+}
+
+#downarrow {
+	border: 15px solid transparent;
+	border-top-color: black;
+	position: absolute;
+	top: 1.4em;
+	right: 35%;
+	z-index: -1;
 }
 
 #game-selected, #games li, #verdict {
@@ -46,12 +59,15 @@ h1 {
 	background: blue;
 	padding: .4em;
 	border-radius: 5px;
+	cursor: default;
 }
 
 #games {
 	display: none;
 	position: absolute;
-	margin-top: 0.5em;
+	right: 0;
+	top: 1.5em;
+	width: 6em;
 }
 
 #games li {
