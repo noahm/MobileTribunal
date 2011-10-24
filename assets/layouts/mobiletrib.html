@@ -67,14 +67,12 @@
 
 <div id="submit">
 	<p id="timer-message">Please review the case for at least <time>60</time> more seconds before deciding your verdict. (Time spent staring at these buttons doesn't count.)</p>
-	<form>
-		<img src="" id="captcha">
-		<input type="button" id="refresh-captcha" alt="refresh" value="refresh"><br>
-		<input type="text" id="captcha-result" name="captcha-result"><br><br>
-		<input type="submit" id="punish" value="punish">
-		<input type="submit" id="pardon" value="pardon">
-		<input type="submit" id="skip"   value="skip">
-	</form>
+	<img src="" id="captcha">
+	<button id="refresh-captcha" alt="refresh">Refresh Captcha</button><br>
+	<input type="text" id="captcha-result" name="captcha-result"><br><br>
+	<button type="submit" id="punish" value="punish">Punish</button>
+	<button type="submit" id="pardon" value="pardon">Pardon</button>
+	<button type="submit" id="skip"   value="skip">Skip</button>
 </div>
 
 </body>
