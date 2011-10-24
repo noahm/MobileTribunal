@@ -42,7 +42,7 @@ $(function() {
 		if (timeLeft < 1) {
 			window.clearInterval(interval);
 			$('#timer-message').detach();
-			$('#pardon,#punish').enable();
+			$('#pardon,#punish').attr('disabled', false);
 		}
 	}, 1000);
 	// handle submitting a verdict
@@ -105,7 +105,7 @@ function reloadCaptcha() {
 
 function loadCase() {
 	$('#game,#submit').hide();
-	$('#pardon,#punish').disable();
+	$('#pardon,#punish').attr('disabled', true);
 	$('#loading').show();
 	$('#game-selected').html('Game 1');
 	$('#games').empty();
