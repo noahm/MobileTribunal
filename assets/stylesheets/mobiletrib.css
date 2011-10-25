@@ -169,6 +169,10 @@ but it still needs some attention to actually get working */
 }
 }
 
+#chat, #reports {
+	word-wrap: break-word;
+}
+
 #chat input#champ-only {
 	height: 1em;
 	width: 1em;
