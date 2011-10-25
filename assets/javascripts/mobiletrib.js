@@ -162,6 +162,8 @@ function applyData(gameData) {
 	$('#deaths').html(stats.SCORES[1]);
 	$('#assists').html(stats.SCORES[2]);
 	$('#outcome').html(stats.WIN);
+	$('#game-type').html(gameData.game_type);
+	$('#premade').text(gameData.premade);
 	$('#creep-score').html(stats.MINIONS_KILLED);
 	$('#dps-out').html(stats.TOTAL_DAMAGE_DEALT);
 	$('#dps-in').html(stats.TOTAL_DAMAGE_RECEIVED);
