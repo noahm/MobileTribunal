@@ -128,8 +128,8 @@ function loadCase() {
 }
 
 function loadGame(gameNumber) {
-	$('#game,#submit').hide();
-	$('#loading').show();
+	$('#game,#submit,#return,#games').hide();
+	$('#loading,#verdict').show();
 	
 	$.ajax({
 		type: 'POST',
