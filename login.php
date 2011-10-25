@@ -45,26 +45,4 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 		}
 	}
 }
-?>
-<!DOCTYPE html>
-<html>
-<head>
-	<?= htmlHead(); ?>
-</head>
-<body onload="document.getElementById('username').focus()">
-	<form method="post" action"/" autocapitalize="off" autocorrect="off"><fieldset>
-		<legend>Login to access Tribunal Mobile</legend>
-		<div><?= implode('<br>', $feedback) ?></div>
-		<div><label for="realm">Region</label>
-			<select name="realm" id="realm">
-				<option value="na">North America</option>
-				<option value="euw">EU West</option>
-				<option value="eune">EU Nordic &amp; East</option>
-			</select>
-		</div>
-		<div><label for="user">Username</label> <input name="username" id="username" type="text"></div>
-		<div><label for="pass">Password</label> <input name="password" id="password" type="password"></div>
-		<div><input type="submit" value="Login"></div>
-	</fieldset></form>
-</body>
-</html>
+require 'assets/layouts/login.html';
