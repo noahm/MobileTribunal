@@ -15,10 +15,10 @@ $result = tribInit($name, $pw, $realm, $ch);
 if ( $result === false )
 	echo "Init failed: " . curl_error($ch);
 else
-	//echo "Init Cookies: {$result["cookies"]}<br /><br />Case number: {$result["caseno"]}<br /><br />";
+	//echo "Init Cookies: {$result["cookies"]}<br /><br />Case number: {$result["case"]}<br /><br />";
 
-$caseno = $result["caseno"];
-$result = tribGetCase($caseno, $realm, $ch, $result["cookies"]);
+$case = $result["case"];
+$result = tribGetCase($case, $realm, $ch, $result["cookies"]);
 
 if ( $result === false )
 	echo "Case-get failed: " . curl_error($ch);
@@ -29,7 +29,7 @@ else {
 
 echo "<br />GET GAME 1 <br />";
 
-$gameData = tribGetGame($caseno, 1, $realm, $ch, $result["cookies"]);
+$gameData = tribGetGame($case, 1, $realm, $ch, $result["cookies"]);
 
 echo nl2br(htmlspecialchars($gameData["JSON"]));
 
@@ -47,12 +47,12 @@ else {
 //Skip the case, get the next one
 echo "<br />SKIPPING CASE<br />";
 
-$result = tribSkipCase($caseno, $realm, $ch, $cookies);
+$result = tribSkipCase($case, $realm, $ch, $cookies);
 
 if ( $result === false )
 	echo "Case skip failed: " . curl_error($ch);
 else {
 
 	$cookies = $result["cookies"];
-	echo "<br />New Case no: {$result["caseno"]} <br />";
+	echo "<br />New Case no: {$result["case"]} <br />";
 }
