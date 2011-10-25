@@ -2,7 +2,11 @@
 $feedback = array();
 
 define("BETA", true);
-$betaUsers = array( '425c051fd12adb6e5a7b12292d013dfa61515cb5', '8e1a05c861a453ab06f3fd47b322ddee68feac0a' );
+$betaUsers = array (
+  '425c051fd12adb6e5a7b12292d013dfa61515cb5',
+  '8e1a05c861a453ab06f3fd47b322ddee68feac0a',
+  'a4ae191ab7d3291b8ec0c5ff7eac3710bce489f5',
+);
 
 if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['realm']))
 {
@@ -14,7 +18,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 		$feedback[] = 'Region was invalid.';
 	}
 
-	if ( BETA && !in_array(sha1($_POST['username']), $betaUsers) )
+	if ( BETA && !in_array(sha1(strtolower($_POST['username'])), $betaUsers) )
 	{
 		$validated = false;
 		$feedback[] = 'You do not have access to this beta test.';
