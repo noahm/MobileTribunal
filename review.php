@@ -27,7 +27,7 @@ if ( $verdict != "" )
 
 	if ( $result )
 	{
-		$_SESSION["case"] = $result["caseno"];
+		$_SESSION["case"] = $result["case"];
 		$_SESSION["cookies"] = $result["cookies"];
 	}
 	elseif ( $result === false ) //Submitted verdict but failed; differentiates from no verdict

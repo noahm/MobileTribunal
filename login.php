@@ -32,7 +32,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 		{
 			// save important info
 			$_SESSION['cookies'] = $result['cookies'];
-			$_SESSION['case'] = $result['caseno'];
+			$_SESSION['case'] = $result['case'];
 			// redirect back to the app
 			curl_close($ch);
 			header('Location: /');

@@ -48,18 +48,18 @@ function tribInit($name, $pass, $realm, $ch)
 
 	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
 	if ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$caseno = $matches[1];
+		$case = $matches[1];
 	else
 		return false;
 
-	return array("cookies" => $cookies, "caseno" => $caseno);
+	return array("cookies" => $cookies, "case" => $case);
 
 }
 
-function tribGetCase($caseno, $realm, $ch, $cookies)
+function tribGetCase($case, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/case/$caseno/review";
+	$url = "http://$realm.leagueoflegends.com/tribunal/case/$case/review";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false )
 		return false;
@@ -73,10 +73,10 @@ function tribGetCase($caseno, $realm, $ch, $cookies)
 
 }
 
-function tribGetGame($caseno, $gameno, $realm, $ch, $cookies)
+function tribGetGame($case, $game, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/case/$caseno/get-game/$gameno";
+	$url = "http://$realm.leagueoflegends.com/case/$case/get-game/$game";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
  	if ( $result === false )
  		return false;
@@ -97,27 +97,27 @@ function tribGetCaptcha($realm, $ch, $cookies)
 
 }
 
-function tribSkipCase($caseno, $realm, $ch, $cookies)
+function tribSkipCase($case, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/cases/skip/$caseno";
+	$url = "http://$realm.leagueoflegends.com/tribunal/cases/skip/$case";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
 	if ( $result === false )
 		return false;
 	elseif ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$caseno = $matches[1];
+		$case = $matches[1];
 	else
 		return false;
 
-	return array("caseno" => $caseno, "cookies" => $result["cookies"]);
+	return array("case" => $case, "cookies" => $result["cookies"]);
 
 }
 
-function tribReviewCase($caseno, $formTokens, $punish, $captcha, $realm, $ch, $cookies)
+function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/case/$caseno/review";
+	$url = "http://$realm.leagueoflegends.com/tribunal/case/$case/review";
 	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon", "captcha_result"=>$captcha));
 	$data = http_build_query($data);
 
@@ -129,11 +129,11 @@ function tribReviewCase($caseno, $formTokens, $punish, $captcha, $realm, $ch, $c
 	if ( $result === false )
 		return false;
 	elseif ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$caseno = $matches[1];
+		$case = $matches[1];
 	else
 		return false;
 
-	return array("caseno" => $caseno, "cookies" => $result["cookies"]);
+	return array("case" => $case, "cookies" => $result["cookies"]);
 
 }
 
