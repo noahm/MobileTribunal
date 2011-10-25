@@ -175,8 +175,9 @@ function applyData(gameData) {
 	// add reports
 	$('#reports').empty();
 	$('#allied-report-count').html(gameData.allied_report_count);
+	var newDiv = $("<div/>");
 	for (var i=0; i<gameData.allied_report_count; i++) {
-		var report = gameData.allycomments[i];
+		var report = newDiv.html(gameData.allycomments[i]).text();
 		var reason = gameData.allyreportreasons[i];
 		$('<li class="allied"></li>').html(report).append($('<h2></h2>').html(reason)).appendTo('#reports');
 	}
