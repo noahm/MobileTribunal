@@ -64,11 +64,11 @@ $(function() {
 			dataType: 'text',
 			url: '/ajax.php',
 			data: { cmd: 'sendSkip' },
-			success: resetPage
+			success: nextCase
 		});
 	});
 	
-	resetPage();
+	nextCase();
 });
 
 function offerQuit(data) {
@@ -82,7 +82,7 @@ function offerQuit(data) {
 	}
 }
 
-function resetPage() {
+function nextCase() {
 	loadCase();
 	window.captchaLoaded = false;
 	window.captchaIsLoading = false;
@@ -99,6 +99,7 @@ function reloadCaptcha() {
 			success: function(data) {
 				$('#captcha').attr('src',data);
 				window.captchaIsLoading = false;
+				window.captchaLoaded = true;
 			}
 		});
 	}
