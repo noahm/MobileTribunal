@@ -75,7 +75,7 @@ function offerQuit(data) {
 	if (data === '0') return alert('Your submission was not valid');
 	
 	if (window.confirm('Your verdict has been recorded. OK to continue reviewing cases. Cancel to quit.')) {
-		resetPage();
+		loadCase();
 	} else {
 		$('body').html('<h1>Thank you for volunteering your time to enforce the summoner\'s code. This page will now close.</h1>');
 		window.close();
