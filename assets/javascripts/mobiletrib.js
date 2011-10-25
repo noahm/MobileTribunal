@@ -64,11 +64,11 @@ $(function() {
 			dataType: 'text',
 			url: '/ajax.php',
 			data: { cmd: 'sendSkip' },
-			success: nextCase
+			success: loadCase
 		});
 	});
 	
-	nextCase();
+	loadCase();
 });
 
 function offerQuit(data) {
@@ -80,12 +80,6 @@ function offerQuit(data) {
 		$('body').html('<h1>Thank you for volunteering your time to enforce the summoner\'s code. This page will now close.</h1>');
 		window.close();
 	}
-}
-
-function nextCase() {
-	loadCase();
-	window.captchaLoaded = false;
-	window.captchaIsLoading = false;
 }
 
 function reloadCaptcha() {
@@ -106,6 +100,10 @@ function reloadCaptcha() {
 }
 
 function loadCase() {
+	window.captchaLoaded = false;
+	window.captchaIsLoading = false;
+	window.cachedGames = {};
+	
 	$('#game,#submit').hide();
 	$('#pardon,#punish').attr('disabled', true);
 	$('#loading').show();
@@ -133,13 +131,20 @@ function loadGame(gameNumber) {
 	$('#game,#submit,#return,#games').hide();
 	$('#loading,#verdict').show();
 	
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: '/ajax.php',
-		data: { cmd: 'getGame', game: gameNumber },
-		success: applyData
-	});
+	if (!window.cachedGames[gameNumber]) {
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: '/ajax.php',
+			data: { cmd: 'getGame', game: gameNumber },
+			success: function(gameData) {
+				window.cachedGames[gameNumber] = gameData;
+				applyData(gameData);
+			}
+		});
+	} else {
+		applyData(window.cachedGames[gameNumber]);
+	}
 }
 
 function applyData(gameData) {
