@@ -67,9 +67,7 @@ switch ( $cmd )
 
 			$_SESSION["cookies"] = $result["cookies"];	//In case next request fails
 
-			if ( $result["captchaResult"] != "1" )
-				echo "failed";
-			else
+			if ( $result["captchaResult"] == "1" )
 			{
 	
 				$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $result["cookies"]);
@@ -84,7 +82,8 @@ switch ( $cmd )
 				}
 
 			}
-
+			else
+				echo "failed";
 		}
 		break;
 
