@@ -137,6 +137,25 @@ function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $coo
 
 }
 
+function tribCheckCaptcha($captcha, $realm, $ch, $cookies)
+{
+
+	$url = "http://$realm.leagueoflegends.com/cases/captchacheck";
+	$data = array("captcha"=>$captcha);
+	$data = http_build_query($data);
+
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+	curl_setopt($ch, CURLOPT_POST, false);
+
+	if ( $result === false )
+		return false;
+
+	return array("captchaResult" => $result["html"], "cookies" => $result["cookies"]);
+
+}
+
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
 

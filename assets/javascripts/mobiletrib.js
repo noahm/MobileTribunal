@@ -73,6 +73,8 @@ $(function() {
 
 function offerQuit(data) {
 	if (data === '0') return alert('Your submission was not valid');
+
+	if (data === 'failed') return alert('Incorrect captcha');
 	
 	if (window.confirm('Your verdict has been recorded. OK to continue reviewing cases. Cancel to quit.')) {
 		loadCase();

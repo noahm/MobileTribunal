@@ -58,14 +58,33 @@ switch ( $cmd )
 		break;
 
 	case "sendVerdict":
-		$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
+		//Check captcha first
+		$result = tribCheckCaptcha($captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 		if ( $result === false )
 			echo "0";
 		else
 		{
-			$_SESSION['cookies'] = $result['cookies'];
-			$_SESSION['case'] = $result['case'];
-			echo $result["case"];
+
+			$_SESSION["cookies"] = $result["cookies"];	//In case next request fails
+
+			if ( $result["captchaResult"] == "0" )
+				echo "failed";
+			else
+			{
+	
+				$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
+
+				if ( $result === false )
+					echo "0";
+				else
+				{
+					$_SESSION['cookies'] = $result['cookies'];
+					$_SESSION['case'] = $result['case'];
+					echo $result["case"];
+				}
+
+			}
+
 		}
 		break;
 
