@@ -140,7 +140,7 @@ function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $coo
 function tribCheckCaptcha($captcha, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/cases/captchacheck";
+	$url = "http://$realm.leagueoflegends.com/cases/captcha-check";
 	$data = array("captcha"=>$captcha);
 	$data = http_build_query($data);
 

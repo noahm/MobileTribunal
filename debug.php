@@ -44,15 +44,7 @@ else {
 	echo "<img src=\"{$result["captcha"]}\"><br />";
 }
 
-//Skip the case, get the next one
-echo "<br />SKIPPING CASE<br />";
 
-$result = tribSkipCase($case, $realm, $ch, $cookies);
+$result = tribCheckCaptcha("asdf", $realm, $ch, $cookies);
 
-if ( $result === false )
-	echo "Case skip failed: " . curl_error($ch);
-else {
-
-	$cookies = $result["cookies"];
-	echo "<br />New Case no: {$result["case"]} <br />";
-}
+echo "<br />Captcha check result: " . htmlspecialchars($result["captchaResult"]);
