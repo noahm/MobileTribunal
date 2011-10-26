@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 
 body {
 	font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode",
@@ -9,6 +9,12 @@ body {
 #title {
 	position: relative;
 	margin-top: .5em;
+}
+
+#footer {
+	width: 100%;
+	text-align: center;
+	font-size: 60%;
 }
 
 #loading {
