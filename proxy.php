@@ -13,7 +13,7 @@ function tribInit($name, $pass, $realm, $ch)
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-	curl_setopt($ch, CURLOPT_CAINFO, "assets/certificates/cacert.crt");
+	curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "/assets/certificates/cacert.crt");
 
 	$result = getHtmlHeaderAndCookies($ch, $url, "");
 	if ( $result === false )
