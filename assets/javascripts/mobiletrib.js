@@ -46,19 +46,18 @@ $(function() {
 		}
 	}, 1000);
 	// handle submitting a verdict
-	$('#pardon,#punish').click(function(event) {
-		event.preventDefault();
+	$('#pardon,#punish').click(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
+		if ($(this).is('[disabled]')) return;
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
 			url: 'ajax.php',
-			data: { cmd: 'sendVerdict', verdict: this.value, "captcha-result": $('#captcha-result').attr('value') },
+			data: { cmd: 'sendVerdict', verdict: this.id, "captcha-result": $('#captcha-result').attr('value') },
 			success: processCaseResult
 		});
 	});
-	$('#skip').click(function(event) {
-		event.preventDefault();
+	$('#skip').click(function() {
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',

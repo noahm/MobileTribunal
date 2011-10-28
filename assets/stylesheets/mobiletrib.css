@@ -79,7 +79,7 @@ h1 {
 	display: none;
 	position: absolute;
 	right: 0;
-	top: 1.5em;
+	top: 1.6em;
 	width: 6em;
 }
 
@@ -212,3 +212,54 @@ but it still needs some attention to actually get working */
 #chat.champ-only .summoner,
 #chat.champ-only time
 { display: none; }
+
+#captcha {
+	width: 220px;
+	height: auto;
+}
+#refresh-captcha {
+	display: inline-block;
+	vertical-align: top;
+	background-image: url(../images/refreshcap.png);
+	background-position-y: 0px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	height: 33px;
+	width: 35px;
+}
+#refresh-captcha:hover {
+	background-position-y: -33px;
+}
+
+#captcha-result {
+	width: 255px;
+	font-size: xx-large;
+	vertical-align: top;
+}
+
+#submit {
+	text-align: center;
+}
+#punish,#pardon,#skip {
+	width: 267px;
+	height: 54px;
+	cursor: pointer;
+	margin: 1.5em 1em 0;
+	display: inline-block;
+}
+#punish:hover,#pardon:hover,#skip:hover {
+	background-position-y: -54px;
+}
+#punish[disabled],#pardon[disabled] {
+	cursor: auto;
+	background-position-y: -108px !important;
+}
+#punish {
+	background-image: url(../images/punishbutton.png);
+}
+#pardon {
+	background-image: url(../images/pardonbutton.png);
+}
+#skip {
+	background-image: url(../images/skipbutton.png);
+}

@@ -76,13 +76,16 @@
 </div>
 
 <div id="submit">
-	<p id="timer-message">Please review the case for at least <time>60</time> more seconds before deciding your verdict. (Time spent staring at these buttons doesn't count.)</p>
-	<img src="" id="captcha">
-	<button id="refresh-captcha" alt="refresh">Refresh Captcha</button><br>
-	<input type="text" id="captcha-result" name="captcha-result" autocorrect="off" autocapitalize="off"><br><br>
-	<button type="submit" id="punish" value="punish">Punish</button>
-	<button type="submit" id="pardon" value="pardon">Pardon</button>
-	<button type="submit" id="skip"   value="skip">Skip</button>
+	<div id="timer-message">
+		<p>Please review the case for at least <time>60</time> more seconds before deciding your verdict.</p>
+		<p>(Time spent staring at these buttons doesn't count.)</p>
+	</div>
+	<img src="http://www.placekitten.com/175/45" id="captcha" height="45" width="175">
+	<div onclick="void(0)" id="refresh-captcha" title="Refresh Captcha"></div>
+	<input type="text" size="4" id="captcha-result" name="captcha-result" autocorrect="off" autocapitalize="off">
+	<div onclick="void(0)" id="punish"></div>
+	<div onclick="void(0)" id="pardon"></div>
+	<div onclick="void(0)" id="skip"></div>
 </div>
 
 </body>
