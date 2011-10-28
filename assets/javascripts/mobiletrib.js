@@ -49,6 +49,7 @@ $(function() {
 	$('#pardon,#punish').click(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
 		if ($(this).is('[disabled]')) return;
+		$('#loading').show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
@@ -58,6 +59,7 @@ $(function() {
 		});
 	});
 	$('#skip').click(function() {
+		$('#loading').show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
@@ -71,6 +73,7 @@ $(function() {
 });
 
 function processCaseResult(data) {
+	$('#loading').hide();
 	if (data === '0')
 		alert('Your submission was not valid');
 	else if (data === 'failed')
