@@ -52,9 +52,9 @@ $(function() {
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
-			url: '/ajax.php',
+			url: 'ajax.php',
 			data: { cmd: 'sendVerdict', verdict: this.value, "captcha-result": $('#captcha-result').attr('value') },
-			success: offerQuit
+			success: processCaseResult
 		});
 	});
 	$('#skip').click(function(event) {
@@ -62,26 +62,30 @@ $(function() {
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
-			url: '/ajax.php',
+			url: 'ajax.php',
 			data: { cmd: 'sendSkip' },
-			success: loadCase
+			success: processCaseResult
 		});
 	});
 	
 	loadCase();
 });
 
-function offerQuit(data) {
-	if (data === '0') return alert('Your submission was not valid');
-
-	if (data === 'failed') return alert('Incorrect captcha');
-	
-	if (window.confirm('Your verdict has been recorded. OK to continue reviewing cases. Cancel to quit.')) {
+function processCaseResult(data) {
+	if (data === '0')
+		alert('Your submission was not valid');
+	else if (data === 'failed')
+		alert('Incorrect captcha');
+	else if (data === 'finished')
+		showFinished();
+	else
 		loadCase();
-	} else {
-		$('body').html('<h1>Thank you for volunteering your time to enforce the summoner\'s code. This page will now close.</h1>');
-		window.close();
-	}
+}
+
+function showFinished() {
+	$('#game,#submit,#loading,#title').hide();
+	$('#finished').show();
+	return true;
 }
 
 function reloadCaptcha() {
@@ -90,7 +94,7 @@ function reloadCaptcha() {
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
-			url: '/ajax.php',
+			url: 'ajax.php',
 			data: { cmd: 'getCaptcha' },
 			success: function(data) {
 				$('#captcha').attr('src',data);
@@ -115,16 +119,22 @@ function loadCase() {
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: '/ajax.php',
+		url: 'ajax.php',
 		data: { cmd: 'getCase' },
 		success: function (data) {
-			var num = Number(data.numGames);
-			if (num < 1) return alert('Could not get case data from Riot');
-			for (var i=1; i<=num; i++) {
-				$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
+
+			if ( data.caseId === 'finished' )
+				showFinished();
+			else
+			{
+				var num = Number(data.numGames);
+				if (num < 1) return alert('Could not get case data from Riot');
+				for (var i=1; i<=num; i++) {
+					$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
+				}
+				$('#caseid').html(data.caseId);
+				loadGame('1');
 			}
-			$('#caseid').html(data.caseId);
-			loadGame('1');
 		}
 	});
 }
@@ -137,7 +147,7 @@ function loadGame(gameNumber) {
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
-			url: '/ajax.php',
+			url: 'ajax.php',
 			data: { cmd: 'getGame', game: gameNumber },
 			success: function(gameData) {
 				window.cachedGames[gameNumber] = gameData;

@@ -22,6 +22,13 @@ switch ( $cmd )
 
 	case "getCase":
 		header('Content-Type: application/json');
+
+		if ( $_SESSION['case'] == "finished" )  //if user logs in but has already hit the limit
+		{
+			echo json_encode(array('numGames'=> 0, 'caseId'=>"finished"));
+			break;
+		}
+
 		$result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
 			echo "0";

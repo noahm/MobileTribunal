@@ -28,7 +28,12 @@ body {
 	background-color: rgba(25,25,25,0.6);
 }
 
-#submit, #game, #return {
+#finished {
+	width: 100%;
+	text-align: center;
+}
+
+#submit, #game, #return, #finished {
 	display: none;
 }
 

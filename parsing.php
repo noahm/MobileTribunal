@@ -27,3 +27,20 @@ function getFormTokens($doc)
 		'form_id' => $xpath->query("//input[@name='form_id']/@value")->item(0)->value,
 	);
 }
+
+function tribParseLocation($header, $realm)
+{
+
+	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") )
+		return "finished";
+	else
+	{
+		$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
+		if ( preg_match($pattern, $header, $matches) != 0 )
+			return $matches[1];
+		else
+			return false;
+
+	}
+
+}

@@ -43,18 +43,13 @@ function tribInit($name, $pass, $realm, $ch)
 	//Get the first case number
 	$url = "http://$realm.leagueoflegends.com/tribunal/cases/review";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+
 	if ( $result === false )
 		return false;
-	else
-		$cookies = $result["cookies"];
-
-	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
-	if ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$case = $matches[1];
-	else
+	elseif ( !$case = tribParseLocation($result["header"], $_SESSION["realm"]) )
 		return false;
 
-	return array("cookies" => $cookies, "case" => $case);
+	return array("cookies" => $result["cookies"], "case" => $case);
 
 }
 
@@ -104,12 +99,10 @@ function tribSkipCase($case, $realm, $ch, $cookies)
 
 	$url = "http://$realm.leagueoflegends.com/tribunal/cases/skip/$case";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
+
 	if ( $result === false )
 		return false;
-	elseif ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$case = $matches[1];
-	else
+	elseif ( !$case = tribParseLocation($result["header"], $_SESSION["realm"]) )
 		return false;
 
 	return array("case" => $case, "cookies" => $result["cookies"]);
@@ -127,12 +120,10 @@ function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $coo
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	curl_setopt($ch, CURLOPT_POST, false);
-	$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";
+
 	if ( $result === false )
 		return false;
-	elseif ( preg_match($pattern, $result["header"], $matches) != 0 )
-		$case = $matches[1];
-	else
+	elseif ( !$case = tribParseLocation($result["header"], $_SESSION["realm"]) )
 		return false;
 
 	return array("case" => $case, "cookies" => $result["cookies"]);
