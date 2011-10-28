@@ -2,6 +2,25 @@
 <html>
 <head>
 	<?= htmlHead(); ?>
+	<link rel="stylesheet" href="../stylesheets/normalize.css">
+	<style>
+	body {
+		padding: .5em;
+	}
+	fieldset {
+		padding-top: .5em;
+	}
+	body,input,select {
+		font-size: x-large;
+	}
+	label {
+		display: inline-block;
+		width: 5em;
+	}
+	div {
+		margin-bottom: 1em;
+	}
+	</style>
 </head>
 <body onload="document.getElementById('username').focus()">
 	<form method="post" action="" autocapitalize="off" autocorrect="off"><fieldset>
