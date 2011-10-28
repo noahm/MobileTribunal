@@ -150,6 +150,10 @@ function loadGame(gameNumber) {
 			data: { cmd: 'getGame', game: gameNumber },
 			success: function(gameData) {
 				window.cachedGames[gameNumber] = gameData;
+				gameData.champion = gameData.champion.replace(/^http:/,'https:');
+				for (var i=0; i<gameData.items.length; i++) {
+					gameData.items[i].icon = gameData.items[i].icon.replace(/^http:/,'https:');
+				}
 				applyData(gameData);
 			}
 		});
