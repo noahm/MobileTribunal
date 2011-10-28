@@ -24,8 +24,10 @@ body {
 	top: 0;
 	left: 0;
 	text-align: center;
-	padding-top: 6em;
 	background-color: rgba(25,25,25,0.6);
+}
+#loading p {
+	padding-top: 6em;
 }
 
 #finished {
