@@ -80,6 +80,8 @@ function processCaseResult(data) {
 		alert('Incorrect captcha');
 	else if (data === 'finished')
 		showFinished();
+	else if (data === 'nosess')
+		location.reload();
 	else
 		loadCase();
 }
@@ -152,6 +154,8 @@ function loadGame(gameNumber) {
 			url: 'ajax.php',
 			data: { cmd: 'getGame', game: gameNumber },
 			success: function(gameData) {
+				if ( gameData === 'nosess' )
+					return location.reload();
 				window.cachedGames[gameNumber] = gameData;
 				gameData.champion = gameData.champion.replace(/^http:/,'https:');
 				for (var i=0; i<gameData.items.length; i++) {

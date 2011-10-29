@@ -12,8 +12,8 @@ $captchaResult = isset($_REQUEST["captcha-result"]) ? $_REQUEST["captcha-result"
 if ( $cmd == "getGame" && $game == "" )
 	die("0");
 
-if ( $cmd == "sendVerdict" && (!preg_match('/^\w{4}$/',$captchaResult) || !preg_match('/^(punish|pardon)$/', $verdict)) )
-	die("0");
+if ( !isset($_SESSION['cookies']) || !isset($_SESSION['realm']) || !isset($_SESSION['case']) )
+	die("nosess");
 
 $ch = curl_init();
 
