@@ -245,3 +245,9 @@ function applyData(gameData) {
 	$('#game').show();
 	window.scroll(0,0);
 }
+
+function disclaim()
+{
+
+	alert("Mobile Tribunal is provided as is with no guarantees as to its functionality. While every effort is made to protect your information (all connections are encrypted with SSL), the Mobile Tribunal is not responsible for theft of your data, including, but not limited to, usernames and passwords.");
+}
