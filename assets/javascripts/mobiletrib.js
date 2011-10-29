@@ -156,17 +156,26 @@ function loadGame(gameNumber) {
 			success: function(gameData) {
 				if ( gameData === 'nosess' )
 					return location.reload();
-				window.cachedGames[gameNumber] = gameData;
-				gameData.champion = gameData.champion.replace(/^http:/,'https:');
-				for (var i=0; i<gameData.items.length; i++) {
-					gameData.items[i].icon = gameData.items[i].icon.replace(/^http:/,'https:');
-				}
+				gameData = initData(gameData, gameNumber);
 				applyData(gameData);
 			}
 		});
 	} else {
 		applyData(window.cachedGames[gameNumber]);
 	}
+}
+
+function initData(gameData, gameNumber) {
+	window.cachedGames[gameNumber] = gameData;
+	gameData.champion = gameData.champion.replace(/^http:/,'https:');
+	for (var i=0; i<gameData.items.length; i++) {
+		gameData.items[i].icon = gameData.items[i].icon.replace(/^http:/,'https:');
+	}
+	gameData.champsUsed = {};
+	for (var i=0; i<gameData.stats.length; i++) {
+		gameData.champsUsed[gameData.stats[i].NAME] = gameData.stats[i].SKIN;
+	}
+	return gameData;
 }
 
 function applyData(gameData) {
@@ -223,7 +232,7 @@ function applyData(gameData) {
 	var chatLength = gameData.chatlogtext.length;
 	for (var i=0; i<chatLength; i++) {
 		var summoner = gameData.chatlogusers[i];
-		var champion = gameData.chatlogchampions[i];
+		var champion = gameData.chatlogchampions[i] || gameData.champsUsed[summoner];
 		var timestamp = gameData.chatloggametime[i];
 		var message = gameData.chatlogtext[i];
 		var classes = gameData.chatlogteams[i];
@@ -232,10 +241,10 @@ function applyData(gameData) {
 		$('<li></li>').addClass(classes)
 			.append(
 				$('<span class="author"></span>')
-					.append($('<span class="summoner"></span>').html(summoner))
-					.append($('<span class="character"></span>').html(champion))
+					.append($('<span class="summoner"></span>').text(summoner))
+					.append($('<span class="character"></span>').text(champion))
 			)
-			.append($('<time></time>').html(timestamp))
+			.append($('<time></time>').text(timestamp))
 			.append(': '+message)
 			.appendTo($chat);
 	}
@@ -252,6 +261,5 @@ function applyData(gameData) {
 
 function disclaim()
 {
-
 	alert("Mobile Tribunal is provided as is with no guarantees as to its functionality. While every effort is made to protect your information (all connections are encrypted with SSL), the Mobile Tribunal is not responsible for theft of your data, including, but not limited to, usernames and passwords.");
 }
