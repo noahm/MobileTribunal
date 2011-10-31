@@ -12,6 +12,7 @@ $betaUsers = array (
   'ef6e140cfecabddcacef16a24844071a1276e6cb',
   '125d7214fa04ca774b20577128f25502d0f695bc',
   '35354d3611b5f1350da676e397452ce912cb1670',
+  '5673cfafdd4d2078ce0731c92322d0f91f1ed715',
 );
 
 if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['realm']))
