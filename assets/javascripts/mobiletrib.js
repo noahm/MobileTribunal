@@ -34,17 +34,6 @@ $(function() {
 	});
 	// handle refreshing captcha
 	$('#refresh-captcha').click(reloadCaptcha);
-	// handle verdict timer
-	var interval, timeLeft = 60;
-	interval = window.setInterval(function() {
-		if ($('#game').is(':visible')) timeLeft -= 1;
-		$('#timer-message time').html(timeLeft);
-		if (timeLeft < 1) {
-			window.clearInterval(interval);
-			$('#timer-message').detach();
-			$('#pardon,#punish').attr('disabled', false);
-		}
-	}, 1000);
 	// handle submitting a verdict
 	$('#pardon,#punish').click(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
@@ -114,8 +103,16 @@ function loadCase() {
 	window.captchaIsLoading = false;
 	window.cachedGames = {};
 	
+	// handle verdict timer
+	$('#timer-message').show();
+	window.timeLeft = 61;
+	timerTick();
+	window.timerInterval = window.setInterval(timerTick, 1000);
+	
+	$('#captcha-result').text('');
+	
+	// assure the right things are visible
 	$('#game,#submit').hide();
-	$('#pardon,#punish').attr('disabled', true);
 	$('#loading').show();
 	$('#game-selected').html('Game 1');
 	$('#games').empty();
@@ -141,6 +138,20 @@ function loadCase() {
 			}
 		}
 	});
+}
+
+function timerTick() {
+	if ($('#game').is(':visible')) window.timeLeft -= 1;
+	if (window.timeLeft >= 1) {
+		$('#timer-message time').text(window.timeLeft);
+		$('#verdict time').text('in '+window.timeLeft+'s');
+		$('#pardon,#punish').attr('disabled', true);
+	} else {
+		window.clearInterval(window.timerInterval);
+		$('#timer-message').hide();
+		$('#verdict time').text('now');
+		$('#pardon,#punish').attr('disabled', false);
+	}
 }
 
 function loadGame(gameNumber) {
