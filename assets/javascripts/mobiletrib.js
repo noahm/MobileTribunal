@@ -105,7 +105,7 @@ function loadCase() {
 	
 	// handle verdict timer
 	$('#timer-message').show();
-	window.timeLeft = 61;
+	window.timeLeft = 60;
 	timerTick();
 	window.timerInterval = window.setInterval(timerTick, 1000);
 	
