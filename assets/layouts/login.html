@@ -12,14 +12,33 @@
 	body,input,select {
 		font-size: x-large;
 	}
-	label {
+	label:first-child {
 		display: inline-block;
 		width: 5em;
 	}
 	div {
 		margin-bottom: 0.8em;
 	}
+	input[type=checkbox] {
+		vertical-align: middle;
+	}
 	</style>
+	<script>
+	$(function(){
+		$('#username').attr('value', $.store.get('username'));
+		$('#password').attr('value', $.store.get('password'));
+		$('#save').attr('checked', !!$.store.get('password'));
+		
+		$('form').submit(function() {
+			$.store.set('username', $('#username').attr('value'));
+			if ($('#save').attr('checked')) {
+				$.store.set('password', $('#password').attr('value'));
+			} else  {
+				$.store.remove('password');
+			}
+		});
+	});
+	</script>
 </head>
 <body onload="document.getElementById('username').focus()">
 	<form method="post" action="" autocapitalize="off" autocorrect="off"><fieldset>
@@ -32,8 +51,9 @@
 				<option value="eune">EU Nordic &amp; East</option>
 			</select>
 		</div>
-		<div><label for="user">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off"></div>
-		<div><label for="pass">Password</label> <input name="password" id="password" type="password"></div>
+		<div><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off"></div>
+		<div><label for="password">Password</label> <input name="password" id="password" type="password"></div>
+		<div><label></label><input type="checkbox" id="save"> <label for="save">Remember password locally</label></div>
 		<div><input type="submit" value="Login"></div>
 	</fieldset></form>
 </body>
