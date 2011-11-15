@@ -3,11 +3,15 @@
 
 function htmlHead() {
 	return <<<HTML
-	<title>Tribunal Mobile</title>
-	<meta name="viewport" content="width=device-width,user-scalable=no">
+	<title>Tribunal</title>
+	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/normalize.css">
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<link rel="shortcut icon" type="image/x-icon" href="assets/images/icons/favicon.ico" />
+	<link rel="apple-touch-icon" media="screen and (resolution: 163dpi)" href="assets/images/icons/57.png" />
+	<link rel="apple-touch-icon" media="screen and (resolution: 132dpi)" href="assets/images/icons/72.png" />
+	<link rel="apple-touch-icon" media="screen and (resolution: 326dpi)" href="assets/images/icons/114.png" />
 
 HTML;
 }
