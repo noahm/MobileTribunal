@@ -109,7 +109,7 @@ function loadCase() {
 	timerTick();
 	window.timerInterval = window.setInterval(timerTick, 1000);
 	
-	$('#captcha-result').text('');
+	$('#captcha-result').attr('value', '');
 	
 	// assure the right things are visible
 	$('#game,#submit').hide();
