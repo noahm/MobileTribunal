@@ -51,8 +51,10 @@ body {
 	color: #9B00FE;
 }
 
-h1 {
+h1,#summoner-name {
+	display: block;
 	text-align: center;
+	font-family: inherit;
 	clear: both;
 	margin: .6em;
 }
