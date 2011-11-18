@@ -196,6 +196,7 @@ function applyData(gameData) {
 	// expand the data into the #game div
 	$('#summoner-name').html('"' + gameData.summoner + '"');
 	$('#portrait img').attr('src', gameData.champion);
+	$('#portrait img').attr('alt', gameData.champsUsed[gameData.summoner]);
 	
 	var stats = gameData.stats[0];
 	$('#level').html(stats.LEVEL);
