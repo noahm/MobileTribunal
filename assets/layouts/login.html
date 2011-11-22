@@ -25,11 +25,13 @@
 	</style>
 	<script>
 	$(function(){
+		$('#realm').attr('value', $.store.get('realm'));
 		$('#username').attr('value', $.store.get('username'));
 		$('#password').attr('value', $.store.get('password'));
 		$('#save').attr('checked', !!$.store.get('password'));
 		
 		$('form').submit(function() {
+			$.store.set('realm', $('#realm').attr('value'));
 			$.store.set('username', $('#username').attr('value'));
 			if ($('#save').attr('checked')) {
 				$.store.set('password', $('#password').attr('value'));
