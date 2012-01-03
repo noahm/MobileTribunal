@@ -43,7 +43,7 @@ $(function() {
 			type: 'POST',
 			dataType: 'text',
 			url: 'ajax.php',
-			data: { cmd: 'sendVerdict', verdict: this.id, "captcha-result": $('#captcha-result').attr('value') },
+			data: { cmd: 'sendVerdict', verdict: this.id, "captcha-result": $('#captcha-result').val() },
 			success: processCaseResult
 		});
 	});
@@ -109,7 +109,7 @@ function loadCase() {
 	timerTick();
 	window.timerInterval = window.setInterval(timerTick, 1000);
 	
-	$('#captcha-result').attr('value', '');
+	$('#captcha-result').val('');
 	
 	// assure the right things are visible
 	$('#game,#submit').hide();
