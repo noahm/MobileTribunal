@@ -42,9 +42,9 @@
 	});
 	</script>
 </head>
-<body onload="document.getElementById('username').focus()">
-	<form method="post" action="" autocapitalize="off" autocorrect="off"><fieldset>
-		<legend>Login to Tribunal Mobile</legend>
+<body class="login">
+	<form method="post" action="" autocapitalize="off" autocorrect="off"><section>
+		<div class="title"><span>Login to Tribunal Mobile</span></div>
 		<div style="background-color:yellow"><?= implode('<br>', $feedback) ?></div>
 		<div><label for="realm">Region</label>
 			<select name="realm" id="realm">
@@ -53,10 +53,10 @@
 				<option value="eune">EU Nordic &amp; East</option>
 			</select>
 		</div>
-		<div><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off"></div>
+		<div><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off" autofocus></div>
 		<div><label for="password">Password</label> <input name="password" id="password" type="password"></div>
-		<div><label></label><input type="checkbox" id="save"> <label for="save">Remember password locally</label></div>
+		<div><label></label><input type="checkbox" id="save"> <label for="save">Save password</label></div>
 		<div><input type="submit" value="Login"></div>
-	</fieldset></form>
+	</section></form>
 </body>
 </html>

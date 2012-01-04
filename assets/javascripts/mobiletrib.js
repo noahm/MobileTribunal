@@ -194,20 +194,21 @@ function applyData(gameData) {
 	if (!window.captchaLoaded) reloadCaptcha();
 	
 	// expand the data into the #game div
-	$('#summoner-name').html('"' + gameData.summoner + '"');
+	$('#summoner-name').text('"' + gameData.summoner + '"');
 	$('#portrait img').attr('src', gameData.champion);
 	$('#portrait img').attr('alt', gameData.champsUsed[gameData.summoner]);
+	$('#champname span').text(gameData.champsUsed[gameData.summoner]);
 	
 	var stats = gameData.stats[0];
-	$('#level').html(stats.LEVEL);
-	$('#time').html(stats.TIME_PLAYED + ':00'); //fudge the time because riot only gives minutes
-	$('#kills').html(stats.SCORES[0]);
-	$('#deaths').html(stats.SCORES[1]);
-	$('#assists').html(stats.SCORES[2]);
-	$('#outcome').html(stats.WIN);
-	$('#creep-score').html(stats.MINIONS_KILLED);
-	$('#dps-out').html(stats.TOTAL_DAMAGE_DEALT);
-	$('#dps-in').html(stats.TOTAL_DAMAGE_RECEIVED);
+	$('#level').text(stats.LEVEL);
+	$('#time').text(stats.TIME_PLAYED + ':00'); //fudge the time because riot only gives minutes
+	$('#kills').text(stats.SCORES[0]);
+	$('#deaths').text(stats.SCORES[1]);
+	$('#assists').text(stats.SCORES[2]);
+	$('#outcome').text(stats.WIN);
+	$('#minion-kills').text(stats.MINIONS_KILLED);
+	$('#dps-out').text(stats.TOTAL_DAMAGE_DEALT);
+	$('#dps-in').text(stats.TOTAL_DAMAGE_RECEIVED);
 	
 	// setup inventory-container
 	$('#inventory-container').empty();
