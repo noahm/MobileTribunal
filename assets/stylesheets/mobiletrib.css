@@ -329,3 +329,31 @@ but it still needs some attention to actually get working */
 #skip {
 	background-image: url(../images/skipbutton.png);
 }
+
+/*
+Styles for login form!
+*/
+
+body.login, .login input, .login select {
+	font-size: 17pt;
+}
+
+.login div.input > * {
+	width: 250px;
+}
+
+.login label:first-child {
+	display: block;
+}
+
+.login section {
+	margin-top: 1em;
+}
+
+.login section > div {
+	margin-bottom: 0.7em;
+}
+
+.login input[type=checkbox] {
+	vertical-align: middle;
+}

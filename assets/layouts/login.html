@@ -2,59 +2,21 @@
 <html>
 <head>
 	<?= htmlHead(); ?>
-	<style>
-	body {
-		padding: .5em;
-	}
-	fieldset {
-		padding-top: .5em;
-	}
-	body,input,select {
-		font-size: x-large;
-	}
-	label:first-child {
-		display: inline-block;
-		width: 5em;
-	}
-	div {
-		margin-bottom: 0.8em;
-	}
-	input[type=checkbox] {
-		vertical-align: middle;
-	}
-	</style>
-	<script>
-	$(function(){
-		$('#realm').attr('value', $.store.get('realm'));
-		$('#username').attr('value', $.store.get('username'));
-		$('#password').attr('value', $.store.get('password'));
-		$('#save').attr('checked', !!$.store.get('password'));
-		
-		$('form').submit(function() {
-			$.store.set('realm', $('#realm').attr('value'));
-			$.store.set('username', $('#username').attr('value'));
-			if ($('#save').attr('checked')) {
-				$.store.set('password', $('#password').attr('value'));
-			} else  {
-				$.store.remove('password');
-			}
-		});
-	});
-	</script>
+	<script src="/assets/javascripts/login.js"></script>
 </head>
 <body class="login">
 	<form method="post" action="" autocapitalize="off" autocorrect="off"><section>
 		<div class="title"><span>Login to Tribunal Mobile</span></div>
 		<div style="background-color:yellow"><?= implode('<br>', $feedback) ?></div>
-		<div><label for="realm">Region</label>
+		<div class="input"><label for="realm">Region</label>
 			<select name="realm" id="realm">
 				<option value="na">North America</option>
 				<option value="euw">EU West</option>
 				<option value="eune">EU Nordic &amp; East</option>
 			</select>
 		</div>
-		<div><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off" autofocus></div>
-		<div><label for="password">Password</label> <input name="password" id="password" type="password"></div>
+		<div class="input"><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off" autofocus></div>
+		<div class="input"><label for="password">Password</label> <input name="password" id="password" type="password"></div>
 		<div><label></label><input type="checkbox" id="save"> <label for="save">Save password</label></div>
 		<div><input type="submit" value="Login"></div>
 	</section></form>
