@@ -42,6 +42,7 @@ $(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
 		if ($(this).is('[disabled]')) return;
 		$('#loading').show();
+		window.scroll(0,0);
 		$.ajax({
 			type: 'POST',
 			dataType: 'text',
@@ -95,6 +96,7 @@ function reloadCaptcha() {
 			data: { cmd: 'getCaptcha' },
 			success: function(data) {
 				$('#captcha').attr('src',data);
+				$('#captcha-result').val('');
 				window.captchaIsLoading = false;
 				window.captchaLoaded = true;
 			}
