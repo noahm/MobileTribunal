@@ -3,8 +3,11 @@
 body {
 	font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode",
 		"Luxi Sans", Tahoma, sans-serif;
-	padding: .5em;
 	background-color: #fff7da;
+}
+
+#viewporter {
+	padding: .5em;
 }
 
 #title {
@@ -365,6 +368,7 @@ body.login, .login input, .login select {
 
 .login section {
 	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
 .login section > div {

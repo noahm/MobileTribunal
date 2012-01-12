@@ -4,7 +4,7 @@
 	<?= htmlHead(); ?>
 	<script type="text/javascript" src="assets/javascripts/mobiletrib.js"></script>
 </head>
-<body>
+<body><div id="viewporter">
 
 <div id="title">
 	<div id="game-selector">
@@ -13,7 +13,7 @@
 		</ul>
 	</div>
 	<div id="verdict">Submit Verdict <time>in 60s</time></div>
-	<div id="return">Return to Case <span id="caseid"></span></div>
+	<div id="return" style="display:inline-block;">Return to Case <span id="caseid"></span></div>
 	<pre id="summoner-name"></pre>
 </div>
 
@@ -93,5 +93,5 @@
 	<a href="?logout">Logout</a> | By kayson and psoplayer | <a href="javascript:disclaim()">Disclaimer</a>
 </div>
 
-</body>
+</div></body>
 </html>

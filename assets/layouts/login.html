@@ -4,7 +4,7 @@
 	<?= htmlHead(); ?>
 	<script src="assets/javascripts/login.js"></script>
 </head>
-<body class="login">
+<body class="login"><div id="viewporter">
 	<form method="post" action="" autocapitalize="off" autocorrect="off"><section>
 		<div class="title"><span>Login to Tribunal Mobile</span></div>
 		<div style="background-color:yellow"><?= implode('<br>', $feedback) ?></div>
@@ -20,5 +20,5 @@
 		<div><label></label><input type="checkbox" id="save"> <label for="save">Save password</label></div>
 		<div><input type="submit" value="Login"></div>
 	</section></form>
-</body>
+</div></body>
 </html>
