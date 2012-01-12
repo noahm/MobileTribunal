@@ -177,15 +177,23 @@ function loadGame(gameNumber) {
 }
 
 function initData(gameData, gameNumber) {
-	window.cachedGames[gameNumber] = gameData;
+	// force secure links to images
 	gameData.champion = gameData.champion.replace(/^http:/,'https:');
 	for (var i=0; i<gameData.items.length; i++) {
 		gameData.items[i].icon = gameData.items[i].icon.replace(/^http:/,'https:');
 	}
+	// try to fix missing champ names
 	gameData.champsUsed = {};
 	for (var i=0; i<gameData.stats.length; i++) {
 		gameData.champsUsed[gameData.stats[i].NAME] = gameData.stats[i].SKIN;
 	}
+	// fix time string if it is over an hour
+	if (Number(gameData.TIME_PLAYED) === NaN) {
+		var timechunks = /^(\d+)[\w\s]*?(\d+)$/.exec(gameData.TIME_PLAYED);
+		gameData.TIME_PLAYED = Number(timechunks[1]) * 60 + Number(timechunks[2]);
+	}
+	// cache the fixed data
+	window.cachedGames[gameNumber] = gameData;
 	return gameData;
 }
 

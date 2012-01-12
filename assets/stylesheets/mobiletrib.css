@@ -43,10 +43,6 @@ body {
 	text-align: center;
 }
 
-#submit, #game, #return, #finished {
-	display: none;
-}
-
 :not(#chat) > .enemy, .enemy .author {
 	color: #BC0000;
 }
@@ -377,4 +373,11 @@ body.login, .login input, .login select {
 
 .login input[type=checkbox] {
 	vertical-align: middle;
+}
+
+/*
+Initial styles
+*/
+#submit, #game, #return, #finished {
+	display: none;
 }
