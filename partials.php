@@ -8,7 +8,7 @@ function htmlHead() {
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/normalize.css">
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/mobiletrib.css">
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="assets/javascripts/jquery.store.js"></script>
 	<link rel="shortcut icon" type="image/x-icon" href="assets/images/icons/favicon.ico" />
 	<link rel="apple-touch-icon" media="screen and (resolution: 163dpi)" href="assets/images/icons/57.png" />
