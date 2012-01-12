@@ -204,8 +204,8 @@ function applyData(gameData) {
 	// expand the data into the #game div
 	$('#summoner-name').text('"' + gameData.summoner + '"');
 	$('#portrait img').attr('src', gameData.champion);
-	$('#portrait img').attr('alt', gameData.champsUsed[gameData.summoner]);
-	$('#champname span').text(gameData.champsUsed[gameData.summoner]);
+	$('#portrait img').attr('alt', gameData.CHAMPION_NAME || gameData.champsUsed[gameData.summoner]);
+	$('#champname span').text(gameData.CHAMPION_NAME || gameData.champsUsed[gameData.summoner]);
 	
 	var stats = gameData.stats[0];
 	$('#level').text(stats.LEVEL);
