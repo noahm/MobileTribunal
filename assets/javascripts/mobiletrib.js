@@ -30,8 +30,11 @@ $(function() {
 	});
 	// handle champonly checkbox
 	$('#champ-only').change(function() {
-		$('#chat').toggleClass('champ-only');
+		$.store.set('chat.champ-only', $('#champ-only').attr('checked'));
+		if ($('#chat').hasClass('champ-only') != $('#champ-only').attr('checked'))
+			$('#chat').toggleClass('champ-only');
 	});
+	$('#champ-only').attr('checked', !!$.store.get('chat.champ-only')).change();
 	// handle refreshing captcha
 	$('#refresh-captcha').click(reloadCaptcha);
 	// handle submitting a verdict
@@ -57,6 +60,7 @@ $(function() {
 			success: processCaseResult
 		});
 	});
+	
 	
 	loadCase();
 });
@@ -247,7 +251,7 @@ function applyData(gameData) {
 	}
 	
 	// build chat log
-	var $chat = $('#chat').removeClass().empty();
+	var $chat = $('#chat').empty();
 	var chatLength = gameData.chatlogtext.length;
 	for (var i=0; i<chatLength; i++) {
 		var summoner = gameData.chatlogusers[i];
@@ -270,7 +274,7 @@ function applyData(gameData) {
 	
 	// reset chat filter controls
 	$('#chat-filter')[0].selectedIndex = 0;
-	$('#champ-only')[0].checked = false;
+	$('#chat-filter').change();
 	
 	// show our handywork
 	$('#loading').hide();
