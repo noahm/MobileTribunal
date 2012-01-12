@@ -31,7 +31,7 @@ $(function() {
 	// handle champonly checkbox
 	$('#champ-only').change(function() {
 		$.store.set('chat.champ-only', $('#champ-only').attr('checked'));
-		if ($('#chat').hasClass('champ-only') != $('#champ-only').attr('checked'))
+		if ($('#chat').hasClass('champ-only') != !!$('#champ-only').attr('checked'))
 			$('#chat').toggleClass('champ-only');
 	});
 	$('#champ-only').attr('checked', !!$.store.get('chat.champ-only')).change();
@@ -172,7 +172,7 @@ function loadGame(gameNumber) {
 			data: { cmd: 'getGame', game: gameNumber },
 			success: function(gameData) {
 				if ( gameData === 'nosess' )
-					return location.reload();
+					return window.location = 'https://'+window.location.hostname+window.location.pathname.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '')+'/index.php?login';
 				gameData = initData(gameData, gameNumber);
 				applyData(gameData);
 			}

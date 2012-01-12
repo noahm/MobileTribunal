@@ -65,7 +65,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 			$_SESSION['case'] = $result['case'];
 			// redirect back to the app
 			curl_close($ch);
-			header('Location: /');
+			header('Location: index.php?review');
 			die;
 		}
 		else

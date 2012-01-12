@@ -2,7 +2,7 @@
 // We always use SSL
 if ($_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
 {
-	header('Location: https://tribunal.phpfogapp.com/?secure');
+	header('Location: https://tribunal.phpfogapp.com/index.php?secure');
 	die;
 }
 
@@ -15,7 +15,7 @@ if ( isset($_REQUEST["logout"]) )
 
 	$_SESSION = array();
 	session_destroy();
-	header('Location: /');
+	header('Location: index.php?login');
 	die();
 
 }

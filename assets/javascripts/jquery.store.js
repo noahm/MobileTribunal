@@ -44,6 +44,7 @@ jQuery.store = (function(){
 	}
 	api.deserialize = function(value) {
 		if (typeof value != 'string') { return undefined }
+		else if (value === 'undefined') { return undefined }
 		return JSON.parse(value)
 	}
 
