@@ -9,13 +9,13 @@ body {
 
 #title {
 	position: relative;
-	margin-top: .5em;
+	margin-bottom: 1em;
 }
 
 #footer {
-	width: 100%;
 	text-align: center;
 	font-size: 60%;
+	margin: 1em;
 }
 
 #loading {
@@ -29,6 +29,13 @@ body {
 }
 #loading p {
 	padding-top: 6em;
+}
+#loading p span {
+	background-color: rgba(0, 0, 0, 0.7);
+	display: inline-block;
+	padding: 1em;
+	border-radius: 5px;
+	color: white;
 }
 
 #finished {
@@ -54,19 +61,22 @@ body {
 
 #summoner-name {
 	background-color: #970c00;
-	background-image: -webkit-linear-gradient(-90deg, #290300, #9d0c00, #290300);
-	background-image:    -moz-linear-gradient(-90deg, #290300, #9d0c00, #290300);
-	background-image:     -ms-linear-gradient(-90deg, #290300, #9d0c00, #290300);
-	background-image:      -o-linear-gradient(-90deg, #290300, #9d0c00, #290300);
+	background-image: -webkit-linear-gradient(0deg, #290300, #9d0c00, #290300);
+	background-image:    -moz-linear-gradient(0deg, #290300, #9d0c00, #290300);
+	background-image:     -ms-linear-gradient(0deg, #290300, #9d0c00, #290300);
+	background-image:      -o-linear-gradient(0deg, #290300, #9d0c00, #290300);
 	display: block;
-	border-radius: 12px;
+	border-radius: 20px;
 	box-shadow: 0 1px 5px #333;
 	text-align: center;
 	font-family: inherit;
 	color: white;
+	text-shadow: 0px -1px 0px #222;
 	clear: both;
-	margin: 1em auto 0.3em;
+	margin: 1.0em auto 0.3em;
+	padding: .3em;
 	width: 80%;
+	font-size: 15pt;
 }
 
 #game-selector {
@@ -87,6 +97,8 @@ body {
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+	display: inline-block;
+	margin: 0;
 }
 #game-selected, #verdict, #return {
 	color: white;
@@ -147,7 +159,7 @@ section .title > span {
 	background-image:     -ms-linear-gradient(-90deg, #dbc07e, #c5a862);
 	background-image:      -o-linear-gradient(-90deg, #dbc07e, #c5a862);
 	border-radius: 4px;
-	padding: 0 5px;
+	padding: 3px 5px;
 	box-shadow: 0px 1px 2px #555;
 	text-shadow: 0px 1px 1px #f4e2b4;
 }
@@ -195,7 +207,7 @@ section .title > span {
 }
 
 #stats {
-	width: 300px;
+	max-width: 320px;
 }
 
 #stats #time-score img {
@@ -207,6 +219,7 @@ section .title > span {
 	-moz-columns: 2;
 	columns: 2;
 	text-shadow: 0px 1px 0px lightgrey;
+	height: 2.8em;
 }
 
 #stats ul li {
@@ -276,6 +289,14 @@ but it still needs some attention to actually get working */
 #chat.champ-only time
 { display: none; }
 
+/*
+Styles for submit screen
+*/
+
+#timer-message p {
+	margin: 1em;
+}
+
 #captcha {
 	width: 220px;
 	height: auto;
@@ -331,7 +352,7 @@ but it still needs some attention to actually get working */
 }
 
 /*
-Styles for login form!
+Styles for login form
 */
 
 body.login, .login input, .login select {
