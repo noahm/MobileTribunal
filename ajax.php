@@ -13,7 +13,7 @@ if ( $cmd == "getGame" && $game == "" )
 	die("0");
 
 if ( !isset($_SESSION['cookies']) || !isset($_SESSION['realm']) || !isset($_SESSION['case']) )
-	die("nosess");
+	die('"nosess"');
 
 $ch = curl_init();
 
