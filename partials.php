@@ -21,6 +21,12 @@ HTML;
 
 function startSession() {
 	// session expires in 30 minutes, only on our domain, only send session cookie over SSL
-	session_set_cookie_params(1800, '/', 'tribunal.phpfogapp.com', true);
+	session_set_cookie_params(1800, '/', $_SERVER['HTTP_HOST'], true);
 	session_start();
 }
+
+function getAbsolutePath() {
+	return (FORCE_SSL ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+}
+
+?>

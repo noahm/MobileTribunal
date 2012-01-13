@@ -33,6 +33,7 @@ function tribParseLocation($header, $realm)
 
 	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") )
 		return "finished";
+
 	else
 	{
 		$pattern = "/Location: http:\/\/$realm\.leagueoflegends\.com\/tribunal\/case\/([0-9]*)\/review\r\n/isU";

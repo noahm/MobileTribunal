@@ -1,12 +1,14 @@
 <?php
 // We always use SSL
-if ($_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
-{
-	header('Location: https://tribunal.phpfogapp.com/index.php?secure');
-	die;
-}
+define('FORCE_SSL', true);
 
 require_once 'partials.php';
+
+if (FORCE_SSL && $_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
+{
+	header('Location: ' . getAbsolutePath() . '?secure');
+	die;
+}
 
 startSession(); // only use this on the endpoint pages (index.php and ajax.php)
 
@@ -15,9 +17,8 @@ if ( isset($_REQUEST["logout"]) )
 
 	$_SESSION = array();
 	session_destroy();
-	header('Location: index.php?login');
+	header('Location: ' . getAbsolutePath() . '?login');
 	die();
-
 }
 
 // if we don't know which case they're reviewing, they are not logged in
@@ -29,3 +30,4 @@ else
 {
 	require 'review.php';
 }
+?>

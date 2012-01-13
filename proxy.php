@@ -39,6 +39,8 @@ function tribInit($name, $pass, $realm, $ch)
 	else
 		$cookies = $result["cookies"];
 
+	if ( stristr($result["header"], "Location: http://$realm.leagueoflegends.com/tribunal/error/level\r\n") )
+		return array("cookies" => $result["cookies"], "case" => "level");
 
 	//Get the first case number
 	$url = "http://$realm.leagueoflegends.com/tribunal/cases/review";

@@ -32,6 +32,7 @@ $betaUsers = array (
   'facbf9909ab183d4298fdfb13ae251d865c05e77',
   'd3c38b028016a1ff2a2397a28865ecb48a618c9e',
   '952cb339e99b81493667f346be8efab58574c5c6',
+  'b4bbc1d3a3cdeb5bb41ec4c2cb65a1dd1a7a87d1',
 );
 
 if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['realm']))
@@ -60,13 +61,29 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 		require_once 'proxy.php';
 		if ($result = tribInit($_POST['username'], $_POST['password'], $_SESSION['realm'], $ch))
 		{
-			// save important info
-			$_SESSION['cookies'] = $result['cookies'];
-			$_SESSION['case'] = $result['case'];
-			// redirect back to the app
-			curl_close($ch);
-			header('Location: index.php?review');
-			die;
+
+
+			if ($result['case'] == "finished")
+			{
+				$feedback[] = 'You have done all the cases that Riot allows within a single day. The limit is reset nightly at 1:00 AM PDT';
+				curl_close($ch);
+			}
+			elseif ($result['case'] == "level")
+			{
+				$feedback[] = 'You must be level 30 to participate in the Tribunal';
+				curl_close($ch);
+			}
+			else
+			{
+				// save important info
+				$_SESSION['cookies'] = $result['cookies'];
+				$_SESSION['case'] = $result['case'];
+				// redirect back to the app
+				curl_close($ch);
+				header('Location: ' . getAbsolutePath() . '?review');
+				die;
+			}
+
 		}
 		else
 		{
