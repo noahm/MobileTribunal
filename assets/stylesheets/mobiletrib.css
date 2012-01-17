@@ -101,6 +101,7 @@ body {
 }
 #game-selected, #verdict, #return {
 	color: white;
+	line-height: 1.2em;
 	background-color: #1a304d;
 	background-image: -webkit-linear-gradient(-90deg, #3d699e, #1a304d, #13244b);
 	background-image:    -moz-linear-gradient(-90deg, #3d699e, #1a304d, #13244b);
