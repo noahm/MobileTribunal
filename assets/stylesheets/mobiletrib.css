@@ -219,7 +219,7 @@ section .title > span {
 	-moz-columns: 2;
 	columns: 2;
 	text-shadow: 0px 1px 0px lightgrey;
-	height: 2.8em;
+	min-height: 2.8em;
 }
 
 #stats ul li {
@@ -257,7 +257,11 @@ but it still needs some attention to actually get working */
 }
 
 #chat, #reports {
+	white-space: pre-wrap;
 	word-wrap: break-word;
+	overflow-wrap: break-word;
+	width: auto;
+	word-break: break-all;
 }
 
 #chat input#champ-only {
