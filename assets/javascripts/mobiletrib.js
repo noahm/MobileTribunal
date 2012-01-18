@@ -30,7 +30,7 @@ $(function() {
 	});
 	// handle champonly checkbox
 	$('#champ-only').change(function() {
-		$.store.set('chat.champ-only', $('#champ-only').attr('checked'));
+		$.store.set('chat.champ-only', !!$('#champ-only').attr('checked'));
 		if ($('#chat').hasClass('champ-only') != !!$('#champ-only').attr('checked'))
 			$('#chat').toggleClass('champ-only');
 	});

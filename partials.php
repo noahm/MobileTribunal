@@ -47,7 +47,7 @@ function htmlHead() {
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/normalize.css">
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/mobiletrib.css">
 	<script type="text/javascript" src="assets/javascripts/jquery.min.js"></script>
-	<script type="text/javascript" src="assets/javascripts/jquery.store.js"></script>
+	<script type="text/javascript" src="assets/javascripts/jquery.store.patched.js"></script>
 	<script type="text/javascript" src="assets/javascripts/viewporter.js"></script>
 	<link rel="shortcut icon" type="image/x-icon" href="assets/images/icons/favicon.ico" />
 	<link rel="apple-touch-icon" media="screen and (resolution: 163dpi)" href="assets/images/icons/57.png" />
