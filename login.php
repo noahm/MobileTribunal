@@ -4,6 +4,7 @@ $feedback = array();
 define("BETA", true);
 $betaUsers = array (
   'b4bbc1d3a3cdeb5bb41ec4c2cb65a1dd1a7a87d1',
+  '84623f05082c43d16e90466fd60dff499905ba39',
   '425c051fd12adb6e5a7b12292d013dfa61515cb5',
   '8e1a05c861a453ab06f3fd47b322ddee68feac0a',
   'a4ae191ab7d3291b8ec0c5ff7eac3710bce489f5',
@@ -35,7 +36,7 @@ $betaUsers = array (
   'd3c38b028016a1ff2a2397a28865ecb48a618c9e',
   '952cb339e99b81493667f346be8efab58574c5c6',
   'b3c1ddbf5e7cd637e5bb97f98e1601bc158ea5f7',
-  '84623f05082c43d16e90466fd60dff499905ba39',
+  '61f0eab02874394590282533230833cfa02b889c',
 );
 
 if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['realm']))
