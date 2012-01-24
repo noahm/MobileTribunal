@@ -261,7 +261,7 @@ but it still needs some attention to actually get working */
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	width: auto;
-	word-break: break-all;
+/*	word-break: break-all;*/
 }
 
 #chat input#champ-only {
