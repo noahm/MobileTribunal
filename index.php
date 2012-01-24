@@ -2,9 +2,9 @@
 // We always use SSL
 define('FORCE_SSL', true);
 
-require_once 'partials.php';
+require_once 'support/partials.php';
 
-if (FORCE_SSL && $_SERVER['HTTP_X_FORWARDED_PROTO'] != 'https')
+if (FORCE_SSL && !usingSSL())
 {
 	header('Location: ' . getAbsolutePath() . '?secure');
 	die;

@@ -1,7 +1,7 @@
 <?php
-require_once 'partials.php';
+require_once 'support/partials.php';
 startSession();
-require_once 'proxy.php';
+require_once 'support/proxy.php';
 
 $cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";
 $game = isset($_REQUEST["game"]) ? $_REQUEST["game"] : "";
