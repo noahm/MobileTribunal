@@ -3,6 +3,9 @@ define("BETA", true);
 $betaUsers = array (
   'b4bbc1d3a3cdeb5bb41ec4c2cb65a1dd1a7a87d1',
   '84623f05082c43d16e90466fd60dff499905ba39',
+  'e6eba2d4fcdbf8df4b262bc9b62ff602d627e67e',
+  '18a972149bc114a29b27add4b4dfca0b524e859a',
+  '9aecc6f612dbc813edf7a3a593b56bd46251ef78',
   '425c051fd12adb6e5a7b12292d013dfa61515cb5',
   '8e1a05c861a453ab06f3fd47b322ddee68feac0a',
   'a4ae191ab7d3291b8ec0c5ff7eac3710bce489f5',
@@ -35,10 +38,8 @@ $betaUsers = array (
   '952cb339e99b81493667f346be8efab58574c5c6',
   'b3c1ddbf5e7cd637e5bb97f98e1601bc158ea5f7',
   '61f0eab02874394590282533230833cfa02b889c',
-  'e6eba2d4fcdbf8df4b262bc9b62ff602d627e67e',
-  '18a972149bc114a29b27add4b4dfca0b524e859a',
-  '9aecc6f612dbc813edf7a3a593b56bd46251ef78',
   '7271193f2847b8f380f5cab3973ddb5dec9f27ac',
+  'b6bffd556cd67e9e7494b430c6da6c7b33df1be2',
 );
 
 function startSession() {
