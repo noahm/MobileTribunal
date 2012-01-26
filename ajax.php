@@ -2,7 +2,9 @@
 require_once 'support/partials.php';
 startSession();
 require_once 'support/proxy.php';
-if (!usingSSL()) die;
+
+if (FORCE_SSL && !usingSSL()) die;
+
 header('Content-Type: application/json');
 
 $cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";

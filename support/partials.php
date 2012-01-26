@@ -35,6 +35,10 @@ $betaUsers = array (
   '952cb339e99b81493667f346be8efab58574c5c6',
   'b3c1ddbf5e7cd637e5bb97f98e1601bc158ea5f7',
   '61f0eab02874394590282533230833cfa02b889c',
+  'e6eba2d4fcdbf8df4b262bc9b62ff602d627e67e',
+  '18a972149bc114a29b27add4b4dfca0b524e859a',
+  '9aecc6f612dbc813edf7a3a593b56bd46251ef78',
+
 );
 
 function startSession() {
