@@ -24,7 +24,7 @@ if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['r
 
 		// perform login
 		$ch = curl_init();
-		require_once 'proxy.php';
+		require_once 'support/proxy.php';
 		if ($result = tribInit($_POST['username'], $_POST['password'], $_SESSION['realm'], $ch))
 		{
 
