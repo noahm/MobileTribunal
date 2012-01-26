@@ -1,32 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?= htmlHead(); ?>
-	<script type="text/javascript" src="assets/javascripts/mobiletrib.js"></script>
+	<title>Tribunal</title>
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" type="text/css" href="assets/stylesheets/normalize.css">
+	<link rel="stylesheet" type="text/css" href="assets/stylesheets/mobiletrib.css">
+	<script type="text/javascript" src="assets/javascripts/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/javascripts/jquery.store.patched.js"></script>
+	<script type="text/javascript" src="assets/javascripts/viewporter.js"></script>
+	<script type="text/javascript" async="true" src="assets/javascripts/mobiletrib.js"></script>
+	<link rel="shortcut icon" type="image/x-icon" href="assets/images/icons/favicon.ico" />
+	<link rel="apple-touch-icon" media="screen and (resolution: 163dpi)" href="assets/images/icons/57.png" />
+	<link rel="apple-touch-icon" media="screen and (resolution: 132dpi)" href="assets/images/icons/72.png" />
+	<link rel="apple-touch-icon" media="screen and (resolution: 326dpi)" href="assets/images/icons/114.png" />
 </head>
 <body><div id="viewporter">
-
-<div id="title">
-	<div id="game-selector">
-		<span id="game-selected">Game 1</span>
-		<ul id="games">
-		</ul>
-	</div>
-	<div id="verdict">Submit Verdict <time>in 60s</time></div>
-	<div id="return" style="display:inline-block;">Return to Case <span id="caseid"></span></div>
-	<pre id="summoner-name"></pre>
-</div>
 
 <div id="loading">
 	<p><span><img src="assets/images/spinner.gif" style="vertical-align:middle"> Loading...</span></p>
 </div>
 
-<div id="game">
+<div id="login" class="login" style="display:none">
+<form autocapitalize="off" autocorrect="off"><section>
+	<div class="title"><span>Login to Tribunal Mobile</span></div>
+	<div style="background-color:yellow" id="feedback"></div>
+	<div class="input"><label for="realm">Region</label>
+		<select name="realm" id="realm">
+			<option value="na">North America</option>
+			<option value="euw">EU West</option>
+			<option value="eune">EU Nordic &amp; East</option>
+		</select>
+	</div>
+	<div class="input"><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off" autofocus></div>
+	<div class="input"><label for="password">Password</label> <input name="password" id="password" type="password"></div>
+	<div><label></label><input type="checkbox" id="save"> <label for="save">Save password</label></div>
+	<div><input type="submit" value="Login"></div>
+</section></form>
+</div>
+
+<div id="title" class="req-by-game req-by-submit exc-by-login exc-by-finished" style="display:none">
+	<div id="game-selector">
+		<span id="game-selected">Game 1</span>
+		<ul id="games">
+		</ul>
+	</div>
+	<div id="verdict" class="req-by-game exc-by-submit">Submit Verdict <time>in 60s</time></div>
+	<div id="return" class="req-by-submit exc-by-game" style="display:inline-block;">Return to Case <span id="caseid"></span></div>
+	<pre id="summoner-name"></pre>
+</div>
+
+<div id="game" style="display:none">
 	<div id="core-info">
 		<section id="character-box" class="float">
 			<div id="champname" class="title"><span></span></div>
 			<div id="portrait">
-				<img src="">
+				<img src="assets/images/blank.gif">
 				<div id="level"></div>
 			</div>
 			<div id="inventory">
@@ -71,16 +100,16 @@
 	</section>
 </div>
 
-<div id="finished">
+<div id="finished" style="display:none">
 	<p>You have done all the cases that Riot allows within a single day. The limit is reset nightly at 1:00 AM PDT</p>
 </div>
 
-<div id="submit">
+<div id="submit" style="display:none">
 	<div id="timer-message">
 		<p>Please review the case for at least <time>60</time> more seconds before deciding your verdict.</p>
 		<p>(Time spent staring at these buttons doesn't count.)</p>
 	</div>
-	<img src="" id="captcha" height="45" width="175">
+	<img src="assets/images/blank.gif" id="captcha" height="45" width="175">
 	<div onclick="void(0)" id="refresh-captcha" title="Refresh Captcha"></div>
 	<div><input type="text" size="4" id="captcha-result" name="captcha-result" autocorrect="off" autocapitalize="off" autocomplete="off"></div>
 	<div onclick="void(0)" id="punish"></div>
@@ -90,7 +119,7 @@
 
 
 <div id="footer">
-	<a href="index.php?logout">Logout</a> | By kayson and psoplayer | <a href="javascript:disclaim()">Disclaimer</a>
+	<a id="logout" href="javascript:void(0)">Logout</a> | By kayson and psoplayer | <a href="javascript:disclaim()">Disclaimer</a>
 </div>
 
 </div></body>

@@ -17,17 +17,8 @@ if ( isset($_REQUEST["logout"]) )
 
 	$_SESSION = array();
 	session_destroy();
-	header('Location: ' . getAbsolutePath() . '?login');
+	header('Location: ' . getAbsolutePath());
 	die();
 }
 
-// if we don't know which case they're reviewing, they are not logged in
-if (!isset($_SESSION['case']))
-{
-	require 'login.php';
-}
-else
-{
-	require 'review.php';
-}
-?>
+include 'assets/layouts/mobiletrib.html';

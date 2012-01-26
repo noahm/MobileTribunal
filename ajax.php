@@ -2,32 +2,31 @@
 require_once 'support/partials.php';
 startSession();
 require_once 'support/proxy.php';
+if (!usingSSL()) die;
+header('Content-Type: application/json');
 
 $cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";
 $game = isset($_REQUEST["game"]) ? $_REQUEST["game"] : "";
 $verdict = isset($_REQUEST["verdict"]) ? $_REQUEST["verdict"] : "";
 $captchaResult = isset($_REQUEST["captcha-result"]) ? $_REQUEST["captcha-result"] : "";
-$username = isset($_REQUEST["username"]) ? $_REQUEST["username"] : "";
-$password = isset($_REQUEST["password"]) ? $_REQUEST["password"] : "";
-$realm = isset($_REQUEST["realm"]) ? $_REQUEST["realm"] : "";
+
+if ($cmd == 'login') {
+	$username = isset($_REQUEST["username"]) ? $_REQUEST["username"] : "";
+	$password = isset($_REQUEST["password"]) ? $_REQUEST["password"] : "";
+	$realm = isset($_REQUEST["realm"]) ? $_REQUEST["realm"] : "";
+}
 
 //Some verification so we don't send bogus requests
 if ( $cmd == "getGame" && $game == "" )
 {
-	header('Content-Type: application/json');
-	die("0");
+	echo '{}';
+	return;
 }
 
-if ( !isset($_SESSION['cookies']) || !isset($_SESSION['realm']) || !isset($_SESSION['case']) )
+if ( $cmd != 'login' && (!isset($_SESSION['cookies']) || !isset($_SESSION['realm']) || !isset($_SESSION['case'])) )
 {
-	header('Content-Type: application/json');
-	die('"nosess"');
-}
-
-if ( $cmd == "login" && ( $username == "" || $password == "" || !in_array($realm, array('na','euw','eune')) ) )
-{
-	header('Content-Type: application/json');
-	die("0");
+	die('{"status":"nosess"}');
+	return;
 }
 
 $ch = curl_init();
@@ -35,48 +34,64 @@ $ch = curl_init();
 switch ( $cmd )
 {
 
-	case "login":
-		header('Content-Type: application/json');
-
-		// save realm to the session
-		$_SESSION['realm'] = $_POST['realm'];
-
-		// perform login
-		$ch = curl_init();
-
-		if ($result = tribInit($username, $password, $realm, $ch))
-		{
-
-			if ($result['case'] == "finished" || $result['case'] == "level")
-			{
-				echo json_encode(array('caseId'=>$result['case']));
-				curl_close($ch);
-			}
-			else
-			{
-				// save important info
-				$_SESSION['cookies'] = $result['cookies'];
-				$_SESSION['case'] = $result['case'];
-				echo json_encode(array('caseId'=>$result['case']));
-
-				curl_close($ch);
-			}
-
-		}
-		else
-		{
-			curl_close($ch);
-			echo json_encode(array('caseId'=>'fail'));
-		}
+	case 'logout':
+		$_SESSION = array();
+		session_destroy();
+		echo json_encode(array('status' => 'ok'));
 		break;
 
+	case 'login':
+		$feedback = array();
+		if (empty($username) || empty($password) || empty($realm)) {
+			$feedback[] = 'You must fill out all fields.';
+		} else {
+			// validate submission
+			$validated = true;
+			if (!in_array($realm, array('na','euw','eune')))
+			{
+				$validated = false;
+				$feedback[] = 'Region was invalid.';
+			}
+
+			if ( BETA && !in_array(sha1(strtolower($username)), $betaUsers) )
+			{
+				$validated = false;
+				$feedback[] = 'You do not have access to this beta test.';
+			}
+
+			if ($validated)
+			{
+				// save realm to the session
+				$_SESSION['realm'] = $realm;
+
+				// perform login
+				if ($result = tribInit($username, $password, $_SESSION['realm'], $ch))
+				{
+					// save important info
+					$_SESSION['cookies'] = $result['cookies'];
+					$_SESSION['case'] = $result['case'];
+					echo '{"status":"ok"}';
+					break;
+				}
+				else
+				{
+					$feedback[] = 'Riot rejected your login.';
+				}
+			}
+		}
+		echo json_encode(array( 'status' => 'error', 'feedback' => $feedback));
+		break;
 
 	case "getCase":
-		header('Content-Type: application/json');
+		if ( $_SESSION['case'] == "finished" )  //if user logs in but has already hit the limit
+		{
+			echo json_encode(array('numGames'=> 0, 'caseId'=>'finished', 'status'=>'finished'));
+			break;
+		}
 
 		$result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
-			echo "0";
+			echo '{}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
@@ -86,10 +101,9 @@ switch ( $cmd )
 		break;
 
 	case "getGame":
-		header('Content-Type: application/json');
 		$result = tribGetGame($_SESSION['case'], $game, $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
-			echo "0";
+			echo '{}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
@@ -101,7 +115,7 @@ switch ( $cmd )
 		header('Content-Type: text/plain');
 		$result = tribGetCaptcha($_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
-			echo "0";
+			echo '0';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
@@ -113,7 +127,7 @@ switch ( $cmd )
 		//Check captcha first
 		$result = tribCheckCaptcha($captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 		if ( $result === false )
-			echo "0";
+			echo '{}';
 		else
 		{
 
@@ -125,34 +139,34 @@ switch ( $cmd )
 				$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $result["cookies"]);
 
 				if ( $result === false )
-					echo "0";
+					echo '{}';
 				else
 				{
 					$_SESSION['cookies'] = $result['cookies'];
 					$_SESSION['case'] = $result['case'];
-					echo $result["case"];
+					echo json_encode($result["case"]);
 				}
 
 			}
 			else
-				echo "failed";
+				echo '{"status":"failed"}';
 		}
 		break;
 
 	case "sendSkip":
 		$result = tribSkipCase($_SESSION["case"], $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 		if ( $result === false )
-			echo "0";
+			echo '{}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
 			$_SESSION['case'] = $result['case'];
-			echo $result["case"];
+			echo json_encode($result["case"]);
 		}
 		break;
 	default:
-		echo "0"; //Should never get here
+		echo '{}'; //Should never get here
 
 }
 
-curl_close($ch);
+if (isset($ch)) curl_close($ch);

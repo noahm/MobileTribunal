@@ -1,22 +1,31 @@
+function empty(o) {
+	for(var i in o) if(o.hasOwnProperty(i)) return false;
+	return true;
+}
+
 $(function() {
+	// init the login form
+	$('#login form').submit(submitLogin);
+	$('#realm').val($.store.get('realm'));
+	$('#username').val($.store.get('username'));
+	$('#password').val($.store.get('password'));
+	$('#save').attr('checked', !!$.store.get('password'));
+	
+	// logout handler
+	$('#logout').click(doLogout);
+	
 	// handle opening and closing the menu
 	$('#game-selected').click(function() {
 		$('#games').toggle();
 	});
 	// handle switching games
 	$('#games li').live('click', function() {
-		$('#game-selected').html(this.innerHTML);
-		$('#verdict').show();
-		$('#games,#return').hide();
-		
+		$('#games').hide();
 		loadGame(this.value);
 	});
 	// handle showing the verdict options
-	$('#verdict,#return').click(function() {
-		$('#game,#submit,#verdict,#return').toggle();
-		$('#loading').hide();
-		window.scroll(0,0);
-	});
+	$('#verdict').click(function() {showOnly('submit');});
+	$('#return').click(function() {showOnly('game');});
 	
 	// handle showing inventory details
 	$('#inventory img').live('click', function() {
@@ -34,9 +43,12 @@ $(function() {
 		if ($('#chat').hasClass('champ-only') != !!$('#champ-only').attr('checked'))
 			$('#chat').toggleClass('champ-only');
 	});
+	
+	// apply saved value to champonly checkbox
 	$('#champ-only').attr('checked', !!$.store.get('chat.champ-only')).change();
 	// handle refreshing captcha
 	$('#refresh-captcha').click(reloadCaptcha);
+	
 	// handle submitting a verdict
 	$('#pardon,#punish').click(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
@@ -45,45 +57,116 @@ $(function() {
 		window.scroll(0,0);
 		$.ajax({
 			type: 'POST',
-			dataType: 'text',
+			dataType: 'json',
 			url: 'ajax.php',
 			data: { cmd: 'sendVerdict', verdict: this.id, "captcha-result": $('#captcha-result').val() },
-			success: processCaseResult
+			success: processCaseSubmissionResult
 		});
 	});
+	// handle the skip button
 	$('#skip').click(function() {
 		$('#loading').show();
 		$.ajax({
 			type: 'POST',
-			dataType: 'text',
+			dataType: 'json',
 			url: 'ajax.php',
 			data: { cmd: 'sendSkip' },
-			success: processCaseResult
+			success: processCaseSubmissionResult
 		});
 	});
-	
 	
 	loadCase();
 });
 
-function processCaseResult(data) {
-	$('#loading').hide();
-	if (data === '0')
-		alert('Your submission was not valid');
-	else if (data === 'failed')
-		alert('Incorrect captcha');
-	else if (data === 'finished')
-		showFinished();
-	else if (data === 'nosess')
-		location.reload();
-	else
-		loadCase();
+// shows only one component of the app and hides all the others
+// nothing is hidden if called for an element that isn't a major part of the game
+function showOnly(elemId) {
+	var mainPageItems = ['login', 'game', 'submit', 'finished'];
+	var alwaysHide = ['loading', 'games'];
+	
+	$('#'+elemId).show();
+	$('.req-by-'+elemId).show(); // show anything required by this item
+	$('.exc-by-'+elemId).hide(); // hide anything excluded by this item
+	
+	if ((i = mainPageItems.indexOf(elemId)) >= 0) { // was one of the main page items
+		// hide other main page items
+		mainPageItems.splice(i,1);
+		$('#'+mainPageItems.join(',#')).hide();
+		
+		// regular page maintence
+		$('#'+alwaysHide.join(',#')).hide();
+		window.scroll(0,0);
+	} else if (elemId === 'loading') window.scroll(0,0);
 }
 
-function showFinished() {
-	$('#game,#submit,#loading,#title').hide();
-	$('#finished').show();
-	return true;
+function doLogout() {
+	showOnly('loading');
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: 'ajax.php',
+		data: {cmd: 'logout'},
+		success: function() {
+			showOnly('login');
+		}
+	});
+}
+
+function submitLogin(event) {
+	event.preventDefault();
+	showOnly('loading');
+	
+	// perform the saving of inputs
+	$.store.set('realm', $('#realm').val());
+	$.store.set('username', $('#username').val());
+	if ($('#save').attr('checked')) {
+		$.store.set('password', $('#password').val());
+	} else  {
+		$.store.remove('password');
+	}
+	
+	// submit the login
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: 'ajax.php',
+		data: {
+			cmd: 'login',
+			username: $('#username').val(),
+			password: $('#password').val(),
+			realm: $('#realm').val()
+		},
+		success: processLoginResult
+	});
+	
+	//empty the password field
+	if (!$('#save').attr('checked')) $('#password').val('');
+}
+
+function processLoginResult(response) {
+	if (response.status === 'ok') {
+		//TODO hide login form, show the case review stuff and load the case
+		showOnly('game');
+		loadCase();
+	} else  {
+		// put each elemnt of response.feedback as a paragraph in #feedback
+		$('#feedback').html(response.feedback.join('<br>'));
+		showOnly('login');
+	}
+}
+
+function processCaseSubmissionResult(data) {
+	showOnly('submit');
+	if (empty(data))
+		alert('Your submission was not valid');
+	else if (data.status === 'failed')
+		alert('Incorrect captcha');
+	else if (data.status === 'finished')
+		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
+	else if (data.status === 'nosess')
+		showOnly('login'); // TODO show login form instead of reloading
+	else
+		loadCase();
 }
 
 function reloadCaptcha() {
@@ -105,6 +188,7 @@ function reloadCaptcha() {
 }
 
 function loadCase() {
+	showOnly('loading');
 	window.captchaLoaded = false;
 	window.captchaIsLoading = false;
 	window.cachedGames = {};
@@ -112,16 +196,10 @@ function loadCase() {
 	// handle verdict timer
 	$('#timer-message').show();
 	window.timeLeft = 60;
-	timerTick();
-	window.timerInterval = window.setInterval(timerTick, 1000);
+	if (!window.timerInterval)
+		window.timerInterval = window.setInterval(timerTick, 1000);
 	
 	$('#captcha-result').val('');
-	
-	// assure the right things are visible
-	$('#game,#submit').hide();
-	$('#loading').show();
-	$('#game-selected').html('Game 1');
-	$('#games').empty();
 	
 	$.ajax({
 		type: 'POST',
@@ -129,18 +207,27 @@ function loadCase() {
 		url: 'ajax.php',
 		data: { cmd: 'getCase' },
 		success: function (data) {
-
-			if ( data.caseId === 'finished' )
-				showFinished();
+			if (empty(data) || data.status === 'nosess') {
+				return showOnly('login');
+			}
+			if ( data.status === 'finished' )
+				showOnly('finished');
 			else
 			{
 				var num = Number(data.numGames);
-				if (num < 1) return alert('Could not get case data from Riot');
+				if (num < 1) {
+					showOnly('login');
+					return alert('Could not get case data from Riot');
+				}
+				// create the list of games
 				for (var i=1; i<=num; i++) {
 					$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
 				}
+				
 				$('#caseid').html(data.caseId);
 				loadGame('1');
+				// if we are loading for the first time, grab a new captcha in the background
+				reloadCaptcha();
 			}
 		}
 	});
@@ -154,6 +241,7 @@ function timerTick() {
 		$('#pardon,#punish').attr('disabled', true);
 	} else {
 		window.clearInterval(window.timerInterval);
+		delete window.timerInterval;
 		$('#timer-message').hide();
 		$('#verdict time').text('now');
 		$('#pardon,#punish').attr('disabled', false);
@@ -161,8 +249,8 @@ function timerTick() {
 }
 
 function loadGame(gameNumber) {
-	$('#game,#submit,#return,#games').hide();
-	$('#loading,#verdict').show();
+	showOnly('loading');
+	$('#game-selected').html('Game '+gameNumber);
 	
 	if (!window.cachedGames[gameNumber]) {
 		$.ajax({
@@ -171,10 +259,8 @@ function loadGame(gameNumber) {
 			url: 'ajax.php',
 			data: { cmd: 'getGame', game: gameNumber },
 			success: function(gameData) {
-				if ( gameData === 'nosess' )
-					return window.location = 'https://'+window.location.hostname+window.location.pathname.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '')+'/index.php?login';
-				gameData = initData(gameData, gameNumber);
-				applyData(gameData);
+				if ( gameData === 'nosess' ) return showOnly('login');
+				applyData(initData(gameData, gameNumber));
 			}
 		});
 	} else {
@@ -182,6 +268,7 @@ function loadGame(gameNumber) {
 	}
 }
 
+// performs some parsing and caches the result of a fetched game
 function initData(gameData, gameNumber) {
 	// force secure links to images
 	gameData.champion = gameData.champion.replace(/^http:/,'https:');
@@ -204,9 +291,6 @@ function initData(gameData, gameNumber) {
 }
 
 function applyData(gameData) {
-	// if we are loading for the first time, grab a new captcha in the background
-	if (!window.captchaLoaded) reloadCaptcha();
-	
 	// expand the data into the #game div
 	$('#summoner-name').text('"' + gameData.summoner + '"');
 	$('#portrait img').attr('src', gameData.champion);
@@ -279,9 +363,7 @@ function applyData(gameData) {
 	$('#chat-filter').change();
 	
 	// show our handywork
-	$('#loading').hide();
-	$('#game').show();
-	window.scroll(0,0);
+	showOnly('game');
 }
 
 function disclaim()

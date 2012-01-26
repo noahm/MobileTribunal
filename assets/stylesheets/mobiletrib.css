@@ -27,6 +27,7 @@ body {
 	height: 100%;
 	top: 0;
 	left: 0;
+	z-index: 2;
 	text-align: center;
 	background-color: rgba(25,25,25,0.6);
 }
@@ -359,7 +360,7 @@ Styles for submit screen
 Styles for login form
 */
 
-body.login, .login input, .login select {
+.login, .login input, .login select {
 	font-size: 17pt;
 }
 
