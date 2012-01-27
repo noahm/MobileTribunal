@@ -1,7 +1,5 @@
 <?php
-// We always use SSL
-define('FORCE_SSL', true);
-
+require_once 'support/config.php';
 require_once 'support/partials.php';
 
 if (FORCE_SSL && !usingSSL())

@@ -1,5 +1,7 @@
 <?php
+require_once 'support/config.php';
 require_once 'support/partials.php';
+
 startSession();
 require_once 'support/proxy.php';
 
@@ -55,7 +57,7 @@ switch ( $cmd )
 				$feedback[] = 'Region was invalid.';
 			}
 
-			if ( BETA && !in_array(sha1(strtolower($username)), $betaUsers) )
+			if ( RESTRICT_USERS && !in_array(sha1(strtolower($username)), $users) )
 			{
 				$validated = false;
 				$feedback[] = 'You do not have access to this beta test.';
