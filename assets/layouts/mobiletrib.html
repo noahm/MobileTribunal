@@ -21,7 +21,7 @@
 	<p><span><img src="assets/images/spinner.gif" style="vertical-align:middle"> Loading...</span></p>
 </div>
 
-<div id="login" class="login" style="display:none">
+<div id="login" class="login exc-by-loading" style="display:none">
 <form autocapitalize="off" autocorrect="off"><section>
 	<div class="title"><span>Login to Tribunal Mobile</span></div>
 	<div style="background-color:yellow" id="feedback"></div>
@@ -50,7 +50,7 @@
 	<pre id="summoner-name"></pre>
 </div>
 
-<div id="game" style="display:none">
+<div id="game" class="exc-by-loading" style="display:none">
 	<div id="core-info">
 		<section id="character-box" class="float">
 			<div id="champname" class="title"><span></span></div>
@@ -104,7 +104,7 @@
 	<p>You have done all the cases that Riot allows within a single day. The limit is reset nightly at 1:00 AM PDT</p>
 </div>
 
-<div id="submit" style="display:none">
+<div id="submit" class="exc-by-loading" style="display:none">
 	<div id="timer-message">
 		<p>Please review the case for at least <time>60</time> more seconds before deciding your verdict.</p>
 		<p>(Time spent staring at these buttons doesn't count.)</p>
@@ -118,7 +118,7 @@
 </div>
 
 
-<div id="footer">
+<div id="footer" class="req-by-login req-by-game req-by-submit exc-by-loading">
 	<a id="logout" href="javascript:void(0)">Logout</a> | By kayson and psoplayer | <a href="javascript:disclaim()">Disclaimer</a>
 </div>
 

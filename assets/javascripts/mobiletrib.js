@@ -53,7 +53,7 @@ $(function() {
 	$('#pardon,#punish').click(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
 		if ($(this).is('[disabled]')) return;
-		$('#loading').show();
+		showOnly('loading');
 		window.scroll(0,0);
 		$.ajax({
 			type: 'POST',
@@ -65,7 +65,7 @@ $(function() {
 	});
 	// handle the skip button
 	$('#skip').click(function() {
-		$('#loading').show();
+		showOnly('loading');
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -220,6 +220,7 @@ function loadCase() {
 					return alert('Could not get case data from Riot');
 				}
 				// create the list of games
+				$('#games').empty();
 				for (var i=1; i<=num; i++) {
 					$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
 				}
