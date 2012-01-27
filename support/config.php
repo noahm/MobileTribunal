@@ -21,8 +21,8 @@ define('FORCE_SSL', true);
 //Default: False
 //Description: Setting this to true will only allow access to users
 //		set in the $users array found below.
-//		This array contains sha1() hashes of the users' LoL LOGIN name.
-//		(NOT the summoner name).
+//		This array contains a whitelist of user login names (not summoner names)
+//		they are lowercased before being sha1 checksumed
 
 define('RESTRICT_USERS', true);
 

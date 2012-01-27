@@ -24,7 +24,8 @@ Depends on:
 
 * PHP 5 (for [DomDocument](http://us.php.net/manual/en/class.domdocument.php))
 * libcurl + [cURL](http://us.php.net/manual/en/book.curl.php) for PHP
-* [OpenSSL](http://us.php.net/manual/en/book.openssl.php) for PHP (NOTE: OpenSSL is required for the proxy to send login information to Riot Games servers. The http host does not need SSL)
+* [OpenSSL](http://us.php.net/manual/en/book.openssl.php) for PHP (NOTE: OpenSSL is required
+  for the proxy to send login information to Riot Games servers. The http host does not need SSL)
 
 Reporting Issues
 ----------------
@@ -50,8 +51,8 @@ Credits
 -------
 
 * kaysond ([kayson](http://www.reddit.com/user/kayson))
-	* Proxy
 	* Founder
+	* Proxy
 * noahm ([psoplayer](http://www.reddit.com/user/psoplayer))
 	* User Interface
 	* Tribunal Parsing
