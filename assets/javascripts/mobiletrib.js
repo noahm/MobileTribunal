@@ -1,3 +1,10 @@
+/* Copyright (c) 2012 kayson (kaysond) & Noah Manneschmidt (psoplayer)
+ * https://github.com/noahm/TribunalMobile
+ *
+ * Licensed under the MIT License.
+ * https://raw.github.com/noahm/TribunalMobile/master/mit-license.txt
+ */
+
 function empty(o) {
 	for(var i in o) if(o.hasOwnProperty(i)) return false;
 	return true;

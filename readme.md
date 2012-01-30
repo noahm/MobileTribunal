@@ -44,15 +44,17 @@ License
 League of Legends and the Tribunal are products of [Riot Games](http://riotgames.com/)
 and are unaffiliated with this app. You may use this code free of charge, but at your own risk.
 
-This code is released under some open-source license that reserves some rights to us but
-lets you take it and build awesome things as long as you give us credit.
+This code is released under the MIT license.
+https://raw.github.com/noahm/TribunalMobile/master/mit-license.txt
 
 Credits
 -------
 
+Copyright (c) 2012 by these cool duders:
+
 * kaysond ([kayson](http://www.reddit.com/user/kayson))
 	* Founder
 	* Proxy
-* noahm ([psoplayer](http://www.reddit.com/user/psoplayer))
+* Noah Manneschmidt ([psoplayer](http://www.reddit.com/user/psoplayer))
 	* User Interface
 	* Tribunal Parsing
