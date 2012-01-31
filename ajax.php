@@ -162,7 +162,10 @@ switch ( $cmd )
 			if ( $result["captchaResult"] == "1" )
 			{
 	
-				$result = tribReviewCase($_SESSION["case"], json_decode($_SESSION["formTokens"], true), $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $result["cookies"]);
+				$result = tribReviewCase(
+					$_SESSION["case"], json_decode($_SESSION["formTokens"], true),
+					$verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $result["cookies"]
+				);
 
 				if ( $result === false )
 					echo '{}';

@@ -34,7 +34,7 @@
 //Description: Setting this to true requires that users access the page via https.
 //		Requests sent using http will be redirected
 
-define('FORCE_SSL', true);
+define('FORCE_SSL', false);
 
 ////////////////////////////////////////////
 //RESTRICT_USERS - 
