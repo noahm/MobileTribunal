@@ -34,7 +34,7 @@
 //Description: Setting this to true requires that users access the page via https.
 //		Requests sent using http will be redirected
 
-define('FORCE_SSL', false);
+define('FORCE_SSL', true);
 
 ////////////////////////////////////////////
 //RESTRICT_USERS - 
@@ -45,7 +45,7 @@ define('FORCE_SSL', false);
 //		This array contains a whitelist of user login names (not summoner names)
 //		they are lowercased before being sha1 checksumed
 
-define('RESTRICT_USERS', true);
+define('RESTRICT_USERS', false);
 
 //This array controls user access. Use sha1() hashes of lowercase usernames
 $users = array (
