@@ -20,7 +20,9 @@ web server equiped with PHP 5, but we worked with Apache. Just check out this re
 your web root and you should be good to go. Web host SSL is enabled by default, but this and some
 other configuration can be changed in the support/config.php file.
 
-Depends on:
+Push this repo to a new PHP Fog app and it should work immediately. To use Heroku, be sure you create
+your app on the cedar stack with `heroku create [appname] --stack cedar` and then it should work fine.
+If you want to run it on a server you manage yourself, you'll have to make sure it meets the dependencies:
 
 * PHP 5 (for [DomDocument](http://us.php.net/manual/en/class.domdocument.php))
 * libcurl + [cURL](http://us.php.net/manual/en/book.curl.php) for PHP
