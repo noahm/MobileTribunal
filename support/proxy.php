@@ -1,6 +1,6 @@
 <?php
 /* Copyright (c) 2012 kayson (kaysond) & Noah Manneschmidt (psoplayer)
- * https://github.com/noahm/TribunalMobile
+ * https://github.com/noahm/MobileTribunal
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -176,7 +176,7 @@ function tribCheckCaptcha($captcha, $realm, $ch, $cookies)
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
 
-	curl_setopt($ch, CURLOPT_USERAGENT, 'TribunalMobile/0.1 (https://tribunal.phpfogapp.com/)');
+	curl_setopt($ch, CURLOPT_USERAGENT, 'MobileTribunal/0.9 (https://github.com/noahm/MobileTribunal/)');
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	

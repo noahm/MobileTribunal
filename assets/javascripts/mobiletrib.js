@@ -1,8 +1,8 @@
 /* Copyright (c) 2012 kayson (kaysond) & Noah Manneschmidt (psoplayer)
- * https://github.com/noahm/TribunalMobile
+ * https://github.com/noahm/MobileTribunal
  *
  * Licensed under the MIT License.
- * https://raw.github.com/noahm/TribunalMobile/master/mit-license.txt
+ * https://raw.github.com/noahm/MobileTribunal/master/mit-license.txt
  */
 
 function empty(o) {

@@ -1,4 +1,4 @@
-Tribunal Mobile
+Mobile Tribunal
 ===============
 
 An unofficial mobile webapp and proxy to the League of Legends Tribunal
@@ -47,7 +47,7 @@ League of Legends and the Tribunal are products of [Riot Games](http://riotgames
 and are unaffiliated with this app. You may use this code free of charge, but at your own risk.
 
 This code is released under the MIT license.
-https://raw.github.com/noahm/TribunalMobile/master/mit-license.txt
+https://raw.github.com/noahm/MobileTribunal/master/mit-license.txt
 
 Credits
 -------

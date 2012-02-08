@@ -1,6 +1,6 @@
 <?php
 /* Copyright (c) 2012 kayson (kaysond) & Noah Manneschmidt (psoplayer)
- * https://github.com/noahm/TribunalMobile
+ * https://github.com/noahm/MobileTribunal
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
