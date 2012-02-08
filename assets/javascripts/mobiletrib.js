@@ -61,7 +61,6 @@ $(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
 		if ($(this).is('[disabled]')) return;
 		showOnly('loading');
-		window.scroll(0,0);
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
