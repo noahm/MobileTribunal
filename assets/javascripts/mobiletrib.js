@@ -163,15 +163,15 @@ function processLoginResult(response) {
 
 function processCaseSubmissionResult(data) {
 	showOnly('submit');
-	if (empty(data))
-		alert('Your submission was not valid');
-	else if (data.status === 'failed')
+	if (data.status === 'failed')
+		alert('Error communicating with Riot servers');
+	else if (data.status === 'captchafail')
 		alert('Incorrect captcha');
 	else if (data.status === 'finished')
 		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
 	else if (data.status === 'nosess')
 		showOnly('login'); // TODO show login form instead of reloading
-	else
+	else if (data.status === 'ok')
 		loadCase();
 }
 
@@ -213,7 +213,7 @@ function loadCase() {
 		url: 'ajax.php',
 		data: { cmd: 'getCase' },
 		success: function (data) {
-			if (empty(data) || data.status === 'nosess') {
+			if (data.status === 'failed' || data.status === 'nosess') {
 				return showOnly('login');
 			}
 			if ( data.status === 'finished' )

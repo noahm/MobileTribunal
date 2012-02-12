@@ -45,7 +45,7 @@ if ($cmd == 'login') {
 //Some verification so we don't send bogus requests
 if ( $cmd == "getGame" && $game == "" )
 {
-	echo '{}';
+	echo '{"status":"failed"}';
 	return;
 }
 
@@ -117,7 +117,7 @@ switch ( $cmd )
 
 		$result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
-			echo '{}';
+			echo '{"status":"failed"}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
@@ -129,7 +129,7 @@ switch ( $cmd )
 	case "getGame":
 		$result = tribGetGame($_SESSION['case'], $game, $_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
-			echo '{}';
+			echo '{"status":"failed"}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
@@ -153,7 +153,7 @@ switch ( $cmd )
 		//Check captcha first
 		$result = tribCheckCaptcha($captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 		if ( $result === false )
-			echo '{}';
+			echo '{"status":"failed"}';
 		else
 		{
 
@@ -168,33 +168,33 @@ switch ( $cmd )
 				);
 
 				if ( $result === false )
-					echo '{}';
+					echo '{"status":"failed"}';
 				else
 				{
 					$_SESSION['cookies'] = $result['cookies'];
 					$_SESSION['case'] = $result['case'];
-					echo json_encode($result["case"]);
+					echo '{"status":"ok","case":"' . $result["case"] . '"}';
 				}
 
 			}
 			else
-				echo '{"status":"failed"}';
+				echo '{"status":"captchafail"}';
 		}
 		break;
 
 	case "sendSkip":
 		$result = tribSkipCase($_SESSION["case"], $_SESSION["realm"], $ch, $_SESSION["cookies"]);
 		if ( $result === false )
-			echo '{}';
+			echo '{"status":"failed"}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
 			$_SESSION['case'] = $result['case'];
-			echo json_encode($result["case"]);
+			echo '{"status":"ok","case":"' . $result["case"] . '"}';
 		}
 		break;
 	default:
-		echo '{}'; //Should never get here
+		echo '{"status":"failed"}'; //Should never get here
 
 }
 
