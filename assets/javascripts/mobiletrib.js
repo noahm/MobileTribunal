@@ -5,11 +5,6 @@
  * https://raw.github.com/noahm/MobileTribunal/master/mit-license.txt
  */
 
-function empty(o) {
-	for(var i in o) if(o.hasOwnProperty(i)) return false;
-	return true;
-}
-
 $(function() {
 	// init the login form
 	$('#login form').submit(submitLogin);
@@ -266,7 +261,7 @@ function loadGame(gameNumber) {
 			url: 'ajax.php',
 			data: { cmd: 'getGame', game: gameNumber },
 			success: function(gameData) {
-				if ( gameData === 'nosess' ) return showOnly('login');
+				if ( gameData.status === 'nosess' ) return showOnly('login');
 				applyData(initData(gameData, gameNumber));
 			}
 		});
