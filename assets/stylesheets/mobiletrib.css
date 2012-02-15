@@ -246,23 +246,12 @@ section .title > span {
 	font-size: 110%;
 }
 
-/* the idea was that the enemy reports and allied reports
-would be in separate columns on an ipad or other wide device
-but it still needs some attention to actually get working */
-@media width > 600px {
-#reports {
-	-webkit-columns: 2;
-	-moz-columns: 2;
-	columns: 2;
-}
-}
-
 #chat, #reports {
-	white-space: pre-wrap;
+/*	white-space: pre-wrap;*/
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	width: auto;
-/*	word-break: break-all;*/
+	overflow: hidden;
 }
 
 #chat input#champ-only {
