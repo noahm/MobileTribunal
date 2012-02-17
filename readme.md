@@ -12,6 +12,11 @@ Features
 * More intuitive information layout than the official Tribunal
 * The easiest way to earn IP while you poop!
 
+Notes
+-----
+
+* Opera Mini doesn't have complete support for javascript and won't work. Use Opera Mobile if your device supports it.
+
 Running MobTrib for yourself
 ----------------------------
 
