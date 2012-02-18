@@ -1,0 +1,34 @@
+CACHE MANIFEST
+#Manifest version 0.9
+# Changing one byte in this file will force all
+# items in the cache to be re-fetched, so update
+# the above version number after making changes
+# to files in the app
+
+# Always cache these files
+CACHE:
+assets/images/assists.png
+assets/images/deaths.png
+assets/images/kills.png
+assets/images/itemslot.png
+assets/images/pardonbutton.png
+assets/images/punishbutton.png
+assets/images/skipbutton.png
+assets/images/spinner.gif
+assets/images/blank.gif
+assets/images/refreshcap.png
+
+assets/javascripts/jquery.min.js
+assets/javascripts/jquery.store.patched.js
+assets/javascripts/viewporter.js
+assets/javascripts/mobiletrib.js
+assets/javascripts/add2home.js
+
+assets/stylesheets/normalize.css
+assets/stylesheets/add2home.css
+assets/stylesheets/mobiletrib.css
+
+# Never cache the results of these files
+NETWORK:
+ajax.php
+*
