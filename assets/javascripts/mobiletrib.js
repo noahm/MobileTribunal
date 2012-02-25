@@ -10,6 +10,7 @@ $(function() {
 	$('#login form').submit(submitLogin);
 	$('#realm').val($.store.get('realm'));
 	$('#username').val($.store.get('username'));
+	$.store.clear('password'); // just in case they used the original version
 	
 	// logout handler
 	$('#logout').click(doLogout);
