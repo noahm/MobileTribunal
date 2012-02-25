@@ -10,8 +10,6 @@ $(function() {
 	$('#login form').submit(submitLogin);
 	$('#realm').val($.store.get('realm'));
 	$('#username').val($.store.get('username'));
-	$('#password').val($.store.get('password'));
-	$('#save').attr('checked', !!$.store.get('password'));
 	
 	// logout handler
 	$('#logout').click(doLogout);
@@ -120,11 +118,6 @@ function submitLogin(event) {
 	// perform the saving of inputs
 	$.store.set('realm', $('#realm').val());
 	$.store.set('username', $('#username').val());
-	if ($('#save').attr('checked')) {
-		$.store.set('password', $('#password').val());
-	} else  {
-		$.store.remove('password');
-	}
 	
 	// submit the login
 	$.ajax({
@@ -139,9 +132,8 @@ function submitLogin(event) {
 		},
 		success: processLoginResult
 	});
-	
-	//empty the password field
-	if (!$('#save').attr('checked')) $('#password').val('');
+
+	$('#password').val('');
 }
 
 function processLoginResult(response) {
