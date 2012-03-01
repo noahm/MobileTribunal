@@ -288,7 +288,7 @@ function initData(gameData, gameNumber) {
 		gameData.champsUsed[gameData.stats[i].NAME] = gameData.stats[i].SKIN;
 	}
 	// fix time string if it is over an hour
-	if (Number(gameData.stats[0].TIME_PLAYED) === NaN) {
+	if (!$.isNumeric(gameData.stats[0].TIME_PLAYED)) {
 		var timechunks = /^(\d+)[\w\s]*?(\d+)$/.exec(gameData.stats[0].TIME_PLAYED);
 		gameData.stats[0].TIME_PLAYED = Number(timechunks[1]) * 60 + Number(timechunks[2]);
 	}
