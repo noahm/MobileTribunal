@@ -13,6 +13,14 @@ Array.prototype.remove = function(from, to) {
 };
 
 $(function() {
+	// in case there is an updated version
+	if (window.applicationCache) {
+		window.applicationCache.addEventListener('updateready', onUpdateReady);
+		if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+			onUpdateReady();
+		}
+	}
+	
 	// init the login form
 	$('#login form').submit(submitLogin);
 	$('#realm').val($.store.get('realm'));
@@ -84,6 +92,10 @@ $(function() {
 	
 	loadCase();
 });
+
+function onUpdateReady() {
+	if (confirm('An update is available. Press OK to reload this page and apply the update.')) window.location.reload();
+}
 
 // shows only one component of the app and hides all the others
 // nothing is hidden if called for an element that isn't a major part of the game
