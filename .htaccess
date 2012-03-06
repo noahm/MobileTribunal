@@ -1,3 +1,6 @@
 # MIME type for manifest file
 AddType text/cache-manifest .manifest
-ExpiresByType text/cache-manifest "access plus 0 seconds"
+<IfModule expires_module>
+	ExpiresActive on
+	ExpiresByType text/cache-manifest "access plus 0 seconds"
+</IfModule>
