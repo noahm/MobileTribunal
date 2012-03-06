@@ -330,11 +330,11 @@ Styles for submit screen
 	box-shadow: 0px 3px 5px #444;
 }
 #punish:hover,#pardon:hover,#skip:hover {
-	background-position-y: -54px;
+	background-position: 0 -53px;
 }
 #punish[disabled],#pardon[disabled] {
 	cursor: auto;
-	background-position-y: -108px !important;
+	background-position: 0 -107px !important;
 }
 #punish {
 	background-image: url(../images/punishbutton.png);

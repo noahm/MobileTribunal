@@ -5,7 +5,22 @@
  * https://raw.github.com/noahm/MobileTribunal/master/mit-license.txt
  */
 
+// Array Remove - By John Resig (MIT Licensed) http://ejohn.org/blog/javascript-array-remove/
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
+
 $(function() {
+	// in case there is an updated version
+	if (window.applicationCache) {
+		window.applicationCache.addEventListener('updateready', onUpdateReady);
+		if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+			onUpdateReady();
+		}
+	}
+	
 	// init the login form
 	$('#login form').submit(submitLogin);
 	$('#realm').val($.store.get('realm'));
@@ -77,6 +92,10 @@ $(function() {
 	
 	loadCase();
 });
+
+function onUpdateReady() {
+	if (confirm('An update is available. Press OK to reload this page and apply the update.')) window.location.reload();
+}
 
 // shows only one component of the app and hides all the others
 // nothing is hidden if called for an element that isn't a major part of the game
@@ -266,17 +285,22 @@ function loadGame(gameNumber) {
 // performs some parsing and caches the result of a fetched game
 function initData(gameData, gameNumber) {
 	// force secure links to images
+	var newItems = [];
 	gameData.champion = gameData.champion.replace(/^http:/,'https:');
 	for (var i=0; i<gameData.items.length; i++) {
-		gameData.items[i].icon = gameData.items[i].icon.replace(/^http:/,'https:');
+		if (gameData.items[i].icon) { // must check if the icon property exists, have seen some elements as simply {scalar: ""}
+			gameData.items[i].icon = gameData.items[i].icon.replace(/^http:/,'https:');
+			newItems.push(gameData.items[i]);
+		}
 	}
+	gameData.items = newItems;
 	// try to fix missing champ names
 	gameData.champsUsed = {};
 	for (var i=0; i<gameData.stats.length; i++) {
 		gameData.champsUsed[gameData.stats[i].NAME] = gameData.stats[i].SKIN;
 	}
 	// fix time string if it is over an hour
-	if (Number(gameData.stats[0].TIME_PLAYED) === NaN) {
+	if (!$.isNumeric(gameData.stats[0].TIME_PLAYED)) {
 		var timechunks = /^(\d+)[\w\s]*?(\d+)$/.exec(gameData.stats[0].TIME_PLAYED);
 		gameData.stats[0].TIME_PLAYED = Number(timechunks[1]) * 60 + Number(timechunks[2]);
 	}
