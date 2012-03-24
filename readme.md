@@ -21,19 +21,7 @@ Running MobTrib for yourself
 ----------------------------
 
 If you don't trust using the app on our host, that's just fine. You can easily run it yourself on any
-web server equiped with PHP 5, but we worked with Apache. Just check out this repository into any path within
-your web root and you should be good to go. Web host SSL is enabled by default, but this and some
-other configuration can be changed in the support/config.php file.
-
-Push this repo to a new PHP Fog app and it should work immediately. To use Heroku, be sure you create
-your app on the cedar stack with `heroku create [appname] --stack cedar` and then it should work fine.
-If you want to run it on a server you manage yourself, you'll have to make sure it meets the dependencies:
-
-* expires module for Apache enabled (check your httpd.conf for mod_expires.so)
-* PHP 5 (for [DomDocument](http://us.php.net/manual/en/class.domdocument.php))
-* libcurl + [cURL](http://us.php.net/manual/en/book.curl.php) for PHP
-* [OpenSSL](http://us.php.net/manual/en/book.openssl.php) for PHP (NOTE: OpenSSL is required
-  for the proxy to send login information to Riot Games servers. The http host does not need SSL)
+web server equiped with PHP 5, but we worked with Apache. [More details available on our Wiki](https://github.com/noahm/MobileTribunal/wiki/Hosting-MobTrib-Yourself)
 
 Reporting Issues
 ----------------
