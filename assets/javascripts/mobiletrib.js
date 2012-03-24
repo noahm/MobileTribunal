@@ -53,7 +53,7 @@ $(function() {
 	$('#chat-filter').change(function() {
 		$('#chat').removeClass('only-all hide-enemy hide-allied only-reported').addClass(this.value);
 	});
-	// handle champonly checkbox
+	// handle "simple" chat checkbox
 	$('#champ-only').change(function() {
 		$.store.set('chat.champ-only', !!$('#champ-only').attr('checked'));
 		if ($('#chat').hasClass('champ-only') != !!$('#champ-only').attr('checked'))
