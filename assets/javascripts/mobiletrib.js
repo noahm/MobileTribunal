@@ -12,6 +12,10 @@ Array.prototype.remove = function(from, to) {
   return this.push.apply(this, rest);
 };
 
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-30304199-1']);
+_gaq.push(['_trackPageview']);
+
 $(function() {
 	// in case there is an updated version
 	if (window.applicationCache) {
@@ -119,6 +123,7 @@ function showOnly(elemId) {
 }
 
 function doLogout() {
+	_gaq.push(['_trackEvent', 'User', 'Logout', 'Manual']);
 	showOnly('loading');
 	$.ajax({
 		type: 'POST',
@@ -158,10 +163,12 @@ function submitLogin(event) {
 
 function processLoginResult(response) {
 	if (response.status === 'ok') {
+		_gaq.push(['_trackEvent', 'User', 'Login '+$('#realm').val(), 'Success']);
 		//TODO hide login form, show the case review stuff and load the case
 		showOnly('game');
 		loadCase();
 	} else  {
+		_gaq.push(['_trackEvent', 'User', 'Login '+$('#realm').val(), 'Failure']);
 		// put each elemnt of response.feedback as a paragraph in #feedback
 		$('#feedback').html(response.feedback.join('<br>'));
 		showOnly('login');
@@ -170,16 +177,27 @@ function processLoginResult(response) {
 
 function processCaseSubmissionResult(data) {
 	showOnly('submit');
-	if (data.status === 'failed')
+	if (data.status === 'failed') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Comm Error']);
 		alert('Error communicating with Riot servers');
-	else if (data.status === 'captchafail')
+	}
+	else if (data.status === 'captchafail') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Captcha Failed']);
 		alert('Incorrect captcha');
-	else if (data.status === 'finished')
+	}
+	else if (data.status === 'finished') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Accepted']);
+		_gaq.push(['_trackEvent', 'User', 'Cases Exhausted']);
 		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
-	else if (data.status === 'nosess')
+	}
+	else if (data.status === 'nosess') {
+		_gaq.push(['_trackEvent', 'User', 'Logout', 'Timed out']);
 		showOnly('login'); // TODO show login form instead of reloading
-	else if (data.status === 'ok')
+	}
+	else if (data.status === 'ok') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Accepted']);
 		loadCase();
+	}
 }
 
 function reloadCaptcha() {
@@ -267,6 +285,7 @@ function loadGame(gameNumber) {
 	$('#game-selected').html('Game '+gameNumber);
 	
 	if (!window.cachedGames[gameNumber]) {
+		_gaq.push(['_trackEvent', 'Case', 'Load Game', 'Uncached', gameNumber]);
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -278,6 +297,7 @@ function loadGame(gameNumber) {
 			}
 		});
 	} else {
+		_gaq.push(['_trackEvent', 'Case', 'Load Game', 'Cached', gameNumber]);
 		applyData(window.cachedGames[gameNumber]);
 	}
 }
