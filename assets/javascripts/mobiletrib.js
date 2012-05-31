@@ -90,7 +90,26 @@ $(function() {
 		});
 	});
 	
-	loadCase();
+	//Initial ajax request
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: 'ajax.php',
+		data: { cmd: 'getCase' },
+		success: function (data) {
+			if (data.status === 'failed' || data.status === 'nosess') {
+				return showOnly('login');
+			}
+			if ( data.status === 'finished' )
+				return showOnly('finished');
+			if ( data.status === 'ok' )
+			{
+				loadCase(data);
+			}
+		}
+
+	});
+
 });
 
 function onUpdateReady() {
@@ -156,14 +175,14 @@ function submitLogin(event) {
 	$('#password').val('');
 }
 
-function processLoginResult(response) {
-	if (response.status === 'ok') {
+function processLoginResult(data) {
+	if (data.status === 'ok') {
 		//TODO hide login form, show the case review stuff and load the case
 		showOnly('game');
-		loadCase();
+		loadCase(data);
 	} else  {
 		// put each elemnt of response.feedback as a paragraph in #feedback
-		$('#feedback').html(response.feedback.join('<br>'));
+		$('#feedback').html(data.feedback.join('<br>'));
 		showOnly('login');
 	}
 }
@@ -177,9 +196,9 @@ function processCaseSubmissionResult(data) {
 	else if (data.status === 'finished')
 		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
 	else if (data.status === 'nosess')
-		showOnly('login'); // TODO show login form instead of reloading
+		showOnly('login');
 	else if (data.status === 'ok')
-		loadCase();
+		loadCase(data);
 }
 
 function reloadCaptcha() {
@@ -200,7 +219,7 @@ function reloadCaptcha() {
 	}
 }
 
-function loadCase() {
+function loadCase(data) {
 	showOnly('loading');
 	window.captchaLoaded = false;
 	window.captchaIsLoading = false;
@@ -211,40 +230,24 @@ function loadCase() {
 	window.timeLeft = 60;
 	if (!window.timerInterval)
 		window.timerInterval = window.setInterval(timerTick, 1000);
-	
+
 	$('#captcha-result').val('');
+	var num = Number(data.numGames);
+	if (num < 1) {
+		showOnly('login');
+		return alert('Could not get case data from Riot');
+	}
+	// create the list of games
+	$('#games').empty();
+	for (var i=1; i<=num; i++) {
+		$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
+	}
 	
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: 'ajax.php',
-		data: { cmd: 'getCase' },
-		success: function (data) {
-			if (data.status === 'failed' || data.status === 'nosess') {
-				return showOnly('login');
-			}
-			if ( data.status === 'finished' )
-				showOnly('finished');
-			else
-			{
-				var num = Number(data.numGames);
-				if (num < 1) {
-					showOnly('login');
-					return alert('Could not get case data from Riot');
-				}
-				// create the list of games
-				$('#games').empty();
-				for (var i=1; i<=num; i++) {
-					$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
-				}
-				
-				$('#caseid').html(data.caseId);
-				loadGame('1');
-				// if we are loading for the first time, grab a new captcha in the background
-				reloadCaptcha();
-			}
-		}
-	});
+	$('#caseid').html(data.case);
+	loadGame('1');
+	// if we are loading for the first time, grab a new captcha in the background
+	reloadCaptcha();
+
 }
 
 function timerTick() {
