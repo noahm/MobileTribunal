@@ -116,10 +116,10 @@ function onUpdateReady() {
 }
 
 function urlPrefix() {
-	if (!window.urlPrefix) {
-		window.urlPrefix = 'https://' + $('#realm').val() + '.leagueoflegends.com';
+	if (!window.imgPrefix) {
+		window.imgPrefix = 'https://' + $('#realm').val() + '.leagueoflegends.com';
 	}
-	return window.urlPrefix;
+	return window.imgPrefix;
 }
 
 // shows only one component of the app and hides all the others
@@ -298,7 +298,7 @@ function initData(gameData, gameNumber) {
 	// cache the fixed data
 	window.cachedGames[gameNumber] = gameData;
 	// apply champion portrait in games list
-	$('#games img')[gameNumber+1].src = urlPrefix()+gameData.offender.champion_url;
+	$('#games img')[gameNumber-1].src = urlPrefix()+gameData.offender.champion_url;
 	return gameData;
 }
 
