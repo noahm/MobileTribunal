@@ -380,7 +380,6 @@ function applyData(gameData) {
 	
 	// build chat log
 	var $chat = $('#chat').empty();
-	var chatLength = gameData.chatlogtext.length;
 	for (var i = gameData.chat_log.length - 1; i >= 0; i--) {
 		var chat_line = gameData.chat_log[i];
 		var classes = chat_line.association_to_offender;
