@@ -194,17 +194,18 @@ function processLoginResult(data) {
 
 function processCaseSubmissionResult(data) {
 	showOnly('submit');
-	if (data.status === 'failed')
+	if (data.status === 'failed') {
 		alert('Error communicating with Riot servers');
-	else if (data.status === 'captchafail')
+	} else if (data.status === 'captchafail') {
 		alert('Incorrect captcha');
-	else if (data.status === 'finished')
+	} else if (data.status === 'finished') {
 		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
-	else if (data.status === 'nosess')
+	} else if (data.status === 'nosess') {
 		$('#feedback').html('Your session has expired.');
 		showOnly('login');
-	else if (data.status === 'ok')
+	} else if (data.status === 'ok') {
 		loadCase(data);
+	}
 }
 
 function reloadCaptcha() {
