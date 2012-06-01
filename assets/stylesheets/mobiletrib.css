@@ -235,7 +235,7 @@ section .title > span {
 	-moz-columns: 2;
 	columns: 2;
 	text-shadow: 0px 1px 0px lightgrey;
-	min-height: 3.7em;
+	min-height: 3.9em;
 }
 
 #stats ul li {
@@ -255,6 +255,7 @@ section .title > span {
 #teammates {
 	width: 100%;
 	border-collapse: collapse;
+	line-height: 16px;
 }
 
 #teammates .template {
@@ -266,6 +267,15 @@ section .title > span {
 	width: 24px;
 	display: block;
 	float: left;
+}
+
+#teammates td.port {
+  text-align: left;
+}
+
+#teammates td.port img {
+  height: 32px;
+  width: 32px;
 }
 
 #teammates th, #teammates td {

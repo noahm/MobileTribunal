@@ -122,6 +122,10 @@ function urlPrefix() {
 	return window.imgPrefix;
 }
 
+function formatImageUrl(url) {
+	return url.replace('/tribunal/bundles/riothelper', urlPrefix()+'/sites/default/files');
+}
+
 // shows only one component of the app and hides all the others
 // nothing is hidden if called for an element that isn't a major part of the game
 function showOnly(elemId) {
@@ -294,22 +298,24 @@ function loadGame(gameNumber) {
 // performs some parsing and caches the result of a fetched game
 function initData(gameData, gameNumber) {
 	// calculate a regular timestamp
-	gameData.time_played = Math.floor(gameData.offender.time_played / 60) + ':' + (gameData.offender.time_played % 60)
+	var minutes = gameData.offender.time_played % 60;
+	if (minutes < 10) minutes = '0' + minutes;
+	gameData.time_played = Math.floor(gameData.offender.time_played / 60) + ':' + minutes;
 	// cache the fixed data
 	window.cachedGames[gameNumber] = gameData;
 	// apply champion portrait in games list
-	$('#games img')[gameNumber-1].src = urlPrefix()+gameData.offender.champion_url;
+	$('#games img')[gameNumber-1].src = formatImageUrl(gameData.offender.champion_url);
 	return gameData;
 }
 
 function applyData(gameData) {
 	// expand the data into the #game div
 	$('#summoner-name').text('"' + gameData.offender.summoner_name + '"');
-	$('#portrait img').attr('src', urlPrefix()+gameData.offender.champion_url);
+	$('#portrait img').attr('src', formatImageUrl(gameData.offender.champion_url));
 	$('#portrait img').attr('alt', gameData.offender.champion_name);
 	$('#champname span').text(gameData.offender.champion_name);
-	$('#summoner1').attr('src', urlPrefix()+gameData.offender.summoner_spell_1);
-	$('#summoner2').attr('src', urlPrefix()+gameData.offender.summoner_spell_2);
+	$('#summoner1').attr('src', formatImageUrl(gameData.offender.summoner_spell_1));
+	$('#summoner2').attr('src', formatImageUrl(gameData.offender.summoner_spell_2));
 	
 	$('#level').text(gameData.offender.level);
 	$('#time').text(gameData.time_played);
@@ -330,7 +336,7 @@ function applyData(gameData) {
 		var item = gameData.offender.items[i];
 		if (item.name !== '')
 			$('<img>')
-				.attr('src', urlPrefix()+item.icon)
+				.attr('src', formatImageUrl(item.icon))
 				.attr('title', item.name)
 				.attr('alt', item.name)
 				.data('info', item)
@@ -344,18 +350,18 @@ function applyData(gameData) {
 		if (player.association_to_offender === 'ally') {
 			var teammate = $('#teammates thead tr.template').clone();
 			teammate.removeClass('template').addClass('teammate');
-			teammate.find('.port img').attr('src', urlPrefix()+player.champion_url);
+			teammate.find('.port img').attr('src', formatImageUrl(player.champion_url));
 			teammate.find('.level').html(player.level);
 			teammate.find('.champname').html(player.champion_name);
 			teammate.find('.score').html(player.scores.kills +'/'+ player.scores.deaths +'/'+ player.scores.assists);
-			teammate.find('.summ1').attr('src', urlPrefix()+player.summoner_spell_1);
-			teammate.find('.summ2').attr('src', urlPrefix()+player.summoner_spell_2);
+			teammate.find('.summ1').attr('src', formatImageUrl(player.summoner_spell_1));
+			teammate.find('.summ2').attr('src', formatImageUrl(player.summoner_spell_2));
 			teammate.find('.gold').html(player.gold_earned);
 			teammate.find('.cs').html(player.minions_killed);
 			for (var i = player.items.length - 1; i >= 0; i--) {
 				var item = teammate.find('.item'+i);
 				if (player.items[i].name !== '') {
-					item.attr('src', urlPrefix()+player.items[i].icon);
+					item.attr('src', formatImageUrl(player.items[i].icon));
 				} else {
 					item.attr('src', 'assets/images/itemslot.png');
 				}
