@@ -317,12 +317,12 @@ function applyData(gameData) {
 	$('#kills').text(gameData.offender.scores.kills);
 	$('#deaths').text(gameData.offender.scores.deaths);
 	$('#assists').text(gameData.offender.scores.assists);
-	$('#outcome').text(stats.offender.outcome);
-	$('#minion-kills').text(stats.offender.minions_killed);
-	$('#gold-earned').text(stats.offender.gold_earned);
-	$('#date-played').text(stats.game_creation_time);
-	$('#dps-out').text(stats.offender.total_damage_dealt);
-	$('#dps-in').text(stats.offender.total_damage_received);
+	$('#outcome').text(gameData.offender.outcome);
+	$('#minion-kills').text(gameData.offender.minions_killed);
+	$('#gold-earned').text(gameData.offender.gold_earned);
+	$('#date-played').text(gameData.game_creation_time);
+	$('#dps-out').text(gameData.offender.total_damage_dealt);
+	$('#dps-in').text(gameData.offender.total_damage_received);
 	
 	// setup inventory-container
 	$('#inventory-container').empty();
