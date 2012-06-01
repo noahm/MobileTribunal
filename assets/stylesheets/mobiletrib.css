@@ -52,7 +52,7 @@ body {
 	color: #BC0000;
 }
 
-:not(#chat) > .allied, .allied .author {
+:not(#chat) > .ally, .ally .author {
 	color: #008B00;
 }
 
@@ -115,9 +115,10 @@ body {
 #games {
 	display: none;
 	position: absolute;
+	text-align: right;
 	right: 0;
-	top: 1.6em;
-	width: 6em;
+	top: 2em;
+	width: 7.5em;
 }
 
 #games li {
@@ -129,6 +130,12 @@ body {
 }
 #games li:not(:first-child) {
 	border-top: none;
+}
+
+#games img {
+	height: 24px;
+	width:  24px;
+	vertical-align: middle;
 }
 
 section {
@@ -194,6 +201,12 @@ section .title > span {
 	border-top-left-radius: 4px;
 }
 
+#summoners img {
+	height: 32px;
+	width: 32px;
+	margin: 4px;
+}
+
 #inventory-container {
 	background-color: gray;
 	width: 198px;
@@ -238,6 +251,47 @@ section .title > span {
 	float: right;
 }
 
+#teammates {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#teammates .template {
+	display: none;
+}
+
+#teammates td img {
+	height: 24px;
+	width: 24px;
+	display: block;
+	float: left;
+}
+
+#teammates th, #teammates td {
+	text-align: center;
+}
+
+#teammates td {
+	padding: 3px;
+}
+
+#teammates col.summoners {
+	width: 30px;
+}
+
+#teammates col.inventory {
+	width: 78px;
+}
+
+#teammates th:first-child {
+	text-align: left;
+	padding-left: 3px;
+}
+
+#teammates col.gold, #teammates col.cs {
+	text-align: right;
+}
+
 #reports li:not(:last-child) {
 	margin-bottom: .6em;
 }
@@ -275,7 +329,7 @@ section .title > span {
 #chat:not(.champ-only) .character:after  { content: ")"; }
 
 #chat.hide-enemy  li.enemy,
-#chat.hide-allied li.allied,
+#chat.hide-allied li.ally,
 #chat.only-all    li:not(.all),
 #chat.only-reported li:not(.reported)
 { display: none; }

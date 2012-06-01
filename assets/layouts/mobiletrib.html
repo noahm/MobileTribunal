@@ -55,6 +55,7 @@
 	<div id="game-selector">
 		<span id="game-selected">Game 1</span>
 		<ul id="games">
+			<li value="1" onclick="void(0)"><img src="assets/images/unknownplayer.png"> Game 1</li>
 		</ul>
 	</div>
 	<div id="verdict" class="req-by-game exc-by-submit">Submit Verdict <time>in 60s</time></div>
@@ -66,9 +67,14 @@
 	<div id="core-info">
 		<section id="character-box" class="float">
 			<div id="champname" class="title"><span></span></div>
-			<div id="portrait">
-				<img src="assets/images/blank.gif">
-				<div id="level"></div>
+			<div id="portraitandsummoners">
+				<div id="portrait">
+					<img src="assets/images/blank.gif">
+					<div id="level"></div>
+				</div>
+				<div id="summoners">
+					<img src="" id="summoner1"><img src="" id="summoner2">
+				</div>
 			</div>
 			<div id="inventory">
 				<div id="inventory-container">
@@ -85,13 +91,60 @@
 			<ul>
 				<li><label>Outcome:</label><span id="outcome"></span></li>
 				<li><label>Minion Kills:</label><span id="minion-kills"></span></li>
+				<li><label>Gold Earned:</label><span id="gold-earned"></span></li>
+				<li><label>Date Played:</label><span id="date-played"></span></li>
 				<li><label>DPS Out:</label><span id="dps-out"></span></li>
 				<li><label>DPS In:</label><span id="dps-in"></span></li>
 			</ul>
 		</section>
 	</div>
 	<section class="full">
-		<div class="title"><span>Reports (<span class="allied"><span id="allied-report-count"></span> allied</span>, <span class="enemy"><span id="enemy-report-count"></span> enemy</span>)</span></div>
+		<div class="title"><span>Team</span></div>
+		<table id="teammates">
+			<colgroup>
+				<col class="player" span="3">
+				<col class="score">
+				<col class="summoners">
+				<col class="inventory">
+				<col class="gold">
+				<col class="cs">
+			</colgroup>
+			<thead>
+				<tr>
+					<th colspan="3"><img src="assets/images/player.png"></th>
+					<th><img src="assets/images/kda.png"></th>
+					<th><img src="assets/images/summoners.png"></th>
+					<th><img src="assets/images/inventory.png"></th>
+					<th><img src="assets/images/gold.png"></th>
+					<th><img src="assets/images/minion.png"></th>
+				</tr>
+				<tr class="template">
+					<td class="port"><img src=""></td>
+					<td class="level"></td>
+					<td class="champname"></td>
+					<td class="score"></td>
+					<td>
+						<img class="summ1" src="">
+						<img class="summ2" src="">
+					</td>
+					<td>
+						<img class="item0" src="">
+						<img class="item1" src="">
+						<img class="item2" src="">
+						<img class="item3" src="">
+						<img class="item4" src="">
+						<img class="item5" src="">
+					</td>
+					<td class="gold"></td>
+					<td class="cs"></td>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</section>
+	<section class="full">
+		<div class="title"><span>Reports (<span class="ally"><span id="allied-report-count"></span> allied</span>, <span class="enemy"><span id="enemy-report-count"></span> enemy</span>)</span></div>
 		<ul id="reports">
 		</ul>
 	</section>

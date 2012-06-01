@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#Manifest version 1.0.1
+#Manifest version 2.0
 # Changing one byte in this file will force all
 # items in the cache to be re-fetched, so update
 # the above version number after making changes
@@ -17,6 +17,13 @@ assets/images/skipbutton.png
 assets/images/spinner.gif
 assets/images/blank.gif
 assets/images/refreshcap.png
+assets/images/player.png
+assets/images/kda.png
+assets/images/summoners.png
+assets/images/inventory.png
+assets/images/gold.png
+assets/images/minion.png
+assets/images/unknownplayer.png
 
 assets/javascripts/jquery.min.js
 assets/javascripts/jquery.store.patched.js
