@@ -368,15 +368,16 @@ function applyData(gameData) {
 	$('#reports').empty();
 	$('#allied-report-count').html(gameData.allied_report_count);
 	$('#enemy-report-count').html(gameData.enemy_report_count);
-	var newDiv = $("<div/>"), reports = {enemy:$(),ally:$()};
 	for (var i = gameData.reports.length - 1; i >= 0; i--) {
 		var report = gameData.reports[i], item = $('<li></li>');
 		item.addClass(report.association_to_offender);
 		item.html(report.comment).append($('<h2></h2>').html(report.offense));
-		reports[report.association_to_offender].add(item);
+		if (report.association_to_offender === 'ally') {
+			item.prependTo('#reports');
+		} else {
+			item.appendTo('#reports');
+		}
 	}
-	reports.ally.appendTo('#reports');
-	reports.enemy.appendTo('#reports');
 	
 	// build chat log
 	var $chat = $('#chat').empty();
