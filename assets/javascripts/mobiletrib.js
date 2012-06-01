@@ -31,7 +31,7 @@ $(function() {
 	$('#logout').click(doLogout);
 	
 	// handle opening and closing the menu
-	$('#game-selected').click(function() {
+	$('#game-selected').tappable(function() {
 		$('#games').toggle();
 	});
 	// handle switching games
@@ -40,8 +40,8 @@ $(function() {
 		loadGame(this.value);
 	});
 	// handle showing the verdict options
-	$('#verdict').click(function() {showOnly('submit');});
-	$('#return').click(function() {showOnly('game');});
+	$('#verdict').tappable(function() {showOnly('submit');});
+	$('#return').tappable(function() {showOnly('game');});
 	
 	// handle showing inventory details
 	$(document).on('click', '#inventory img', function() {
