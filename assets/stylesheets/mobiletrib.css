@@ -270,12 +270,13 @@ section .title > span {
 }
 
 #teammates td.port {
-  text-align: left;
+	text-align: left;
 }
 
 #teammates td.port img {
-  height: 32px;
-  width: 32px;
+	height: 32px;
+	width: 32px;
+	margin-right: 3px;
 }
 
 #teammates th, #teammates td {
@@ -313,7 +314,6 @@ section .title > span {
 }
 
 #chat, #reports {
-/*	white-space: pre-wrap;*/
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	width: auto;
@@ -446,3 +446,53 @@ Initial styles
 #submit, #game, #return, #finished {
 	display: none;
 }
+
+/* specific screen size styles
+iphone portrait  320x480
+iphone4          640x960
+ipad            1024x768
+andrid          1280x720 */
+@media screen and (max-width: 560px) {
+#teammates .champname {
+	display: none;
+}
+#teammates td.port img {
+	float: none;
+	display: inline;
+	vertical-align: middle;
+}
+}
+
+@media screen and (min-width: 680px) {
+#teammates .summ1, #teammates .summ2 {
+	height: 32px;
+	width:  32px;
+}
+#teammates col.summoners {
+	width: 80px;
+}
+}
+
+@media screen and (min-width: 800px) {
+#teammates .item0, #teammates .item1, #teammates .item2, #teammates .item3, #teammates .item4, #teammates .item5 {
+	height: 32px;
+	width:  32px;
+}
+#teammates col.inventory {
+	width: 198px;
+}
+}
+
+/* the large size is kinda dumb and looks bad 
+@media screen and (min-width: 1200px) {
+#teammates td {
+	line-height: 32px;
+}
+#teammates td img {
+	height: 64px !important;
+	width:  64px !important;
+}
+#teammates col.summoners {
+	width: 134px;
+}
+*/
