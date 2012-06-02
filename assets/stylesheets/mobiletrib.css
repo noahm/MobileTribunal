@@ -452,7 +452,7 @@ iphone portrait  320x480
 iphone4          640x960
 ipad            1024x768
 andrid          1280x720 */
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 480px) {
 #teammates .champname {
 	display: none;
 }
