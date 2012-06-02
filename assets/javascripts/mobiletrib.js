@@ -254,7 +254,7 @@ function loadCase(data) {
 		$('<li onclick="void(0)"></li>').attr('value',i).html('<img src="assets/images/unknownplayer.png"> Game '+i).appendTo('#games');
 	}
 	
-	$('#caseid').html(data.case);
+	$('#caseid').html(data['case']);
 	loadGame('1');
 	// if we are loading for the first time, grab a new captcha in the background
 	reloadCaptcha();
@@ -309,6 +309,7 @@ function initData(gameData, gameNumber) {
 }
 
 function applyData(gameData) {
+	var i, item;
 	// expand the data into the #game div
 	$('#summoner-name').text('"' + gameData.offender.summoner_name + '"');
 	$('#portrait img').attr('src', formatImageUrl(gameData.offender.champion_url));
@@ -332,8 +333,8 @@ function applyData(gameData) {
 	
 	// setup inventory-container
 	$('#inventory-container').empty();
-	for (var i=0; i<gameData.offender.items.length; i++) {
-		var item = gameData.offender.items[i];
+	for (i=0; i<gameData.offender.items.length; i++) {
+		item = gameData.offender.items[i];
 		if (item.name !== '')
 			$('<img>')
 				.attr('src', formatImageUrl(item.icon))
@@ -358,8 +359,8 @@ function applyData(gameData) {
 			teammate.find('.summ2').attr('src', formatImageUrl(player.summoner_spell_2));
 			teammate.find('.gold').html(player.gold_earned);
 			teammate.find('.cs').html(player.minions_killed);
-			for (var i = player.items.length - 1; i >= 0; i--) {
-				var item = teammate.find('.item'+i);
+			for (i = player.items.length - 1; i >= 0; i--) {
+				item = teammate.find('.item'+i);
 				if (player.items[i].name !== '') {
 					item.attr('src', formatImageUrl(player.items[i].icon));
 				} else {
@@ -374,8 +375,9 @@ function applyData(gameData) {
 	$('#reports').empty();
 	$('#allied-report-count').html(gameData.allied_report_count);
 	$('#enemy-report-count').html(gameData.enemy_report_count);
-	for (var i = gameData.reports.length - 1; i >= 0; i--) {
-		var report = gameData.reports[i], item = $('<li></li>');
+	for (i = gameData.reports.length - 1; i >= 0; i--) {
+		var report = gameData.reports[i];
+		item = $('<li></li>');
 		item.addClass(report.association_to_offender);
 		item.html(report.comment).append($('<h2></h2>').html(report.offense));
 		if (report.association_to_offender === 'ally') {
@@ -387,7 +389,7 @@ function applyData(gameData) {
 	
 	// build chat log
 	var $chat = $('#chat').empty();
-	for (var i = gameData.chat_log.length - 1; i >= 0; i--) {
+	for (i = gameData.chat_log.length - 1; i >= 0; i--) {
 		var chat_line = gameData.chat_log[i];
 		var classes = chat_line.association_to_offender;
 		if (classes === 'offender') classes += ' ally';
