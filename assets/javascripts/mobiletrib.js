@@ -357,7 +357,7 @@ function applyData(gameData) {
 			teammate.find('.score').html(player.scores.kills +'/'+ player.scores.deaths +'/'+ player.scores.assists);
 			teammate.find('.summ1').attr('src', formatImageUrl(player.summoner_spell_1));
 			teammate.find('.summ2').attr('src', formatImageUrl(player.summoner_spell_2));
-			teammate.find('.gold').html(player.gold_earned);
+			teammate.find('.gold').html(player.gold_earned > 1000 ? (Math.round(player.gold_earned / 1000) + 'k') : player.gold_earned);
 			teammate.find('.cs').html(player.minions_killed);
 			for (i = player.items.length - 1; i >= 0; i--) {
 				item = teammate.find('.item'+i);
