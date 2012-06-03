@@ -22,13 +22,14 @@
  */
 
 function startSession() {
-	// session expires in 30 minutes, only on our domain, only send session cookie over SSL
+	// session expires in 4 hours, only on our domain, only send session cookie over SSL
 	$domain = $_SERVER['HTTP_HOST'];
 	// strip a possible port number from the host
 	if ($pos = strrpos($domain,':')) {
 		$domain = substr($domain, 0, $pos);
 	}
-	session_set_cookie_params(1800, '/', $domain, FORCE_SSL);
+	ini_set('session.gc_maxlifetime', '14400');
+	session_set_cookie_params(14400, '/', $domain, FORCE_SSL);
 	session_start();
 }
 

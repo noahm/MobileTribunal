@@ -37,7 +37,7 @@ function tribInit($name, $pass, $realm, $ch)
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 	curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "/assets/certificates/cacert.crt");
 
-	$result = getHtmlHeaderAndCookies($ch, $url, "");
+	$result = getHtmlHeaderAndCookies($ch, $url, array());
 	if ( $result === false )
 		return false;
 	else
@@ -46,49 +46,53 @@ function tribInit($name, $pass, $realm, $ch)
 	curl_setopt($ch, CURLOPT_POST, false);
 
 	//"Get Started" Page
-	$url = "http://$realm.leagueoflegends.com/Tribunal";
+	$url = "http://$realm.leagueoflegends.com/tribunal/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false )
 		return false;
 	else
 		$cookies = $result["cookies"];
 
-	//"Accept" Page
-	$url = "http://$realm.leagueoflegends.com/tribunal/acceptance";
+//At this point, check for the phrase "You have not reached the minimum level requirements to be eligible to participate in the Tribunal.	"
+//in the html, return the error and dont run through the rest of the function
+
+	//"Agree" Page
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/guidelines/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false )
 		return false;
 	else
 		$cookies = $result["cookies"];
 
-	if ( stristr($result["header"], "Location: http://$realm.leagueoflegends.com/tribunal/error/level\r\n") )
-		return array("cookies" => $result["cookies"], "case" => "level");
+	//Submit "Agree" Page
+	$url = "http://$realm.leagueoflegends.com/tribunal/accept/";
+	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+	if ( $result === false )
+		return false;
 
 	//Get the first case number
-	$url = "http://$realm.leagueoflegends.com/tribunal/cases/review";
-	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-
-	if ( $result === false )
-		return false;
-	elseif ( !$case = tribParseLocation($result["header"], $_SESSION["realm"]) )
-		return false;
-
-	return array("cookies" => $result["cookies"], "case" => $case);
+	return tribGetCase($realm, $ch, $result["cookies"]);
 
 }
 
-function tribGetCase($case, $realm, $ch, $cookies)
+function tribGetCase($realm, $ch, $cookies)
 {
-
-	$url = "http://$realm.leagueoflegends.com/tribunal/case/$case/review";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false )
 		return false;
 	else
 	{
-
-		$caseInfo = tribParseHTML($result['html']);
-		return array("numGames" => $caseInfo["numGames"], "formTokens" => json_encode($caseInfo["formTokens"]), "cookies" => $result["cookies"]);
+		$loc = tribParseLocation($result["header"], $realm);
+		if ( $loc === false )
+			return false;
+		elseif ( $loc == "finished" )
+			return array("cookies" => $result["cookies"], "case" => "finished");
+		elseif ( $loc == "case" )
+		{
+			$caseInfo = tribParseHTML($result['html']);
+			return array("cookies" => $result["cookies"], "case" => $caseInfo["case"], "numGames" => $caseInfo["numGames"]);
+		}
 
 	}
 
@@ -97,7 +101,7 @@ function tribGetCase($case, $realm, $ch, $cookies)
 function tribGetGame($case, $game, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/case/$case/get-game/$game";
+	$url = "http://$realm.leagueoflegends.com/tribunal/get_game/$case/$game/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
  	if ( $result === false )
  		return false;
@@ -109,7 +113,7 @@ function tribGetGame($case, $game, $realm, $ch, $cookies)
 function tribGetCaptcha($realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/cases/captcha";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/refresh_captcha/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false )
 		return false;
@@ -126,18 +130,16 @@ function tribSkipCase($case, $realm, $ch, $cookies)
 
 	if ( $result === false )
 		return false;
-	elseif ( !$case = tribParseLocation($result["header"], $_SESSION["realm"]) )
-		return false;
 
-	return array("case" => $case, "cookies" => $result["cookies"]);
+	return tribGetCase($realm, $ch, $result["cookies"]);
 
 }
 
 function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/case/$case/review";
-	$data = array_merge($formTokens, array("op"=>$punish?"Punish":"Pardon", "captcha_result"=>$captcha));
+	$url = "http://$realm.leagueoflegends.com/tribunal/vote/$case/";
+	$data = array("decision"=>$punish?"punish":"pardon");
 	$data = http_build_query($data);
 
 	curl_setopt($ch, CURLOPT_POST, true);
@@ -145,26 +147,16 @@ function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $coo
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	curl_setopt($ch, CURLOPT_POST, false);
 
-	if ( $result === false )
-		return false;
-	elseif ( !$case = tribParseLocation($result["header"], $_SESSION["realm"]) )
-		return false;
-
-	return array("case" => $case, "cookies" => $result["cookies"]);
+	return tribGetCase($realm, $ch, $result["cookies"]);
 
 }
 
 function tribCheckCaptcha($captcha, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/cases/captcha-check";
-	$data = array("captcha"=>$captcha);
-	$data = http_build_query($data);
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/captcha_check/$captcha/";
 
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	curl_setopt($ch, CURLOPT_POST, false);
 
 	if ( $result === false )
 		return false;
@@ -180,8 +172,14 @@ function getHtmlHeaderAndCookies($ch, $url, $cookies)
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
-	if ( $cookies != "" )
-		curl_setopt($ch, CURLOPT_COOKIE, $cookies);
+	
+	//Reassemble cookies
+	if ( !empty($cookies) )
+	{
+		foreach( $cookies as $name => $value )
+			$cookieStrings[] = "$name=$value";
+		curl_setopt($ch, CURLOPT_COOKIE, implode("; ", $cookieStrings));
+	}
 
 	$result= curl_exec($ch);
 
@@ -191,7 +189,15 @@ function getHtmlHeaderAndCookies($ch, $url, $cookies)
 	//Parse cookies
 	$pattern = "/Set-Cookie: (.*);/U";
 	if ( preg_match_all($pattern, $result, $matches) != 0 )
-		$cookies = implode("; ", $matches[1]);
+	{
+		foreach ( $matches[1] as $match )
+		{		
+			$newCookie = explode("=", $match);
+			$newCookies[$newCookie[0]] = $newCookie[1];
+		}
+		
+		$cookies = array_merge($cookies, $newCookies);
+	}
 
 	//Parse content
 	$contentpos = strpos($result, "\r\n\r\n")+4;

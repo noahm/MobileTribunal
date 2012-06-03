@@ -96,7 +96,10 @@ switch ( $cmd )
 					// save important info
 					$_SESSION['cookies'] = $result['cookies'];
 					$_SESSION['case'] = $result['case'];
-					echo '{"status":"ok"}';
+					if ( $result['case'] == "finished" )
+						echo '{"status":"finished"}';
+					else
+						echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
 					break;
 				}
 				else
@@ -109,22 +112,20 @@ switch ( $cmd )
 		break;
 
 	case "getCase":
-		if ( $_SESSION['case'] == "finished" )  //if user logs in but has already hit the limit
-		{
-			echo json_encode(array('numGames'=> 0, 'caseId'=>'finished', 'status'=>'finished'));
-			break;
-		}
-
-		$result = tribGetCase($_SESSION['case'], $_SESSION['realm'], $ch, $_SESSION['cookies']);
+		$result = tribGetCase($_SESSION['realm'], $ch, $_SESSION['cookies']);
 		if ( $result === false )
 			echo '{"status":"failed"}';
 		else
 		{
 			$_SESSION['cookies'] = $result['cookies'];
-			$_SESSION['formTokens'] = $result['formTokens'];
-			echo json_encode(array('numGames'=>$result["numGames"], 'caseId'=>$_SESSION['case']));
+			$_SESSION['case'] = $result['case'];
+			if ( $result['case'] == "finished" )
+				echo '{"status":"finished"}';
+			else
+				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
 		}
 		break;
+		
 
 	case "getGame":
 		$result = tribGetGame($_SESSION['case'], $game, $_SESSION['realm'], $ch, $_SESSION['cookies']);
@@ -173,7 +174,10 @@ switch ( $cmd )
 				{
 					$_SESSION['cookies'] = $result['cookies'];
 					$_SESSION['case'] = $result['case'];
-					echo '{"status":"ok","case":"' . $result["case"] . '"}';
+					if ( $result['case'] == "finished" )
+						echo '{"status":"finished"}';
+					else
+						echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
 				}
 
 			}
@@ -190,7 +194,10 @@ switch ( $cmd )
 		{
 			$_SESSION['cookies'] = $result['cookies'];
 			$_SESSION['case'] = $result['case'];
-			echo '{"status":"ok","case":"' . $result["case"] . '"}';
+			if ( $result['case'] == "finished" )
+				echo '{"status":"finished"}';
+			else
+				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
 		}
 		break;
 	default:

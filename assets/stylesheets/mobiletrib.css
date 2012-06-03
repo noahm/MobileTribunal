@@ -52,11 +52,11 @@ body {
 	color: #BC0000;
 }
 
-:not(#chat) > .allied, .allied .author {
+:not(#chat) > .ally, .ally .author {
 	color: #008B00;
 }
 
-:not(#chat) > .reported, .reported .author {
+:not(#chat) > .offender, .offender .author {
 	color: #9B00FE;
 }
 
@@ -115,9 +115,10 @@ body {
 #games {
 	display: none;
 	position: absolute;
+	text-align: right;
 	right: 0;
-	top: 1.6em;
-	width: 6em;
+	top: 2em;
+	width: 7.5em;
 }
 
 #games li {
@@ -129,6 +130,12 @@ body {
 }
 #games li:not(:first-child) {
 	border-top: none;
+}
+
+#games img {
+	height: 24px;
+	width:  24px;
+	vertical-align: middle;
 }
 
 section {
@@ -194,6 +201,13 @@ section .title > span {
 	border-top-left-radius: 4px;
 }
 
+#summoners img {
+	height: 32px;
+	width: 32px;
+	margin: 4px;
+	box-shadow: 0px 0px 4px grey;
+}
+
 #inventory-container {
 	background-color: gray;
 	width: 198px;
@@ -221,7 +235,7 @@ section .title > span {
 	-moz-columns: 2;
 	columns: 2;
 	text-shadow: 0px 1px 0px lightgrey;
-	min-height: 2.8em;
+	min-height: 3.9em;
 }
 
 #stats ul li {
@@ -238,6 +252,58 @@ section .title > span {
 	float: right;
 }
 
+#teammates {
+	width: 100%;
+	border-collapse: collapse;
+	line-height: 16px;
+}
+
+#teammates .template {
+	display: none;
+}
+
+#teammates td img {
+	height: 24px;
+	width: 24px;
+	display: block;
+	float: left;
+}
+
+#teammates td.port {
+	text-align: left;
+}
+
+#teammates td.port img {
+	height: 32px;
+	width: 32px;
+	margin-right: 3px;
+}
+
+#teammates th, #teammates td {
+	text-align: center;
+}
+
+#teammates td {
+	padding: 3px;
+}
+
+#teammates col.summoners {
+	width: 30px;
+}
+
+#teammates col.inventory {
+	width: 78px;
+}
+
+#teammates th:first-child {
+	text-align: left;
+	padding-left: 3px;
+}
+
+#teammates col.gold, #teammates col.cs {
+	text-align: right;
+}
+
 #reports li:not(:last-child) {
 	margin-bottom: .6em;
 }
@@ -248,7 +314,6 @@ section .title > span {
 }
 
 #chat, #reports {
-/*	white-space: pre-wrap;*/
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	width: auto;
@@ -275,9 +340,9 @@ section .title > span {
 #chat:not(.champ-only) .character:after  { content: ")"; }
 
 #chat.hide-enemy  li.enemy,
-#chat.hide-allied li.allied,
+#chat.hide-allied li.ally,
 #chat.only-all    li:not(.all),
-#chat.only-reported li:not(.reported)
+#chat.only-reported li:not(.offender)
 { display: none; }
 
 #chat.champ-only .summoner,
@@ -381,3 +446,53 @@ Initial styles
 #submit, #game, #return, #finished {
 	display: none;
 }
+
+/* specific screen size styles
+iphone portrait  320x480
+iphone4          640x960
+ipad            1024x768
+andrid          1280x720 */
+@media screen and (max-width: 560px) {
+#teammates .champname {
+	display: none;
+}
+#teammates td.port img {
+	float: none;
+	display: inline;
+	vertical-align: middle;
+}
+}
+
+@media screen and (min-width: 680px) {
+#teammates .summ1, #teammates .summ2 {
+	height: 32px;
+	width:  32px;
+}
+#teammates col.summoners {
+	width: 80px;
+}
+}
+
+@media screen and (min-width: 800px) {
+#teammates .item0, #teammates .item1, #teammates .item2, #teammates .item3, #teammates .item4, #teammates .item5 {
+	height: 32px;
+	width:  32px;
+}
+#teammates col.inventory {
+	width: 198px;
+}
+}
+
+/* the large size is kinda dumb and looks bad 
+@media screen and (min-width: 1200px) {
+#teammates td {
+	line-height: 32px;
+}
+#teammates td img {
+	height: 64px !important;
+	width:  64px !important;
+}
+#teammates col.summoners {
+	width: 134px;
+}
+*/
