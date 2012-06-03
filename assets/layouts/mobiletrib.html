@@ -15,6 +15,7 @@
 	</script>
 	<script type="text/javascript" src="assets/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="assets/javascripts/jquery.store.patched.js"></script>
+	<script type="text/javascript" src="assets/javascripts/jquery.tappable.js"></script>
 	<script type="text/javascript" src="assets/javascripts/viewporter.js"></script>
 	<script type="text/javascript" src="assets/javascripts/add2home.js"></script>
 	<script type="text/javascript" async="true" src="assets/javascripts/mobiletrib.js"></script>
@@ -35,7 +36,7 @@
 </div>
 
 <div id="login" class="login exc-by-loading" style="display:none">
-<form autocapitalize="off" autocorrect="off"><section>
+<form autocapitalize="off" autocorrect="off" autocomplete="on"><section>
 	<div class="title"><span>Login to Tribunal Mobile</span></div>
 	<div style="background-color:yellow" id="feedback"></div>
 	<div class="input"><label for="realm">Region</label>
@@ -45,7 +46,7 @@
 			<option value="eune">EU Nordic &amp; East</option>
 		</select>
 	</div>
-	<div class="input"><label for="username">Username</label> <input name="username" id="username" type="text" autocorrect="off" autocapitalize="off" autofocus></div>
+	<div class="input"><label for="username">Username</label> <input name="username" id="username" type="text" autofocus></div>
 	<div class="input"><label for="password">Password</label> <input name="password" id="password" type="password"></div>
 	<div><input type="submit" value="Login"></div>
 </section></form>
@@ -55,6 +56,7 @@
 	<div id="game-selector">
 		<span id="game-selected">Game 1</span>
 		<ul id="games">
+			<li value="1" onclick="void(0)"><img src="assets/images/unknownplayer.png"> Game 1</li>
 		</ul>
 	</div>
 	<div id="verdict" class="req-by-game exc-by-submit">Submit Verdict <time>in 60s</time></div>
@@ -66,9 +68,14 @@
 	<div id="core-info">
 		<section id="character-box" class="float">
 			<div id="champname" class="title"><span></span></div>
-			<div id="portrait">
-				<img src="assets/images/blank.gif">
-				<div id="level"></div>
+			<div id="portraitandsummoners">
+				<div id="portrait">
+					<img src="assets/images/blank.gif">
+					<div id="level"></div>
+				</div>
+				<div id="summoners">
+					<img src="" id="summoner1"><img src="" id="summoner2">
+				</div>
 			</div>
 			<div id="inventory">
 				<div id="inventory-container">
@@ -83,7 +90,9 @@
 				<img src="assets/images/assists.png"><span id="assists"></span>
 			</span></div>
 			<ul>
+				<li><label>Gold:</label><span id="gold-earned"></span></li>
 				<li><label>Outcome:</label><span id="outcome"></span></li>
+				<li><label>Date:</label><span id="date-played"></span></li>
 				<li><label>Minion Kills:</label><span id="minion-kills"></span></li>
 				<li><label>DPS Out:</label><span id="dps-out"></span></li>
 				<li><label>DPS In:</label><span id="dps-in"></span></li>
@@ -91,7 +100,50 @@
 		</section>
 	</div>
 	<section class="full">
-		<div class="title"><span>Reports (<span class="allied"><span id="allied-report-count"></span> allied</span>, <span class="enemy"><span id="enemy-report-count"></span> enemy</span>)</span></div>
+		<div class="title"><span>Team</span></div>
+		<table id="teammates">
+			<colgroup>
+				<col class="player">
+				<col class="score">
+				<col class="summoners">
+				<col class="inventory">
+				<col class="gold">
+				<col class="cs">
+			</colgroup>
+			<thead>
+				<tr>
+					<th><img src="assets/images/player.png"></th>
+					<th><img src="assets/images/kda.png"></th>
+					<th><img src="assets/images/summoners.png"></th>
+					<th><img src="assets/images/inventory.png"></th>
+					<th><img src="assets/images/gold.png"></th>
+					<th><img src="assets/images/minion.png"></th>
+				</tr>
+				<tr class="template">
+					<td class="port"><img src=""> <span class="level"></span><br><span class="champname"></span></td>
+					<td class="score"></td>
+					<td>
+						<img class="summ1" src="">
+						<img class="summ2" src="">
+					</td>
+					<td>
+						<img class="item0" src="">
+						<img class="item1" src="">
+						<img class="item2" src="">
+						<img class="item3" src="">
+						<img class="item4" src="">
+						<img class="item5" src="">
+					</td>
+					<td class="gold"></td>
+					<td class="cs"></td>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</section>
+	<section class="full">
+		<div class="title"><span>Reports (<span class="ally"><span id="allied-report-count"></span> allied</span>, <span class="enemy"><span id="enemy-report-count"></span> enemy</span>)</span></div>
 		<ul id="reports">
 		</ul>
 	</section>
