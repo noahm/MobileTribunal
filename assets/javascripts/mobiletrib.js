@@ -223,7 +223,7 @@ function processCaseSubmissionResult(data) {
 	}
 	else if (data.status === 'ok') {
 		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Accepted']);
-		loadCase();
+		loadCase(data);
 	}
 }
 
