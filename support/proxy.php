@@ -125,11 +125,18 @@ function tribGetCaptcha($realm, $ch, $cookies)
 function tribSkipCase($case, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/cases/skip/$case";
+	$url = "http://$realm.leagueoflegends.com/tribunal/vote/$case/";
+	$data = array("decision"=>"skip");
+	$data = http_build_query($data);
+
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 
 	if ( $result === false )
 		return false;
+
+	curl_setopt($ch, CURLOPT_POST, false);
 
 	return tribGetCase($realm, $ch, $result["cookies"]);
 
@@ -145,6 +152,10 @@ function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $coo
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+
+	if ( $result === false )
+		return false;
+
 	curl_setopt($ch, CURLOPT_POST, false);
 
 	return tribGetCase($realm, $ch, $result["cookies"]);
