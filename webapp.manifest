@@ -25,6 +25,7 @@ assets/images/gold.png
 assets/images/minion.png
 assets/images/unknownplayer.png
 
+assets/javascripts/json2.min.js
 assets/javascripts/jquery.min.js
 assets/javascripts/jquery.store.patched.js
 assets/javascripts/jquery.tappable.js
