@@ -116,7 +116,11 @@ var viewporter;
 		triggerWindowEvent: function(name) {
 			var event = document.createEvent("Event");
 			event.initEvent(name, false, false);
-			window.dispatchEvent(event);
+			if (window.dispatchEvent) {
+				window.dispatchEvent(event);
+			} else {
+				document.dispatchEvent(event);
+			}
 		}
 
 	};
