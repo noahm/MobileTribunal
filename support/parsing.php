@@ -49,12 +49,11 @@ function getNumGames($doc)
 
 function tribParseLocation($header, $realm)
 {
-
-	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") )
+	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") ) {
 		return "finished";
-	elseif ( stristr($header, "HTTP/1.0 200 OK") )
+	} elseif ( stristr($header, "HTTP/1.0 200 OK") ) {
 		return "case";
-	else
+	} else {
 		return false;
-
+	}
 }
