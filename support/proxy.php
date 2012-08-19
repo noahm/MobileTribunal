@@ -147,7 +147,7 @@ function tribSkipCase($case, $realm, $ch, $cookies)
 
 }
 
-function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $cookies)
+function tribReviewCase($case, $punish, $captcha, $realm, $ch, $cookies)
 {
 
 	$url = "http://$realm.leagueoflegends.com/tribunal/vote/$case/";
