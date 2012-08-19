@@ -346,11 +346,12 @@ Styles for submit screen
 }
 
 #captcha {
+	display: none;
 	width: 220px;
 	height: auto;
 }
 #refresh-captcha {
-	display: inline-block;
+	display: none;
 	vertical-align: top;
 	background-image: url(../images/refreshcap.png);
 	background-position-y: 0px;
@@ -364,6 +365,7 @@ Styles for submit screen
 }
 
 #captcha-result {
+	display: none;
 	width: 255px;
 	font-size: xx-large;
 	vertical-align: top;
