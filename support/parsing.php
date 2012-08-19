@@ -21,40 +21,93 @@
  * THE SOFTWARE.
  */
 
-function tribParseHTML($html)
+function htmlToDoc($html)
 {
-	// grab the element from the html
 	$doc = new DOMDocument();
-
 	// gag error reporting for all the nonsense that bad html pages generate during parsing
 	$orig = error_reporting(0);
 	$doc->loadHTML($html);
 	error_reporting($orig);
-
-	return array( 'numGames' => getNumGames($doc), 'case' => getCaseNo($doc) );
+	return $doc;
 }
 
+function tribParseHTML($html)
+{
+	$doc = htmlToDoc($html);
+	return array( 'numGames' => getNumGames($html), 'case' => getCaseNo($doc) );
+}
+
+function tribParseStartErrors($html)
+{
+	$doc = htmlToDoc($html);
+	if ($doc->getElementById('hammer_start')) {
+		return false; // no problems here
+	}
+	if (checkUnderleveled($doc)) {
+		return array('case' => 'underlevel');
+	}
+	if (checkRecess($doc)) {
+		return array('case' => 'recess');
+	}
+	return array('case' => 'unknown');
+}
+
+function checkUnderleveled($doc)
+{
+	$el = $doc->getElementById('finished_info_text');
+	if ($el) {
+		return !stripos($el->textContent, 'You have not reached the minimum level requirements')===false;
+	} else {
+		return false;
+	}
+}
+
+function checkRecess($doc)
+{
+	$el = $doc->getElementById('finished_info_title');
+	if ($el) {
+		return !stripos($el->textContent, 'Tribunal in Recess')===false;
+	} else {
+		return false;
+	}
+}
 
 function getCaseNo($doc)
 {
-	$gamecount = $doc->getElementById('h_caseid');
-	return (int) $gamecount->textContent;
+	$xpath = new DOMXpath($doc);
+	$caseno = $xpath->query("//*/span[@class='raw-case-number']");
+	if ($caseno->length > 0) {
+		return (int) $caseno->item(0)->textContent;
+	} else {
+		return 0;
+	}
 }
 
-function getNumGames($doc)
+// not as simple as it used to be
+// now it's packed in a javascript object literal output in an anonymous script tag
+// DOM parsing won't help so much here
+function getNumGames($html)
 {
-	$gamecount = $doc->getElementById('h_gamecount');
-	return (int) $gamecount->textContent;
+	// first find the variable declaration
+	$chopped = substr($html, strpos($html, 'var caseData'));
+	// then find the next semicolon
+	$chopped = substr($chopped, 0, strpos($chopped, ';')+1);
+	// parse for the game_count expression
+	$matches = array();
+	if (preg_match("/['\"]game_count['\"]:\s+(\d+),/", $chopped, $matches)) {
+		return (int)$matches[1];
+	} else {
+		return 0;
+	}
 }
 
 function tribParseLocation($header, $realm)
 {
-
-	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") )
+	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") ) {
 		return "finished";
-	elseif ( stristr($header, "HTTP/1.0 200 OK") )
+	} elseif ( stristr($header, "HTTP/1.1 200 OK") ) {
 		return "case";
-	else
+	} else {
 		return false;
-
+	}
 }

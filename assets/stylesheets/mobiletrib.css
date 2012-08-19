@@ -205,7 +205,7 @@ section .title > span {
 	height: 32px;
 	width: 32px;
 	margin: 4px;
-	box-shadow: 0px 0px 4px grey;
+	box-shadow: 0px 0px 4px gray;
 }
 
 #inventory-container {
@@ -320,11 +320,6 @@ section .title > span {
 	overflow: hidden;
 }
 
-#chat input#champ-only {
-	height: 1em;
-	width: 1em;
-}
-
 #chat .all .author:after {
 	content: " [All]";
 }
@@ -336,17 +331,10 @@ section .title > span {
 #chat time:before { content: " ["; }
 #chat time:after  { content: "]"; }
 
-#chat:not(.champ-only) .character:before { content: " ("; }
-#chat:not(.champ-only) .character:after  { content: ")"; }
-
 #chat.hide-enemy  li.enemy,
 #chat.hide-allied li.ally,
 #chat.only-all    li:not(.all),
 #chat.only-reported li:not(.offender)
-{ display: none; }
-
-#chat.champ-only .summoner,
-#chat.champ-only time
 { display: none; }
 
 /*

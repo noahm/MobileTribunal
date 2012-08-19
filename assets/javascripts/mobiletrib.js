@@ -57,15 +57,7 @@ $(function() {
 	$('#chat-filter').change(function() {
 		$('#chat').removeClass('only-all hide-enemy hide-allied only-reported').addClass(this.value);
 	});
-	// handle "simple" chat checkbox
-	$('#champ-only').change(function() {
-		$.store.set('chat.champ-only', !!$('#champ-only').attr('checked'));
-		if ($('#chat').hasClass('champ-only') != !!$('#champ-only').attr('checked'))
-			$('#chat').toggleClass('champ-only');
-	});
-	
-	// apply saved value to champonly checkbox
-	$('#champ-only').attr('checked', !!$.store.get('chat.champ-only')).change();
+
 	// handle refreshing captcha
 	$('#refresh-captcha').click(reloadCaptcha);
 	
@@ -195,10 +187,12 @@ function processLoginResult(data) {
 		_gaq.push(['_trackEvent', 'User', 'Login '+$('#realm').val(), 'Success']);
 		showOnly('game');
 		loadCase(data);
-	} else {
+	} else if (data.status === 'error') {
 		// put each elemnt of response.feedback as a paragraph in #feedback
 		$('#feedback').html(data.feedback.join('<br>'));
 		showOnly('login');
+	} else {
+		showOnly(data.status);
 	}
 }
 
@@ -328,7 +322,6 @@ function initData(gameData, gameNumber) {
 function applyData(gameData) {
 	var i, item;
 	// expand the data into the #game div
-	$('#summoner-name').text('"' + gameData.offender.summoner_name + '"');
 	$('#portrait img').attr('src', formatImageUrl(gameData.offender.champion_url));
 	$('#portrait img').attr('alt', gameData.offender.champion_name);
 	$('#champname span').text(gameData.offender.champion_name);
@@ -352,7 +345,7 @@ function applyData(gameData) {
 	$('#inventory-container').empty();
 	for (i=0; i<gameData.offender.items.length; i++) {
 		item = gameData.offender.items[i];
-		if (item.name !== '')
+		if (item.id !== '0')
 			$('<img>')
 				.attr('src', formatImageUrl(item.icon))
 				.attr('title', item.name)
@@ -378,7 +371,7 @@ function applyData(gameData) {
 			teammate.find('.cs').html(player.minions_killed);
 			for (i = player.items.length - 1; i >= 0; i--) {
 				item = teammate.find('.item'+i);
-				if (player.items[i].name !== '') {
+				if (player.items[i].id !== '0') {
 					item.attr('src', formatImageUrl(player.items[i].icon));
 				} else {
 					item.attr('src', 'assets/images/itemslot.png');
@@ -396,7 +389,7 @@ function applyData(gameData) {
 		var report = gameData.reports[i];
 		item = $('<li></li>');
 		item.addClass(report.association_to_offender);
-		item.html(report.comment).append($('<h2></h2>').html(report.offense));
+		item.html(report.comment).append($('<h2></h2>').html(gameData.translated_report_reasons[report.offense]));
 		if (report.association_to_offender === 'ally') {
 			item.prependTo('#reports');
 		} else {
@@ -414,7 +407,6 @@ function applyData(gameData) {
 		$('<li></li>').addClass(classes)
 			.append(
 				$('<span class="author"></span>')
-					.append($('<span class="summoner"></span>').text(chat_line.summoner_name))
 					.append($('<span class="character"></span>').text(chat_line.champion_name))
 			)
 			.append($('<time></time>').text(chat_line.time))
