@@ -189,10 +189,12 @@ function processLoginResult(data) {
 	if (data.status === 'ok') {
 		showOnly('game');
 		loadCase(data);
-	} else {
+	} else if (data.status === 'error') {
 		// put each elemnt of response.feedback as a paragraph in #feedback
 		$('#feedback').html(data.feedback.join('<br>'));
 		showOnly('login');
+	} else {
+		showOnly(data.status);
 	}
 }
 

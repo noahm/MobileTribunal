@@ -55,8 +55,10 @@ function tribInit($name, $pass, $realm, $ch)
 		$cookies = $result["cookies"];
 	}
 
-//At this point, check for the phrase "You have not reached the minimum level requirements to be eligible to participate in the Tribunal.	"
-//in the html, return the error and dont run through the rest of the function
+	// check for recess or not matching summoner lvl requirements
+	if ($r = tribParseStartErrors($result['html'])) {
+		return $r; // case => [underlevel, recess, unknown]
+	}
 
 	//"Agree" Page
 	$url = "http://$realm.leagueoflegends.com/tribunal/en/guidelines/";
@@ -149,7 +151,7 @@ function tribReviewCase($case, $formTokens, $punish, $captcha, $realm, $ch, $coo
 {
 
 	$url = "http://$realm.leagueoflegends.com/tribunal/vote/$case/";
-	$data = array("decision"=>$punish?"punish":"pardon");
+	$data = array("decision" => $punish ? "punish" : "pardon");
 	$data = http_build_query($data);
 
 	curl_setopt($ch, CURLOPT_POST, true);

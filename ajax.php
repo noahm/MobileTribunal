@@ -96,10 +96,23 @@ switch ( $cmd )
 					// save important info
 					$_SESSION['cookies'] = $result['cookies'];
 					$_SESSION['case'] = $result['case'];
-					if ( $result['case'] == "finished" )
+					switch ($result['case'])
+					{
+						case 'finished':
 						echo '{"status":"finished"}';
-					else
+						break;
+
+						case 'underlevel':
+						echo '{"status":"underlevel"}';
+						break;
+
+						case 'recess':
+						echo '{"status":"recess"}';
+						break;
+
+						default:
 						echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+					}
 					break;
 				}
 				else
