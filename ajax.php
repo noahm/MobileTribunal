@@ -165,18 +165,19 @@ switch ( $cmd )
 
 	case "sendVerdict":
 		//Check captcha first
-		$result = tribCheckCaptcha($captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
-		if ( $result === false )
+		//$result = tribCheckCaptcha($captchaResult, $_SESSION["realm"], $ch, $_SESSION["cookies"]);
+		if ( false )
 			echo '{"status":"failed"}';
 		else
 		{
 
-			$_SESSION["cookies"] = $result["cookies"];	//In case next request fails
+			//$_SESSION["cookies"] = $result["cookies"];	//In case next request fails
 
-			if ( $result["captchaResult"] == "1" )
+			if ( true ) //$result["captchaResult"] == "1"
 			{
 				$result = tribReviewCase(
-					$_SESSION["case"], $verdict=="punish", $captchaResult, $_SESSION["realm"], $ch, $result["cookies"]
+					$_SESSION["case"], $verdict=="punish", "", $_SESSION["realm"], $ch, $_SESSION["cookies"]
+					//$_SESSION["case"], $verdict=="punish", "", $_SESSION["realm"], $ch, $result["cookies"]
 				);
 
 				if ( $result === false )

@@ -55,7 +55,7 @@ $(function() {
 	});
 
 	// handle refreshing captcha
-	$('#refresh-captcha').click(reloadCaptcha);
+	//$('#refresh-captcha').click(reloadCaptcha);
 	
 	// handle submitting a verdict
 	$('#pardon,#punish').click(function() {
@@ -66,7 +66,7 @@ $(function() {
 			type: 'POST',
 			dataType: 'json',
 			url: 'ajax.php',
-			data: { cmd: 'sendVerdict', verdict: this.id, "captcha-result": $('#captcha-result').val() },
+			data: { cmd: 'sendVerdict', verdict: this.id, "captcha-result": "" }, //$('#captcha-result').val() },
 			success: processCaseSubmissionResult
 		});
 	});
@@ -226,8 +226,8 @@ function reloadCaptcha() {
 
 function loadCase(data) {
 	showOnly('loading');
-	window.captchaLoaded = false;
-	window.captchaIsLoading = false;
+	//window.captchaLoaded = false;
+	//window.captchaIsLoading = false;
 	window.cachedGames = {};
 	
 	// handle verdict timer
@@ -251,7 +251,7 @@ function loadCase(data) {
 	$('#caseid').html(data['case']);
 	loadGame('1');
 	// if we are loading for the first time, grab a new captcha in the background
-	reloadCaptcha();
+	//reloadCaptcha();
 }
 
 function timerTick() {
