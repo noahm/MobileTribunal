@@ -2,6 +2,7 @@
 <html manifest="webapp.manifest">
 <head>
 	<title>Tribunal</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/normalize.css">
@@ -61,8 +62,8 @@
 		</ul>
 	</div>
 	<div id="verdict" class="req-by-game exc-by-submit">Submit Verdict <time>in 60s</time></div>
-	<div id="return" class="req-by-submit exc-by-game" style="display:inline-block;">Return to Case <span id="caseid"></span></div>
-	<pre id="summoner-name"></pre>
+	<div id="return" class="req-by-submit exc-by-game" style="display:inline-block;">Return to Case</div>
+	<pre id="summoner-name">Case #<span id="caseid"></span></pre>
 </div>
 
 <div id="game" class="exc-by-loading" style="display:none">
@@ -101,7 +102,7 @@
 		</section>
 	</div>
 	<section class="full">
-		<div class="title"><span>Team</span></div>
+		<div class="title"><span>Teammates</span></div>
 		<table id="teammates">
 			<colgroup>
 				<col class="player">
@@ -158,7 +159,6 @@
 				<option value="hide-enemy">Allied</option>
 				<option value="hide-allied">Enemy</option>
 			</select>
-			<label for="champ-only">Simple</label>&nbsp;<input type="checkbox" name="champ-only" id="champ-only">
 		</span></div>
 		<ol id="chat">
 		</ol>
@@ -167,6 +167,19 @@
 
 <div id="finished" style="display:none">
 	<p>You have done all the cases that Riot allows within a single day. The limit is reset nightly at 1:00 AM PDT</p>
+</div>
+
+<div id="recess" style="display:none">
+	<p>The Tribunal is currently in recess while it builds more cases. Please return later to vote on summoner case files.</p>
+</div>
+
+<div id="underlevel" style="display:none">
+	<p>You do not meet the level requirements to participate in the Tribunal.
+		For More Information, read the <a href="http://www.leagueoflegends.com/tribunal/en/faq/">FAQ Page</a>.</p>
+</div>
+
+<div id="unknown" style="display:none">
+	<p>There was an unknown error encountered when talking to Riot. Use our feedback link below to bug us about fixing this.</p>
 </div>
 
 <div id="submit" class="exc-by-loading" style="display:none">
