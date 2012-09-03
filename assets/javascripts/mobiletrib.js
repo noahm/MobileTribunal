@@ -125,7 +125,7 @@ function formatImageUrl(url) {
 // shows only one component of the app and hides all the others
 // nothing is hidden if called for an element that isn't a major part of the game
 function showOnly(elemId) {
-	var mainPageItems = ['login', 'game', 'submit', 'finished'];
+	var mainPageItems = ['login', 'game', 'submit', 'finished', 'recess', 'underlevel', 'unknown'];
 	var alwaysHide = ['loading', 'games'];
 	
 	$('#'+elemId).show();
