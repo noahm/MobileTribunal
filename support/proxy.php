@@ -83,7 +83,7 @@ function tribInit($name, $pass, $realm, $ch)
 
 function tribGetCase($realm, $ch, $cookies)
 {
-	$url = "http://$realm.leagueoflegends.com/tribunal/en/";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/review";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false ) {
 		return false;
