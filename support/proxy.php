@@ -1,4 +1,4 @@
-<?php
+		<?php
 /* Copyright (c) 2012 kayson (kaysond) & Noah Manneschmidt (psoplayer)
  * https://github.com/noahm/MobileTribunal
  *
@@ -46,8 +46,8 @@ function tribInit($name, $pass, $realm, $ch)
 
 	curl_setopt($ch, CURLOPT_POST, false);
 
-	//"Get Started" Page
-	$url = "http://$realm.leagueoflegends.com/tribunal/";
+	//"Agree" Page
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/guidelines/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false ) {
 		return false;
@@ -60,19 +60,10 @@ function tribInit($name, $pass, $realm, $ch)
 		return $r; // case => [underlevel, recess, unknown]
 	}
 
-	//"Agree" Page
-	$url = "http://$realm.leagueoflegends.com/tribunal/en/guidelines/";
-	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	if ( $result === false ) {
-		return false;
-	} else {
-		$cookies = $result["cookies"];
-	}
-
 	//Submit "Agree" Page
 	$url = "http://$realm.leagueoflegends.com/tribunal/accept/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	if ( $result === false ) {
+	if ( $result === false ) { echo "fail";
 		return false;
 	}
 

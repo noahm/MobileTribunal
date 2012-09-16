@@ -119,7 +119,7 @@ function urlPrefix() {
 }
 
 function formatImageUrl(url) {
-	return url.replace('/tribunal/bundles/riothelper', urlPrefix()+'/sites/default/files');
+	return urlPrefix()+url;
 }
 
 // shows only one component of the app and hides all the others
