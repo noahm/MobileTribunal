@@ -40,7 +40,7 @@ function tribParseHTML($html)
 function tribParseStartErrors($html)
 {
 	$doc = htmlToDoc($html);
-	if ($doc->getElementById('hammer_start')) {
+	if ($doc->getElementById('guidelines_header')) {
 		return false; // no problems here
 	}
 	if (checkUnderleveled($doc)) {
