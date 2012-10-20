@@ -109,13 +109,13 @@ function onUpdateReady() {
 
 function urlPrefix() {
 	if (!window.imgPrefix) {
-		window.imgPrefix = 'https://' + $('#realm').val() + '.leagueoflegends.com';
+		window.imgPrefix = 'http://' + $('#realm').val() + '.leagueoflegends.com';
 	}
 	return window.imgPrefix;
 }
 
 function formatImageUrl(url) {
-	return urlPrefix()+url;
+	return url.replace('/tribunal/bundles/riothelper/game_data/1.0.0.148', urlPrefix()+'/sites/default/files/game_data/1.0.0.146');
 }
 
 // shows only one component of the app and hides all the others
