@@ -40,8 +40,8 @@ function tribParseHTML($html)
 function tribParseStartErrors($html)
 {
 	$doc = htmlToDoc($html);
-	if ($doc->getElementById('guidelines_header')) {
-		return false; // no problems here
+	if ($doc->getElementById('guidelines')) {
+		return true; // no problems here
 	}
 	if (checkUnderleveled($doc)) {
 		return array('case' => 'underlevel');
@@ -49,7 +49,7 @@ function tribParseStartErrors($html)
 	if (checkRecess($doc)) {
 		return array('case' => 'recess');
 	}
-	return array('case' => 'unknown');
+	return false;
 }
 
 function checkUnderleveled($doc)
@@ -110,4 +110,11 @@ function tribParseLocation($header, $realm)
 	} else {
 		return false;
 	}
+}
+
+function parseRecaptcha($html)
+{
+	$pattern = "/challenge : '([\w-]+)',/";
+	preg_match($pattern, $html, $matches);
+	return $matches[1];
 }

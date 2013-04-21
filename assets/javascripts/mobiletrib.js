@@ -27,6 +27,9 @@ $(function() {
 	$('#username').val($.store.get('username'));
 	$.store.clear('password'); // just in case they used the original version
 	
+	//handle recaptcha display
+	$('#realm').change(function() { displayRecaptcha();});
+
 	// logout handler
 	$('#logout').click(doLogout);
 	
@@ -90,6 +93,7 @@ $(function() {
 		data: { cmd: 'getCase' },
 		success: function (data) {
 			if (data.status === 'failed' || data.status === 'nosess') {
+				displayRecaptcha();
 				return showOnly('login');
 			}
 			if ( data.status === 'finished' ) {
@@ -115,7 +119,7 @@ function urlPrefix() {
 }
 
 function formatImageUrl(url) {
-	return url.replace('/tribunal/bundles/riothelper/game_data/1.0.0.148', urlPrefix()+'/sites/default/files/game_data/1.0.0.146');
+	return url.replace('/tribunal/bundles/riothelper/game_data/3.03.0.1/', urlPrefix()+'/tribunal/bundles/riothelper/game_data/3.03.0.1/');
 }
 
 // shows only one component of the app and hides all the others
@@ -169,7 +173,9 @@ function submitLogin(event) {
 			cmd: 'login',
 			username: $('#username').val(),
 			password: $('#password').val(),
-			realm: $('#realm').val()
+			realm: $('#realm').val(),
+			recaptcha_response: $('#recaptcha_response').val(),
+			recaptcha_challenge: $('#recaptcha_challenge').val()
 		},
 		success: processLoginResult
 	});
@@ -184,6 +190,8 @@ function processLoginResult(data) {
 	} else if (data.status === 'error') {
 		// put each elemnt of response.feedback as a paragraph in #feedback
 		$('#feedback').html(data.feedback.join('<br>'));
+		if( $('#realm').val() == 'na' )
+			loadRecaptcha();
 		showOnly('login');
 	} else {
 		showOnly(data.status);
@@ -194,14 +202,17 @@ function processCaseSubmissionResult(data) {
 	showOnly('submit');
 	if (data.status === 'failed') {
 		alert('Error communicating with Riot servers');
-	} else if (data.status === 'captchafail') {
+	}
+	else if (data.status === 'captchafail') {
 		alert('Incorrect captcha');
-	} else if (data.status === 'finished') {
+	}
+	else if (data.status === 'finished') {
 		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
-	} else if (data.status === 'nosess') {
-		$('#feedback').html('Your session has expired.');
-		showOnly('login');
-	} else if (data.status === 'ok') {
+	}
+	else if (data.status === 'nosess') {
+		showOnly('login'); // TODO show login form instead of reloading
+	}
+	else if (data.status === 'ok') {
 		loadCase(data);
 	}
 }
@@ -222,6 +233,30 @@ function reloadCaptcha() {
 			}
 		});
 	}
+}
+
+function loadRecaptcha() {
+	$('#recaptcha_img').attr('src','');
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: 'ajax.php',
+		data: { cmd: 'getRecaptcha' },
+		success: function(data) {
+			$('#recaptcha_img').attr('src',data.image);
+			$('#recaptcha_challenge').val(data.challenge);
+			$('#recaptcha_response').val('');
+		}
+	});
+}
+
+function displayRecaptcha() {
+	if( $('#realm').val() == 'na' ) {
+		loadRecaptcha();
+		$('#recaptcha').show();
+	}
+	else
+		$('#recaptcha').hide();
 }
 
 function loadCase(data) {
@@ -245,7 +280,7 @@ function loadCase(data) {
 	// create the list of games
 	$('#games').empty();
 	for (var i=1; i<=num; i++) {
-		$('<li onclick="void(0)"></li>').attr('value',i).html('<img src="assets/images/unknownplayer.png"> Game '+i).appendTo('#games');
+		$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
 	}
 	
 	$('#caseid').html(data['case']);
@@ -291,25 +326,30 @@ function loadGame(gameNumber) {
 
 // performs some parsing and caches the result of a fetched game
 function initData(gameData, gameNumber) {
+
+	//quick fix: gameData.offender is now an element of gameData.players, so we'll find the offender and recreate gameData.offender
+	for( var i = 0; i < gameData.players.length; i++ ) {
+		if( gameData.players[i].association_to_offender == 'offender' )
+			gameData.offender = gameData.players[i];
+	}
 	// calculate a regular timestamp
 	var minutes = gameData.offender.time_played % 60;
 	if (minutes < 10) minutes = '0' + minutes;
 	gameData.time_played = Math.floor(gameData.offender.time_played / 60) + ':' + minutes;
 	// cache the fixed data
 	window.cachedGames[gameNumber] = gameData;
-	// apply champion portrait in games list
-	$('#games img')[gameNumber-1].src = formatImageUrl(gameData.offender.champion_url);
+	// apply champion portrait in games list - removed because riot doesn't send individual images anymore
+	//$('#games img')[gameNumber-1].src = formatImageUrl(gameData.offender.champion_url);
 	return gameData;
 }
 
 function applyData(gameData) {
 	var i, item;
 	// expand the data into the #game div
-	$('#portrait img').attr('src', formatImageUrl(gameData.offender.champion_url));
-	$('#portrait img').attr('alt', gameData.offender.champion_name);
+	$('#portrait-img').attr('style', gameData.offender.champion_icon);
 	$('#champname span').text(gameData.offender.champion_name);
-	$('#summoner1').attr('src', formatImageUrl(gameData.offender.summoner_spell_1));
-	$('#summoner2').attr('src', formatImageUrl(gameData.offender.summoner_spell_2));
+	$('#summoner1').attr('style', gameData.offender.summoner_spell_1_icon);
+	$('#summoner2').attr('style', gameData.offender.summoner_spell_2_icon);
 	
 	$('#level').text(gameData.offender.level);
 	$('#time').text(gameData.time_played);
@@ -326,15 +366,11 @@ function applyData(gameData) {
 	
 	// setup inventory-container
 	$('#inventory-container').empty();
-	for (i=0; i<gameData.offender.items.length; i++) {
-		item = gameData.offender.items[i];
-		if (item.id !== '0')
-			$('<img>')
-				.attr('src', formatImageUrl(item.icon))
-				.attr('title', item.name)
-				.attr('alt', item.name)
-				.data('info', item)
-				.appendTo('#inventory-container');
+	for (i=0; i<gameData.offender.item_icons.length; i++) {
+		item = gameData.offender.item_icons[i];
+		$('<div>')
+			.attr('style', item)
+			.appendTo('#inventory-container');
 	}
 
 	//display teammates
@@ -344,21 +380,17 @@ function applyData(gameData) {
 		if (player.association_to_offender === 'ally') {
 			var teammate = $('#teammates thead tr.template').clone();
 			teammate.removeClass('template').addClass('teammate');
-			teammate.find('.port img').attr('src', formatImageUrl(player.champion_url));
+			teammate.find('.port div').attr('style', player.champion_icon);
 			teammate.find('.level').html(player.level);
 			teammate.find('.champname').html(player.champion_name);
 			teammate.find('.score').html(player.scores.kills +'/'+ player.scores.deaths +'/'+ player.scores.assists);
-			teammate.find('.summ1').attr('src', formatImageUrl(player.summoner_spell_1));
-			teammate.find('.summ2').attr('src', formatImageUrl(player.summoner_spell_2));
+			teammate.find('.summ1').attr('style',player.summoner_spell_1_icon);
+			teammate.find('.summ2').attr('style',player.summoner_spell_2_icon);
 			teammate.find('.gold').html(player.gold_earned > 1000 ? (Math.round(player.gold_earned / 1000) + 'k') : player.gold_earned);
 			teammate.find('.cs').html(player.minions_killed);
-			for (i = player.items.length - 1; i >= 0; i--) {
+			for (i = player.item_icons.length - 1; i >= 0; i--) {
 				item = teammate.find('.item'+i);
-				if (player.items[i].id !== '0') {
-					item.attr('src', formatImageUrl(player.items[i].icon));
-				} else {
-					item.attr('src', 'assets/images/itemslot.png');
-				}
+				item.attr('style', player.item_icons[i]);
 			}
 			teammate.appendTo('#teammates tbody');
 		}
