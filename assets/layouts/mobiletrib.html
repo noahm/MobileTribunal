@@ -51,6 +51,13 @@
 	</div>
 	<div class="input"><label for="username">Username</label> <input name="username" id="username" type="text" autofocus></div>
 	<div class="input"><label for="password">Password</label> <input name="password" id="password" type="password"></div>
+	<div id="recaptcha" class="input">
+		<label for="recaptcha_response">Recaptcha</label>
+		<img id="recaptcha_img" src="assets/images/blank.gif">
+		<input name="recaptcha_challenge" id="recaptcha_challenge" type="hidden">
+		<br />
+		<input name="recaptcha_response" id="recaptcha_response" type="text">
+	</div>
 	<div><input type="submit" value="Login"></div>
 </section></form>
 </div>
@@ -59,7 +66,7 @@
 	<div id="game-selector">
 		<span id="game-selected">Game 1</span>
 		<ul id="games">
-			<li value="1" onclick="void(0)"><img src="assets/images/unknownplayer.png"> Game 1</li>
+			<li value="1" onclick="void(0)">Game 1</li>
 		</ul>
 	</div>
 	<div id="verdict" class="req-by-game exc-by-submit">Submit Verdict <time>in 60s</time></div>
@@ -73,11 +80,11 @@
 			<div id="champname" class="title"><span></span></div>
 			<div id="portraitandsummoners">
 				<div id="portrait">
-					<img src="assets/images/blank.gif">
+					<div id="portrait-img"></div>
 					<div id="level"></div>
 				</div>
 				<div id="summoners">
-					<img src="" id="summoner1"><img src="" id="summoner2">
+					<div id="summoner1"></div><div id="summoner2"></div>
 				</div>
 			</div>
 			<div id="inventory">
@@ -123,19 +130,19 @@
 					<th><img src="assets/images/minion.png"></th>
 				</tr>
 				<tr class="template">
-					<td class="port"><img src=""> <span class="level"></span><br><span class="champname"></span></td>
+					<td class="port"><div></div> <span class="level"></span><br><span class="champname"></span></td>
 					<td class="score"></td>
 					<td>
-						<img class="summ1" src="">
-						<img class="summ2" src="">
+						<div class="summ1"></div>
+						<div class="summ2"></div>
 					</td>
 					<td>
-						<img class="item0" src="">
-						<img class="item1" src="">
-						<img class="item2" src="">
-						<img class="item3" src="">
-						<img class="item4" src="">
-						<img class="item5" src="">
+						<div class="item0"></div>
+						<div class="item1"></div>
+						<div class="item2"></div>
+						<div class="item3"></div>
+						<div class="item4"></div>
+						<div class="item5"></div>
 					</td>
 					<td class="gold"></td>
 					<td class="cs"></td>

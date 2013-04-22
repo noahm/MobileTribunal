@@ -180,8 +180,8 @@ section .title > span {
 
 #portrait {
 	position: relative;
-	height: 80px;
-	width: 80px;
+	height: 48px;
+	width: 48px;
 	box-shadow: 0px 0px 3px #555;
 }
 #portrait, #portrait img {
@@ -201,23 +201,18 @@ section .title > span {
 	border-top-left-radius: 4px;
 }
 
-#summoners img {
-	height: 32px;
-	width: 32px;
+#summoners div {
 	margin: 4px;
 	box-shadow: 0px 0px 4px gray;
 }
 
 #inventory-container {
-	background-color: gray;
-	width: 198px;
-	height: 132px;
-	background-image: url(../images/itemslot.png);
+	width: 150px;
+	height: 100px;
+	/*background-image: url(../images/itemslot.png); removed because its the wrong size. to be fixed*/
 }
 
-#inventory-container img {
-	height: 64px;
-	width: 64px;
+#inventory-container div {
 	margin: 1px;
 	float: left;
 }
@@ -262,7 +257,7 @@ section .title > span {
 	display: none;
 }
 
-#teammates td img {
+#teammates td div {
 	height: 24px;
 	width: 24px;
 	display: block;

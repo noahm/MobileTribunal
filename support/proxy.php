@@ -1,4 +1,4 @@
-		<?php
+<?php
 /* Copyright (c) 2012 kayson (kaysond) & Noah Manneschmidt (psoplayer)
  * https://github.com/noahm/MobileTribunal
  *
@@ -22,13 +22,14 @@
  */
 
 require_once 'parsing.php';
-function tribInit($name, $pass, $realm, $ch)
+function tribLogin($name, $pass, $realm, $recaptcha_challenge, $recaptcha_response, $ch)
 {
 
-	//Login Page
-
+	//Submit Riot's login page
 	$url = "https://$realm.leagueoflegends.com/user/login";
-	$data = array ('name' => $name, 'pass' => $pass, 'form_id' => "user_login");
+	$data = array ('name' => $name, 'pass' => $pass, 'form_id' => "user_login",
+			'recaptcha_challenge_field' => $recaptcha_challenge,
+			'recaptcha_response_field' => $recaptcha_response,);
 	$data = http_build_query($data);
 
 	curl_setopt($ch, CURLOPT_POST, true);
@@ -38,15 +39,29 @@ function tribInit($name, $pass, $realm, $ch)
 	curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "/assets/certificates/cacert.crt");
 
 	$result = getHtmlHeaderAndCookies($ch, $url, array());
-	if ( $result === false ) {
+	if ( $result === false )
 		return false;
-	} else {
-		$cookies = $result["cookies"];
-	}
 
 	curl_setopt($ch, CURLOPT_POST, false);
 
-	//"Agree" Page
+	//Check where we end up - redirects to the login page mean bad pass/recaptcha
+	if( stristr($result["header"], "Location: https://$realm.leagueoflegends.com/user/login\r\n") ) //Bad recaptcha responses redirect to login
+		return array('status' => 'recaptcha');
+
+	elseif( stristr($result["header"], "200 OK") ) //bad user/pw's just goes through
+		return array('status' => 'userpass');
+
+	elseif( stristr($result["header"], "Location: http://$realm.leagueoflegends.com\r\n") ) //success redirects to main page
+		return array('status' => 'success', 'cookies' => $result['cookies']);
+
+	else
+		return false;
+}
+
+function tribInit($realm, $cookies, $ch)
+{
+
+	//Successful login, now get to the tribunal
 	$url = "http://$realm.leagueoflegends.com/tribunal/en/guidelines/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
 	if ( $result === false ) {
@@ -56,14 +71,17 @@ function tribInit($name, $pass, $realm, $ch)
 	}
 
 	// check for recess or not matching summoner lvl requirements
-	if ($r = tribParseStartErrors($result['html'])) {
-		return $r; // case => [underlevel, recess, unknown]
-	}
+	$r = tribParseStartErrors($result['html']);
+
+	if ($r === false)
+		return false;
+	elseif ($r != true)
+		return array("cookies" => $cookies, "case" => $r["case"]); // case => [underlevel, recess]
 
 	//Submit "Agree" Page
-	$url = "http://$realm.leagueoflegends.com/tribunal/accept/";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/accept/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
-	if ( $result === false ) { echo "fail";
+	if ( $result === false ) {
 		return false;
 	}
 
@@ -72,14 +90,38 @@ function tribInit($name, $pass, $realm, $ch)
 
 }
 
+function tribGetRecaptcha($ch, $realm)
+{
+	$url = "https://www.google.com/recaptcha/api/challenge?k=6Ldhvd0SAAAAAHwXC1e_b3N_RuA7WmusxCqFnFyu";
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+	curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "/assets/certificates/cacert.crt");
+	$result = getHtmlHeaderandCookies($ch, $url, "");
+	if ( $result === false )
+		return false;
+	else {
+		$challenge = parseRecaptcha($result["html"]);
+		$url = "https://www.google.com/recaptcha/api/image?c=" . $challenge;
+		curl_setopt($ch, CURLOPT_REFERER, "https://$realm.leagueoflegends.com/user/login");
+		$result = getHtmlHeaderAndCookies($ch, $url, "");
+
+		if ( $result === false )
+			return false;
+		else
+			return array('challenge' => $challenge, 'image' => "data:image/png;base64," . base64_encode($result["html"]));
+	}
+}
+
 function tribGetCase($realm, $ch, $cookies)
 {
-	$url = "http://$realm.leagueoflegends.com/tribunal/en/review";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/review/";
 	$result = getHtmlHeaderandCookies($ch, $url, $cookies);
+
 	if ( $result === false ) {
 		return false;
 	} else {
 		$loc = tribParseLocation($result["header"], $realm);
+
 		if ( $loc === false ) {
 			return false;
 		} elseif ( $loc == "finished" ) {
@@ -120,7 +162,7 @@ function tribGetCaptcha($realm, $ch, $cookies)
 function tribSkipCase($case, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/vote/$case/";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/vote/$case/";
 	$data = array("decision"=>"skip");
 	$data = http_build_query($data);
 
@@ -141,7 +183,7 @@ function tribSkipCase($case, $realm, $ch, $cookies)
 function tribReviewCase($case, $punish, $captcha, $realm, $ch, $cookies)
 {
 
-	$url = "http://$realm.leagueoflegends.com/tribunal/vote/$case/";
+	$url = "http://$realm.leagueoflegends.com/tribunal/en/vote/$case/";
 	$data = array("decision" => $punish ? "punish" : "pardon");
 	$data = http_build_query($data);
 
@@ -176,12 +218,15 @@ function tribCheckCaptcha($captcha, $realm, $ch, $cookies)
 
 function getHtmlHeaderAndCookies($ch, $url, $cookies)
 {
-
-	curl_setopt($ch, CURLOPT_USERAGENT, 'MobileTribunal/1.0 (https://github.com/noahm/MobileTribunal/)');
+	//Use a real browser's useragent so cloudflare doesn't think we're a spammer
+	$useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0';
+	$useragent .= ' MobileTribunal/2.2 (https://github.com/noahm/MobileTribunal/)';
+	curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	
+	curl_setopt($ch, CURLINFO_HEADER_OUT, true);	
+
 	//Reassemble cookies
 	if ( !empty($cookies) )
 	{
