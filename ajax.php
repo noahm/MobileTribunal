@@ -23,13 +23,13 @@
 
 require_once 'support/config.php';
 require_once 'support/partials.php';
-
+header('Content-Type: application/json');
 startSession();
 require_once 'support/proxy.php';
 
 if (FORCE_SSL && !usingSSL()) die;
 
-header('Content-Type: application/json');
+
 
 $cmd = isset($_REQUEST["cmd"]) ? $_REQUEST["cmd"] : "";
 $game = isset($_REQUEST["game"]) ? $_REQUEST["game"] : "";
@@ -39,6 +39,8 @@ $captchaResult = isset($_REQUEST["captcha-result"]) ? $_REQUEST["captcha-result"
 if ($cmd == 'login') {
 	$username = isset($_REQUEST["username"]) ? $_REQUEST["username"] : "";
 	$password = isset($_REQUEST["password"]) ? $_REQUEST["password"] : "";
+	$recaptcha_challenge = isset($_REQUEST["recaptcha_challenge"]) ? $_REQUEST["recaptcha_challenge"] : "";
+	$recaptcha_response = isset($_REQUEST["recaptcha_response"]) ? $_REQUEST["recaptcha_response"] : "";
 	$realm = isset($_REQUEST["realm"]) ? $_REQUEST["realm"] : "";
 }
 
@@ -49,7 +51,7 @@ if ( $cmd == "getGame" && $game == "" )
 	return;
 }
 
-if ( $cmd != 'login' && (!isset($_SESSION['cookies']) || !isset($_SESSION['realm']) || !isset($_SESSION['case'])) )
+if ( $cmd != 'login' && $cmd != 'getRecaptcha' && (!isset($_SESSION['cookies']) || !isset($_SESSION['realm']) || !isset($_SESSION['case'])) )
 {
 	die('{"status":"nosess"}');
 	return;
@@ -66,9 +68,17 @@ switch ( $cmd )
 		echo json_encode(array('status' => 'ok'));
 		break;
 
+	case 'getRecaptcha':
+		$result = tribGetRecaptcha($ch, "na");
+		if ( $result === false )
+			echo '{"status":"failed"}';
+		else
+			echo json_encode($result);
+		break;
+
 	case 'login':
 		$feedback = array();
-		if (empty($username) || empty($password) || empty($realm)) {
+		if (empty($username) || empty($password) || empty($realm) || (empty($recaptcha_response)&&$realm=="na") ) {
 			$feedback[] = 'You must fill out all fields.';
 		} else {
 			// validate submission
@@ -91,37 +101,47 @@ switch ( $cmd )
 				$_SESSION['realm'] = $realm;
 
 				// perform login
-				if ($result = tribInit($username, $password, $_SESSION['realm'], $ch))
-				{
-					// save important info
-					$_SESSION['cookies'] = $result['cookies'];
-					$_SESSION['case'] = $result['case'];
-					switch ($result['case'])
-					{
-						case 'finished':
-						echo '{"status":"finished"}';
-						break;
+				$result = tribLogin($username, $password, $_SESSION['realm'], $recaptcha_challenge, $recaptcha_response, $ch);
+				if ( $result === false )
+					$feedback[] = 'An unknown error occurred during login';
+				elseif( $result["status"] != "success" )
+					$feedback[] = $result["status"]=="userpass"?'Invalid username/password':'Incorrect recaptcha response';
+				else {
+					$result = tribInit($_SESSION['realm'], $result['cookies'], $ch);
+					if ( $result === false )
+						$feedback[] = 'Login succeeded but an unknown error occurred while starting the Tribunal';
+					else {
+						// save important info
+						$_SESSION['cookies'] = $result['cookies'];
+						$_SESSION['case'] = $result['case'];
+						switch ($result['case'])
+						{
+							case 'finished':
+							echo '{"status":"finished"}';
+							break;
+	
+							case 'underlevel':
+							echo '{"status":"underlevel"}';
+							break;
+	
+							case 'recess':
+							echo '{"status":"recess"}';
+							break;
+	
+							case 'unknown':
+							echo '{"status":"unknown"}';
+							break;
 
-						case 'underlevel':
-						echo '{"status":"underlevel"}';
-						break;
-
-						case 'recess':
-						echo '{"status":"recess"}';
-						break;
-
-						default:
-						echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+							default:
+							echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+							break;
+						}
 					}
-					break;
-				}
-				else
-				{
-					$feedback[] = 'Riot rejected your login.';
 				}
 			}
 		}
-		echo json_encode(array( 'status' => 'error', 'feedback' => $feedback));
+		if( !empty($feedback) )
+			echo json_encode(array( 'status' => 'error', 'feedback' => $feedback));
 		break;
 
 	case "getCase":
