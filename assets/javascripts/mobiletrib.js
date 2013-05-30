@@ -99,6 +99,9 @@ $(function() {
 			if ( data.status === 'finished' ) {
 				return showOnly('finished');
 			}
+			if ( data.status === 'recess' ) {
+				return showOnly('recess');
+			}
 			if ( data.status === 'ok' ) {
 				loadCase(data);
 			}
