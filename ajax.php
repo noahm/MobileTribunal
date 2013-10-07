@@ -152,13 +152,10 @@ switch ( $cmd )
 		{
 			$_SESSION['cookies'] = $result['cookies'];
 			$_SESSION['case'] = $result['case'];
-			if ( $result['case'] == "finished" ) {
+			if ( $result['case'] == "finished" )
 				echo '{"status":"finished"}';
-			} elseif ($result['case'] == "recess") {
-				echo '{"status":"recess"}';
-			} else {
+			else
 				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
-			}
 		}
 		break;
 		

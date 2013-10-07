@@ -43,7 +43,7 @@ body {
 	color: white;
 }
 
-#finished, #recess {
+#finished {
 	width: 100%;
 	text-align: center;
 }

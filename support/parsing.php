@@ -34,9 +34,6 @@ function htmlToDoc($html)
 function tribParseHTML($html)
 {
 	$doc = htmlToDoc($html);
-	if (checkRecess($doc)) {
-		return array('case' => 'recess', 'numGames' => 0);
-	}
 	return array( 'numGames' => getNumGames($html), 'case' => getCaseNo($doc) );
 }
 

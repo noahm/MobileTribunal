@@ -12,6 +12,10 @@ Array.prototype.remove = function(from, to) {
   return this.push.apply(this, rest);
 };
 
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-30304199-1']);
+_gaq.push(['_trackPageview']);
+
 $(function() {
 	// in case there is an updated version
 	if (window.applicationCache) {
@@ -99,9 +103,6 @@ $(function() {
 			if ( data.status === 'finished' ) {
 				return showOnly('finished');
 			}
-			if ( data.status === 'recess' ) {
-				return showOnly('recess');
-			}
 			if ( data.status === 'ok' ) {
 				loadCase(data);
 			}
@@ -147,6 +148,7 @@ function showOnly(elemId) {
 }
 
 function doLogout() {
+	_gaq.push(['_trackEvent', 'User', 'Logout', 'Manual']);
 	showOnly('loading');
 	$.ajax({
 		type: 'POST',
@@ -188,6 +190,7 @@ function submitLogin(event) {
 
 function processLoginResult(data) {
 	if (data.status === 'ok') {
+		_gaq.push(['_trackEvent', 'User', 'Login '+$('#realm').val(), 'Success']);
 		showOnly('game');
 		loadCase(data);
 	} else if (data.status === 'error') {
@@ -204,9 +207,26 @@ function processLoginResult(data) {
 function processCaseSubmissionResult(data) {
 	showOnly('submit');
 	if (data.status === 'failed') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Comm Error']);
 		alert('Error communicating with Riot servers');
 	}
 	else if (data.status === 'captchafail') {
+<<<<<<< HEAD
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Captcha Failed']);
+		alert('Incorrect captcha');
+	}
+	else if (data.status === 'finished') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Accepted']);
+		_gaq.push(['_trackEvent', 'User', 'Cases Exhausted']);
+		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
+	}
+	else if (data.status === 'nosess') {
+		_gaq.push(['_trackEvent', 'User', 'Logout', 'Timed out']);
+		showOnly('login'); // TODO show login form instead of reloading
+	}
+	else if (data.status === 'ok') {
+		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Accepted']);
+=======
 		alert('Incorrect captcha');
 	}
 	else if (data.status === 'finished') {
@@ -216,6 +236,7 @@ function processCaseSubmissionResult(data) {
 		showOnly('login'); // TODO show login form instead of reloading
 	}
 	else if (data.status === 'ok') {
+>>>>>>> master
 		loadCase(data);
 	}
 }
@@ -312,6 +333,7 @@ function loadGame(gameNumber) {
 	$('#game-selected').html('Game '+gameNumber);
 	
 	if (!window.cachedGames[gameNumber]) {
+		_gaq.push(['_trackEvent', 'Case', 'Load Game', 'Uncached', gameNumber]);
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -323,6 +345,7 @@ function loadGame(gameNumber) {
 			}
 		});
 	} else {
+		_gaq.push(['_trackEvent', 'Case', 'Load Game', 'Cached', gameNumber]);
 		applyData(window.cachedGames[gameNumber]);
 	}
 }
