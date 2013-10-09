@@ -83,7 +83,7 @@ switch ( $cmd )
 		} else {
 			// validate submission
 			$validated = true;
-			if (!in_array($realm, array('na','euw','eune')))
+			if (!in_array($realm, array('na','euw','eune','oce','br')))
 			{
 				$validated = false;
 				$feedback[] = 'Region was invalid.';
