@@ -37,7 +37,7 @@ function tribParseHTML($html)
 	if (checkRecess($doc)) {
 		return array('case' => 'recess', 'numGames' => 0);
 	}
-	return array( 'numGames' => getNumGames($html), 'case' => getCaseNo($doc) );
+	return array( 'numGames' => getNumGames($html), 'case' => getCaseNo($doc), 'votesAllowed' => getVotesAllowed($doc), 'votesToday' => getVotesToday($doc));
 }
 
 function tribParseStartErrors($html)
@@ -86,6 +86,28 @@ function getCaseNo($doc)
 	}
 }
 
+function getVotesToday($doc)
+{
+	$xpath = new DOMXpath($doc);
+	$votes = $xpath->query("//*/span[@class='votes-today']");
+	if ($votes->length > 0) {
+		return (int) $votes->item(0)->textContent;
+	} else {
+		return 0;
+	}
+}
+
+function getVotesAllowed($doc)
+{
+	$xpath = new DOMXpath($doc);
+	$votes = $xpath->query("//*/span[@class='votes-allowed']");
+	if ($votes->length > 0) {
+		return (int) $votes->item(0)->textContent;
+	} else {
+		return 0;
+	}
+}
+
 // not as simple as it used to be
 // now it's packed in a javascript object literal output in an anonymous script tag
 // DOM parsing won't help so much here
@@ -121,3 +143,26 @@ function parseRecaptcha($html)
 	preg_match($pattern, $html, $matches);
 	return $matches[1];
 }
+
+function parseLogin($html)
+{
+	//We expect a JSON response
+	$result = json_decode($html, true);
+	
+	if( $result["success"] === false )
+	{
+		if( stristr($result["error"], "reCaptcha") )
+			return "recaptcha";
+		elseif( stristr($result["error"], "Authorized") )
+			return "userpass";
+		else
+			return false;
+	}
+	elseif ($result["success"] == true )
+		return "ok";
+	else
+		return false;
+
+}
+		
+	

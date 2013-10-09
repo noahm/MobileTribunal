@@ -26,12 +26,12 @@ $(function() {
 	$('#realm').val($.store.get('realm'));
 	$('#username').val($.store.get('username'));
 	$.store.clear('password'); // just in case they used the original version
-	
-	//handle recaptcha display
-	$('#realm').change(function() { displayRecaptcha();});
 
 	// logout handler
 	$('#logout').click(doLogout);
+
+	//recaptcha refresh
+	$('#recaptcha_img').click(loadRecaptcha);
 	
 	// handle opening and closing the menu
 	$('#game-selected').tappable(function() {
@@ -93,7 +93,7 @@ $(function() {
 		data: { cmd: 'getCase' },
 		success: function (data) {
 			if (data.status === 'failed' || data.status === 'nosess') {
-				displayRecaptcha();
+				loadRecaptcha();
 				return showOnly('login');
 			}
 			if ( data.status === 'finished' ) {
@@ -193,8 +193,7 @@ function processLoginResult(data) {
 	} else if (data.status === 'error') {
 		// put each elemnt of response.feedback as a paragraph in #feedback
 		$('#feedback').html(data.feedback.join('<br>'));
-		if( $('#realm').val() == 'na' )
-			loadRecaptcha();
+		loadRecaptcha();
 		showOnly('login');
 	} else {
 		showOnly(data.status);
@@ -239,7 +238,6 @@ function reloadCaptcha() {
 }
 
 function loadRecaptcha() {
-	$('#recaptcha_img').attr('src','');
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
@@ -251,15 +249,6 @@ function loadRecaptcha() {
 			$('#recaptcha_response').val('');
 		}
 	});
-}
-
-function displayRecaptcha() {
-	if( $('#realm').val() == 'na' ) {
-		loadRecaptcha();
-		$('#recaptcha').show();
-	}
-	else
-		$('#recaptcha').hide();
 }
 
 function loadCase(data) {
@@ -287,6 +276,8 @@ function loadCase(data) {
 	}
 	
 	$('#caseid').html(data['case']);
+	$('#votes-today').html(data['votesToday']);
+	$('#votes-allowed').html(data['votesAllowed']);
 	loadGame('1');
 	// if we are loading for the first time, grab a new captcha in the background
 	//reloadCaptcha();

@@ -101,13 +101,13 @@ switch ( $cmd )
 				$_SESSION['realm'] = $realm;
 
 				// perform login
-				$result = tribLogin($username, $password, $_SESSION['realm'], $recaptcha_challenge, $recaptcha_response, $ch);
+				$result = tribLogin($username, $password, $realm, $recaptcha_challenge, $recaptcha_response, $ch);
 				if ( $result === false )
 					$feedback[] = 'An unknown error occurred during login';
-				elseif( $result["status"] != "success" )
+				elseif( $result["status"] != "ok" )
 					$feedback[] = $result["status"]=="userpass"?'Invalid username/password':'Incorrect recaptcha response';
 				else {
-					$result = tribInit($_SESSION['realm'], $result['cookies'], $ch);
+					$result = tribInit($realm, $result['cookies'], $ch);
 					if ( $result === false )
 						$feedback[] = 'Login succeeded but an unknown error occurred while starting the Tribunal';
 					else {
@@ -133,7 +133,7 @@ switch ( $cmd )
 							break;
 
 							default:
-							echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+							echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . ',"votesToday":' . $result["votesToday"] . ',"votesAllowed":' . $result["votesAllowed"] . '}';
 							break;
 						}
 					}
@@ -157,11 +157,10 @@ switch ( $cmd )
 			} elseif ($result['case'] == "recess") {
 				echo '{"status":"recess"}';
 			} else {
-				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . ',"votesToday":' . $result["votesToday"] . ',"votesAllowed":' . $result["votesAllowed"] . '}';
 			}
 		}
 		break;
-		
 
 	case "getGame":
 		$result = tribGetGame($_SESSION['case'], $game, $_SESSION['realm'], $ch, $_SESSION['cookies']);
