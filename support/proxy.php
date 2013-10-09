@@ -22,12 +22,23 @@
  */
 
 require_once 'parsing.php';
+
 function tribLogin($name, $pass, $realm, $recaptcha_challenge, $recaptcha_response, $ch)
 {
+	//This array defines values for localization cookies based on selected realm
+	$localization = array("na" => "en_US", 
+							"euw" => "en_GB",
+							"eune" => "en_PL",
+							"br" => "pt_BR",
+							"oce" => "en_AU"
+						);
+						
+	//Create the localization cookies
+	$cookies = array("PVPNET_REGION" => $realm, "PVPNET_LANG" => $localization[$realm]);
 
 	//Submit Riot's login page
-	$url = "https://$realm.leagueoflegends.com/user/login";
-	$data = array ('name' => $name, 'pass' => $pass, 'form_id' => "user_login",
+	$url = "https://account.leagueoflegends.com/auth";
+	$data = array ('username' => $name, 'password' => $pass,
 			'recaptcha_challenge_field' => $recaptcha_challenge,
 			'recaptcha_response_field' => $recaptcha_response,);
 	$data = http_build_query($data);
@@ -37,25 +48,21 @@ function tribLogin($name, $pass, $realm, $recaptcha_challenge, $recaptcha_respon
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 	curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "/assets/certificates/cacert.crt");
+	//Necessary or the server throws an HTTP 500 error
+	curl_setopt($ch, CURLOPT_REFERER, "https://account.leagueoflegends.com/");
 
-	$result = getHtmlHeaderAndCookies($ch, $url, array());
+	$result = getHtmlHeaderAndCookies($ch, $url, $cookies);
 	if ( $result === false )
 		return false;
 
 	curl_setopt($ch, CURLOPT_POST, false);
 
-	//Check where we end up - redirects to the login page mean bad pass/recaptcha
-	if( stristr($result["header"], "Location: https://$realm.leagueoflegends.com/user/login\r\n") ) //Bad recaptcha responses redirect to login
-		return array('status' => 'recaptcha');
-
-	elseif( stristr($result["header"], "200 OK") ) //bad user/pw's just goes through
-		return array('status' => 'userpass');
-
-	elseif( stristr($result["header"], "Location: http://$realm.leagueoflegends.com\r\n") ) //success redirects to main page
-		return array('status' => 'success', 'cookies' => $result['cookies']);
-
-	else
+	$status = parseLogin($result['html']);
+	if ( $status === false )
 		return false;
+	else
+		return array("cookies" => $result["cookies"], "status" => $status);
+		
 }
 
 function tribInit($realm, $cookies, $ch)
@@ -92,7 +99,7 @@ function tribInit($realm, $cookies, $ch)
 
 function tribGetRecaptcha($ch, $realm)
 {
-	$url = "https://www.google.com/recaptcha/api/challenge?k=6Ldhvd0SAAAAAHwXC1e_b3N_RuA7WmusxCqFnFyu";
+	$url = "https://www.google.com/recaptcha/api/challenge?k=6LcwdeESAAAAAJg_ltVGdjrqlf7Bmbg449SyUcSW";
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 	curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "/assets/certificates/cacert.crt");
@@ -102,7 +109,6 @@ function tribGetRecaptcha($ch, $realm)
 	else {
 		$challenge = parseRecaptcha($result["html"]);
 		$url = "https://www.google.com/recaptcha/api/image?c=" . $challenge;
-		curl_setopt($ch, CURLOPT_REFERER, "https://$realm.leagueoflegends.com/user/login");
 		$result = getHtmlHeaderAndCookies($ch, $url, "");
 
 		if ( $result === false )
@@ -128,7 +134,7 @@ function tribGetCase($realm, $ch, $cookies)
 			return array("cookies" => $result["cookies"], "case" => "finished");
 		} elseif ( $loc == "case" ) {
 			$caseInfo = tribParseHTML($result['html']);
-			return array("cookies" => $result["cookies"], "case" => $caseInfo["case"], "numGames" => $caseInfo["numGames"]);
+			return array("cookies" => $result["cookies"], "case" => $caseInfo["case"], "numGames" => $caseInfo["numGames"], "votesToday" => $caseInfo["votesToday"], "votesAllowed" => $caseInfo["votesAllowed"]);
 		}
 	}
 }
@@ -225,7 +231,8 @@ function getHtmlHeaderAndCookies($ch, $url, $cookies)
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLINFO_HEADER_OUT, true);	
+	curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+	curl_setopt($ch, CURLOPT_ENCODING, "");
 
 	//Reassemble cookies
 	if ( !empty($cookies) )
@@ -236,6 +243,9 @@ function getHtmlHeaderAndCookies($ch, $url, $cookies)
 		curl_setopt($ch, CURLOPT_COOKIE, implode("; ", $cookieStrings));
 	}
 
+	if ( DEBUG )
+		curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+	
 	$result = curl_exec($ch);
 
 	if ( $result === false ) {
@@ -261,6 +271,10 @@ function getHtmlHeaderAndCookies($ch, $url, $cookies)
 
 	//Parse header
 	$header = substr($result, 0, $contentpos);
+
+	//Debug logging
+	if ( DEBUG )
+		file_put_contents(LOG_FILE, date("m-d-y H:i:s") . "\r\n\r\n" . curl_getinfo($ch, CURLINFO_HEADER_OUT) . "\r\n\r\n" . $header . "\r\n\r\n" . $html . "\r\n\r\n", FILE_APPEND);
 
 	return array("html" => $html, "header" => $header, "cookies" => $cookies);
 

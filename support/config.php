@@ -52,6 +52,25 @@ $users = array (
 );
 
 ////////////////////////////////////////////
+//DEBUG - 
+//
+//Default: False
+//Description: Setting this to true will log HTTP responses to the file defined in LOG_FILE.
+//		NOTE: Only outgoing headers and incoming responses are logged;
+//		username/password information is NOT stored even with this enabled
+
+define('DEBUG', false);
+
+////////////////////////////////////////////
+//
+//LOG_FILE - 
+//
+//Default: "log.txt"
+//Description: Name of the log file used if DEBUG is enabled
+
+define('LOG_FILE', "log.txt");
+
+////////////////////////////////////////////
 //
 //END OF CONFIGURATION
 //
