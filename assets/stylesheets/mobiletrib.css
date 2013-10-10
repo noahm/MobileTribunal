@@ -6,6 +6,14 @@ body {
 	background-color: #fff7da;
 }
 
+div {
+	-webkit-transform-origin: 0 0;
+	-o-transform-origin: 0 0;
+	-ms-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	transform-origin: 0 0;
+}
+
 #viewporter {
 	padding: .5em;
 }
@@ -63,9 +71,9 @@ body {
 #summoner-name {
 	background-color: #970c00;
 	background-image: -webkit-linear-gradient(0deg, #290300, #9d0c00, #290300);
-	background-image:    -moz-linear-gradient(0deg, #290300, #9d0c00, #290300);
 	background-image:     -ms-linear-gradient(0deg, #290300, #9d0c00, #290300);
 	background-image:      -o-linear-gradient(0deg, #290300, #9d0c00, #290300);
+	background-image:     linear-gradient(to right, #290300, #9d0c00, #290300);
 	display: block;
 	border-radius: 20px;
 	box-shadow: 0 1px 5px #333;
@@ -112,9 +120,9 @@ body {
 	line-height: 1.2em;
 	background-color: #1a304d;
 	background-image: -webkit-linear-gradient(-90deg, #3d699e, #1a304d, #13244b);
-	background-image:    -moz-linear-gradient(-90deg, #3d699e, #1a304d, #13244b);
 	background-image:     -ms-linear-gradient(-90deg, #3d699e, #1a304d, #13244b);
 	background-image:      -o-linear-gradient(-90deg, #3d699e, #1a304d, #13244b);
+	background-image:      linear-gradient(to bottom, #3d699e, #1a304d, #13244b);
 	border-radius: 5px;
 }
 
@@ -138,10 +146,15 @@ body {
 	border-top: none;
 }
 
-#games img {
-	height: 24px;
-	width:  24px;
+#games div {
+	height: 48px;
+	width:  48px;
+	display: inline-block;
 	vertical-align: middle;
+	background-image: url(../images/unknownplayer.lg.png);
+	transform: scale(0.5);
+	margin-right: -24px;
+	margin-bottom: -24px;
 }
 
 section {
@@ -170,9 +183,9 @@ section .title {
 section .title > span {
 	background-color: #dbc07e;
 	background-image: -webkit-linear-gradient(-90deg, #dbc07e, #c5a862);
-	background-image:    -moz-linear-gradient(-90deg, #dbc07e, #c5a862);
 	background-image:     -ms-linear-gradient(-90deg, #dbc07e, #c5a862);
 	background-image:      -o-linear-gradient(-90deg, #dbc07e, #c5a862);
+	background-image:      linear-gradient(to bottom, #dbc07e, #c5a862);
 	border-radius: 4px;
 	padding: 3px 5px;
 	box-shadow: 0px 1px 2px #555;
@@ -186,12 +199,12 @@ section .title > span {
 
 #portrait {
 	position: relative;
-	height: 48px;
-	width: 48px;
+	height: 80px;
+	width: 80px;
 	box-shadow: 0px 0px 3px #555;
 }
-#portrait, #portrait img {
-	border-radius: 5px;
+#portrait-img {
+    transform: scale(1.6666667);
 }
 
 #level {
@@ -208,19 +221,28 @@ section .title > span {
 }
 
 #summoners div {
-	margin: 4px;
+    margin: 4px;
+    display: inline-block;
 	box-shadow: 0px 0px 4px gray;
+	transform: scale(0.66666666667);
+	/* subract 4 less for a net of 4px margin */
+	margin-right: -12px;
+	margin-bottom: -12px;
 }
 
 #inventory-container {
-	width: 150px;
-	height: 100px;
-	/*background-image: url(../images/itemslot.png); removed because its the wrong size. to be fixed*/
+	width: 198px;
+	height: 132px;
+	background-image: url(../images/itemslot.png);
 }
 
 #inventory-container div {
 	margin: 1px;
 	float: left;
+	transform: scale(1.33333333333);
+	/* add one more for a net of 1px margin */
+	margin-right: 17px;
+	margin-bottom: 17px;
 }
 
 #stats {
@@ -264,20 +286,22 @@ section .title > span {
 }
 
 #teammates td div {
-	height: 24px;
-	width: 24px;
+	transform: scale(0.5);
+	margin-right: -24px;
+	margin-bottom: -24px;
 	display: block;
 	float: left;
 }
 
 #teammates td.port {
 	text-align: left;
+	min-width: 65px;
 }
 
-#teammates td.port img {
-	height: 32px;
-	width: 32px;
-	margin-right: 3px;
+#teammates td.port div {
+    transform: scale(0.666666667);
+	margin-right: -13px;
+	margin-bottom: -16px;
 }
 
 #teammates th, #teammates td {
@@ -294,6 +318,7 @@ section .title > span {
 
 #teammates col.inventory {
 	width: 78px;
+	min-width: 48px;
 }
 
 #teammates th:first-child {
@@ -447,17 +472,19 @@ andrid          1280x720 */
 #teammates .champname {
 	display: none;
 }
-#teammates td.port img {
+#teammates td.port div {
 	float: none;
-	display: inline;
+	display: inline-block;
 	vertical-align: middle;
+	margin-right: -18px;
 }
 }
 
 @media screen and (min-width: 680px) {
 #teammates .summ1, #teammates .summ2 {
-	height: 32px;
-	width:  32px;
+	transform: scale(0.6666667);
+	margin-right: -16px;
+	margin-bottom: -16px;
 }
 #teammates col.summoners {
 	width: 80px;
@@ -466,24 +493,11 @@ andrid          1280x720 */
 
 @media screen and (min-width: 800px) {
 #teammates .item0, #teammates .item1, #teammates .item2, #teammates .item3, #teammates .item4, #teammates .item5 {
-	height: 32px;
-	width:  32px;
+	transform: scale(0.6666666667);
+	margin-bottom: -16px;
+	margin-right: -16px;
 }
 #teammates col.inventory {
 	width: 198px;
 }
 }
-
-/* the large size is kinda dumb and looks bad 
-@media screen and (min-width: 1200px) {
-#teammates td {
-	line-height: 32px;
-}
-#teammates td img {
-	height: 64px !important;
-	width:  64px !important;
-}
-#teammates col.summoners {
-	width: 134px;
-}
-*/
