@@ -55,20 +55,20 @@
 	<div class="input"><label for="password">Password</label> <input name="password" id="password" type="password"></div>
 	<div id="recaptcha" class="input">
 		<label for="recaptcha_response">Recaptcha</label>
-		<img id="recaptcha_img" src="assets/images/blank.gif">
+		<img id="recaptcha_img" src="">
 		<input name="recaptcha_challenge" id="recaptcha_challenge" type="hidden">
 		<br />
-		<input name="recaptcha_response" id="recaptcha_response" type="text">
+		<input name="recaptcha_response" id="recaptcha_response" type="text" autocomplete="off">
 	</div>
 	<div><input type="submit" value="Login"></div>
 </section></form>
 </div>
 
-<div id="title" class="req-by-game req-by-submit exc-by-login exc-by-finished" style="display:none">
+<div id="title" class="req-by-game req-by-submit exc-by-login exc-by-finished exc-by-loading" style="display:none">
 	<div id="game-selector">
 		<span id="game-selected">Game 1</span>
 		<ul id="games">
-			<li value="1" onclick="void(0)">Game 1</li>
+			<li value="1" onclick="void(0)"><div></div> Game 1</li>
 		</ul>
 	</div>
 	<div id="verdict" class="req-by-game exc-by-submit">Submit Verdict <time>in 60s</time></div>
@@ -135,11 +135,11 @@
 				<tr class="template">
 					<td class="port"><div></div> <span class="level"></span><br><span class="champname"></span></td>
 					<td class="score"></td>
-					<td>
+					<td class="summs">
 						<div class="summ1"></div>
 						<div class="summ2"></div>
 					</td>
-					<td>
+					<td class="items">
 						<div class="item0"></div>
 						<div class="item1"></div>
 						<div class="item2"></div>
@@ -207,7 +207,7 @@
 </div>
 
 
-<div id="footer" class="req-by-login req-by-game req-by-submit exc-by-loading">
+<div id="footer" class="req-by-login req-by-game req-by-submit req-by-underlevel req-by-finished req-by-recess req-by-unknown exc-by-loading">
 	<a id="logout" href="javascript:void(0)">Logout</a> | By kayson and psoplayer | <a href="javascript:disclaim()">Disclaimer</a>
 	<br><a href="http://www.reddit.com/r/mobiletribunal" target="_blank">Feedback</a>
 </div>

@@ -44,7 +44,7 @@ function tribParseStartErrors($html)
 {
 	$doc = htmlToDoc($html);
 	if ($doc->getElementById('guidelines')) {
-		return true; // no problems here
+		return "ok"; // no problems here
 	}
 	if (checkUnderleveled($doc)) {
 		return array('case' => 'underlevel');
@@ -128,7 +128,7 @@ function getNumGames($html)
 
 function tribParseLocation($header, $realm)
 {
-	if ( stristr($header, "Location: http://$realm.leagueoflegends.com/tribunal/finished\r\n") ) {
+	if ( stristr($header, "location: /tribunal/") && stristr($header, "/finished/") ) {	 //The actual header reads location: /tribunal/en/finished/ ; this is an attempt to make it insensitive to language
 		return "finished";
 	} elseif ( stristr($header, "HTTP/1.1 200 OK") ) {
 		return "case";

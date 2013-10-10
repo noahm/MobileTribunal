@@ -78,12 +78,12 @@ switch ( $cmd )
 
 	case 'login':
 		$feedback = array();
-		if (empty($username) || empty($password) || empty($realm) || (empty($recaptcha_response)&&$realm=="na") ) {
+		if (empty($username) || empty($password) || empty($realm) || empty($recaptcha_response) ) {
 			$feedback[] = 'You must fill out all fields.';
 		} else {
 			// validate submission
 			$validated = true;
-			if (!in_array($realm, array('na','euw','eune')))
+			if (!in_array($realm, array('na','euw','eune','oce','br')))
 			{
 				$validated = false;
 				$feedback[] = 'Region was invalid.';
@@ -211,7 +211,7 @@ switch ( $cmd )
 					if ( $result['case'] == "finished" )
 						echo '{"status":"finished"}';
 					else
-						echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+						echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . ',"votesToday":' . $result["votesToday"] . ',"votesAllowed":' . $result["votesAllowed"] . '}';
 				}
 
 			}
@@ -231,7 +231,7 @@ switch ( $cmd )
 			if ( $result['case'] == "finished" )
 				echo '{"status":"finished"}';
 			else
-				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . '}';
+				echo '{"status":"ok","case":"' . $result["case"] . '","numGames":' . $result["numGames"] . ',"votesToday":' . $result["votesToday"] . ',"votesAllowed":' . $result["votesAllowed"] . '}';
 		}
 		break;
 	default:
