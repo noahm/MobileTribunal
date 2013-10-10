@@ -152,6 +152,8 @@ div {
 	display: inline-block;
 	vertical-align: middle;
 	background-image: url(../images/unknownplayer.lg.png);
+	-webkit-transform: scale(0.5);
+	-ms-transform: scale(0.5);
 	transform: scale(0.5);
 	margin-right: -24px;
 	margin-bottom: -24px;
@@ -204,7 +206,9 @@ section .title > span {
 	box-shadow: 0px 0px 3px #555;
 }
 #portrait-img {
-    transform: scale(1.6666667);
+	-webkit-transform: scale(1.6666667);
+	-ms-transform: scale(1.6666667);
+	transform: scale(1.6666667);
 }
 
 #level {
@@ -224,6 +228,8 @@ section .title > span {
     margin: 4px;
     display: inline-block;
 	box-shadow: 0px 0px 4px gray;
+	-webkit-transform: scale(0.66666666667);
+	-ms-transform: scale(0.66666666667);
 	transform: scale(0.66666666667);
 	/* subract 4 less for a net of 4px margin */
 	margin-right: -12px;
@@ -239,6 +245,8 @@ section .title > span {
 #inventory-container div {
 	margin: 1px;
 	float: left;
+	-webkit-transform: scale(1.33333333333);
+	-ms-transform: scale(1.33333333333);
 	transform: scale(1.33333333333);
 	/* add one more for a net of 1px margin */
 	margin-right: 17px;
@@ -286,6 +294,8 @@ section .title > span {
 }
 
 #teammates td div {
+	-webkit-transform: scale(0.5);
+	-ms-transform: scale(0.5);
 	transform: scale(0.5);
 	margin-right: -24px;
 	margin-bottom: -24px;
@@ -299,7 +309,9 @@ section .title > span {
 }
 
 #teammates td.port div {
-    transform: scale(0.666666667);
+	-webkit-transform: scale(0.666666667);
+	-ms-transform: scale(0.666666667);
+	transform: scale(0.666666667);
 	margin-right: -13px;
 	margin-bottom: -16px;
 }
@@ -482,6 +494,8 @@ andrid          1280x720 */
 
 @media screen and (min-width: 680px) {
 #teammates .summ1, #teammates .summ2 {
+	-webkit-transform: scale(0.6666667);
+	-ms-transform: scale(0.6666667);
 	transform: scale(0.6666667);
 	margin-right: -16px;
 	margin-bottom: -16px;
@@ -493,6 +507,8 @@ andrid          1280x720 */
 
 @media screen and (min-width: 800px) {
 #teammates .item0, #teammates .item1, #teammates .item2, #teammates .item3, #teammates .item4, #teammates .item5 {
+	-webkit-transform: scale(0.6666666667);
+	-ms-transform: scale(0.6666666667);
 	transform: scale(0.6666666667);
 	margin-bottom: -16px;
 	margin-right: -16px;
