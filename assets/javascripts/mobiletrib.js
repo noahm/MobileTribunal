@@ -321,10 +321,16 @@ function loadGame(gameNumber) {
 
 // performs some parsing and caches the result of a fetched game
 function initData(gameData, gameNumber) {
-	//quick fix: gameData.offender is now an element of gameData.players, so we'll find the offender and recreate gameData.offender
+	// massage some player data
 	for( var i = 0; i < gameData.players.length; i++ ) {
-		if( gameData.players[i].association_to_offender == 'offender' )
-			gameData.offender = gameData.players[i];
+		var player = gameData.players[i];
+		// fill empty item slots with our empty image
+		while (player.item_icons.length < 6) {
+			player.item_icons.push('width:48px;height:48px;background-image:url(assets/images/itemslot.png);background-size:48px;');
+		}
+		if( player.association_to_offender == 'offender' ) {
+			gameData.offender = player;
+		}
 	}
 	// calculate a regular timestamp
 	var minutes = gameData.offender.time_played % 60;
@@ -384,11 +390,7 @@ function applyData(gameData) {
 			teammate.find('.cs').html(player.minions_killed);
 			for (i = player.item_icons.length - 1; i >= 0; i--) {
 				item = teammate.find('.item'+i);
-				if (player.item_icons[i]) {
-					item.attr('style', player.item_icons[i]);
-				} else {
-					item.attr('style', 'width:48px;height:48px;background-image:url(assets/images/itemslot.png);background-size:48px;');
-				}
+				item.attr('style', player.item_icons[i]);
 			}
 			teammate.appendTo('#teammates tbody');
 		}
