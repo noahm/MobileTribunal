@@ -154,7 +154,8 @@ function doLogout() {
 		url: 'ajax.php',
 		data: {cmd: 'logout'},
 		success: function() {
-			showOnly('login');
+			loadRecaptcha();
+			return showOnly('login');
 		}
 	});
 }
@@ -212,7 +213,7 @@ function processCaseSubmissionResult(data) {
 		showOnly('finished'); // TODO have a button to retry that checks if you are still expired
 	}
 	else if (data.status === 'nosess') {
-		showOnly('login'); // TODO show login form instead of reloading
+		showOnly('login');
 	}
 	else if (data.status === 'ok') {
 		loadCase(data);

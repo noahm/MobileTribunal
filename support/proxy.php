@@ -82,7 +82,7 @@ function tribInit($realm, $cookies, $ch)
 
 	if ($r === false)
 		return false;
-	elseif ($r != true)
+	elseif ($r != "ok")
 		return array("cookies" => $cookies, "case" => $r["case"]); // case => [underlevel, recess]
 
 	//Submit "Agree" Page
