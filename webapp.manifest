@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#Manifest version 2.3
+#Manifest version 2.3b
 # Changing one byte in this file will force all
 # items in the cache to be re-fetched, so update
 # the above version number after making changes
@@ -23,13 +23,14 @@ assets/images/summoners.png
 assets/images/inventory.png
 assets/images/gold.png
 assets/images/minion.png
-assets/images/unknownplayer.png
+assets/images/unknownplayer.lg.png
 
 assets/javascripts/json2.min.js
 assets/javascripts/jquery.min.js
 assets/javascripts/jquery.store.patched.js
 assets/javascripts/jquery.tappable.js
 assets/javascripts/viewporter.js
+assets/javascripts/mobiletrib.js
 assets/javascripts/add2home.js
 
 assets/stylesheets/normalize.css
@@ -38,6 +39,5 @@ assets/stylesheets/mobiletrib.css
 
 # Never cache the results of these files
 NETWORK:
-assets/javascripts/mobiletrib.js
 ajax.php
 *

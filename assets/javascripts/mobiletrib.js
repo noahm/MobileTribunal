@@ -7,9 +7,9 @@
 
 // Array Remove - By John Resig (MIT Licensed) http://ejohn.org/blog/javascript-array-remove/
 Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
+	var rest = this.slice((to || from) + 1 || this.length);
+	this.length = from < 0 ? this.length + from : from;
+	return this.push.apply(this, rest);
 };
 
 var _gaq = _gaq || [];
@@ -24,7 +24,7 @@ $(function() {
 			onUpdateReady();
 		}
 	}
-	
+
 	// init the login form
 	$('#login form').submit(submitLogin);
 	$('#realm').val($.store.get('realm'));
@@ -36,7 +36,7 @@ $(function() {
 
 	//recaptcha refresh
 	$('#recaptcha_img').click(loadRecaptcha);
-	
+
 	// handle opening and closing the menu
 	$('#game-selected').tappable(function() {
 		$('#games').toggle();
@@ -49,7 +49,7 @@ $(function() {
 	// handle showing the verdict options
 	$('#verdict').tappable(function() {showOnly('submit');});
 	$('#return').tappable(function() {showOnly('game');});
-	
+
 	// handle showing inventory details
 	$(document).on('click', '#inventory img', function() {
 		var data = $(this).data('info');
@@ -63,7 +63,7 @@ $(function() {
 
 	// handle refreshing captcha
 	//$('#refresh-captcha').click(reloadCaptcha);
-	
+
 	// handle submitting a verdict
 	$('#pardon,#punish').click(function() {
 		if (timeLeft > 0) return alert('Please spend more time reviewing the case');
@@ -88,7 +88,7 @@ $(function() {
 			success: processCaseSubmissionResult
 		});
 	});
-	
+
 	//Initial ajax request
 	$.ajax({
 		type: 'POST',
@@ -134,16 +134,16 @@ function formatImageUrl(url) {
 function showOnly(elemId) {
 	var mainPageItems = ['login', 'game', 'submit', 'finished', 'recess', 'underlevel', 'unknown'];
 	var alwaysHide = ['loading', 'games'];
-	
+
 	$('#'+elemId).show();
 	$('.req-by-'+elemId).show(); // show anything required by this item
 	$('.exc-by-'+elemId).hide(); // hide anything excluded by this item
-	
+
 	if ((i = mainPageItems.indexOf(elemId)) >= 0) { // was one of the main page items
 		// hide other main page items
 		mainPageItems.splice(i,1);
 		$('#'+mainPageItems.join(',#')).hide();
-		
+
 		// regular page maintence
 		$('#'+alwaysHide.join(',#')).hide();
 		window.scroll(0,0);
@@ -159,7 +159,8 @@ function doLogout() {
 		url: 'ajax.php',
 		data: {cmd: 'logout'},
 		success: function() {
-			showOnly('login');
+			loadRecaptcha();
+			return showOnly('login');
 		}
 	});
 }
@@ -167,11 +168,11 @@ function doLogout() {
 function submitLogin(event) {
 	event.preventDefault();
 	showOnly('loading');
-	
+
 	// perform the saving of inputs
 	$.store.set('realm', $('#realm').val());
 	$.store.set('username', $('#username').val());
-	
+
 	// submit the login
 	$.ajax({
 		type: 'POST',
@@ -223,7 +224,7 @@ function processCaseSubmissionResult(data) {
 	}
 	else if (data.status === 'nosess') {
 		_gaq.push(['_trackEvent', 'User', 'Logout', 'Timed out']);
-		showOnly('login'); // TODO show login form instead of reloading
+		showOnly('login');
 	}
 	else if (data.status === 'ok') {
 		_gaq.push(['_trackEvent', 'Case', 'Submit', 'Accepted']);
@@ -268,7 +269,7 @@ function loadCase(data) {
 	//window.captchaLoaded = false;
 	//window.captchaIsLoading = false;
 	window.cachedGames = {};
-	
+
 	// handle verdict timer
 	$('#timer-message').show();
 	window.timeLeft = 20;
@@ -284,9 +285,9 @@ function loadCase(data) {
 	// create the list of games
 	$('#games').empty();
 	for (var i=1; i<=num; i++) {
-		$('<li onclick="void(0)"></li>').attr('value',i).html('Game '+i).appendTo('#games');
+		$('<li onclick="void(0)"></li>').attr('value',i).html('<div></div> Game '+i).appendTo('#games');
 	}
-	
+
 	$('#caseid').html(data['case']);
 	$('#votes-today').html(data['votesToday']);
 	$('#votes-allowed').html(data['votesAllowed']);
@@ -313,7 +314,7 @@ function timerTick() {
 function loadGame(gameNumber) {
 	showOnly('loading');
 	$('#game-selected').html('Game '+gameNumber);
-	
+
 	if (!window.cachedGames[gameNumber]) {
 		_gaq.push(['_trackEvent', 'Case', 'Load Game', 'Uncached', gameNumber]);
 		$.ajax({
@@ -334,11 +335,16 @@ function loadGame(gameNumber) {
 
 // performs some parsing and caches the result of a fetched game
 function initData(gameData, gameNumber) {
-
-	//quick fix: gameData.offender is now an element of gameData.players, so we'll find the offender and recreate gameData.offender
+	// massage some player data
 	for( var i = 0; i < gameData.players.length; i++ ) {
-		if( gameData.players[i].association_to_offender == 'offender' )
-			gameData.offender = gameData.players[i];
+		var player = gameData.players[i];
+		// fill empty item slots with our empty image
+		while (player.item_icons.length < 6) {
+			player.item_icons.push('width:48px;height:48px;background-image:url(assets/images/itemslot.png);background-size:48px;');
+		}
+		if( player.association_to_offender == 'offender' ) {
+			gameData.offender = player;
+		}
 	}
 	// calculate a regular timestamp
 	var minutes = gameData.offender.time_played % 60;
@@ -347,7 +353,7 @@ function initData(gameData, gameNumber) {
 	// cache the fixed data
 	window.cachedGames[gameNumber] = gameData;
 	// apply champion portrait in games list - removed because riot doesn't send individual images anymore
-	//$('#games img')[gameNumber-1].src = formatImageUrl(gameData.offender.champion_url);
+	var img = $('#games li[value='+gameNumber+'] div').attr('style', gameData.offender.champion_icon);
 	return gameData;
 }
 
@@ -358,7 +364,7 @@ function applyData(gameData) {
 	$('#champname span').text(gameData.offender.champion_name);
 	$('#summoner1').attr('style', gameData.offender.summoner_spell_1_icon);
 	$('#summoner2').attr('style', gameData.offender.summoner_spell_2_icon);
-	
+
 	$('#level').text(gameData.offender.level);
 	$('#time').text(gameData.time_played);
 	// we should probably display different stats if dominion
@@ -371,7 +377,7 @@ function applyData(gameData) {
 	$('#date-played').text(gameData.game_creation_time);
 	$('#dps-out').text(gameData.offender.total_damage_dealt);
 	$('#dps-in').text(gameData.offender.total_damage_received);
-	
+
 	// setup inventory-container
 	$('#inventory-container').empty();
 	for (i=0; i<gameData.offender.item_icons.length; i++) {
@@ -419,7 +425,7 @@ function applyData(gameData) {
 			item.appendTo('#reports');
 		}
 	}
-	
+
 	// build chat log
 	var $chat = $('#chat').empty();
 	for (i = gameData.chat_log.length - 1; i >= 0; i--) {
@@ -436,11 +442,11 @@ function applyData(gameData) {
 			.append(': '+chat_line.message)
 			.prependTo($chat);
 	}
-	
+
 	// reset chat filter controls
 	$('#chat-filter')[0].selectedIndex = 0;
 	$('#chat-filter').change();
-	
+
 	// show our handywork
 	showOnly('game');
 }
