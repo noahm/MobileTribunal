@@ -1,13 +1,19 @@
 Mobile Tribunal
 ===============
 
-An unofficial mobile webapp and proxy to the League of Legends Tribunal
+Mobile Tribunal was an unofficial proxy interface to Riot's tribunal for League of Legends. The tribunal has been discontinued, and this project is now defunct.
+
+The tribunal used to allow any player of the game to earn small amounts of in-game currency by reviewing cases of reported players. Users could vote to pardon or punish based on included chat logs and other game data. This proxy project presented all the same information in a mobile-friendly format which was much more usable than Riot's official site was at the time. It used to look like this:
+
+![Screenshot showing reports from teammates](https://user-images.githubusercontent.com/319485/130699782-6cfaa476-aa7a-439e-812c-4b1900d5998f.png)
+
+![Screenshot showing team scoreboard](https://user-images.githubusercontent.com/319485/130699788-b647fdf9-ae1a-4593-9766-a178b3f6fd8b.png)
 
 Features
 --------
 
 * Web interface designed for both small phone screens and tablets. Works just fine on the desktop too!
-* Tested on Mobile Safari, Android, Mobile IE (WP7), and more!
+* Tested on Mobile Safari, Android, Mobile IE (Windows Phone), and more!
 * Chat filters let you easily follow conversations and quickly check the reported player's language
 * More intuitive information layout than the official Tribunal
 * The easiest way to earn IP while you poop!
@@ -46,7 +52,7 @@ https://raw.github.com/noahm/MobileTribunal/master/mit-license.txt
 Credits
 -------
 
-Copyright (c) 2012 by these cool duders:
+Copyright (c) 2012 by:
 
 * kaysond ([kayson](http://www.reddit.com/user/kayson))
 	* Founder
